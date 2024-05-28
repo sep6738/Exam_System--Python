@@ -1,6 +1,6 @@
 
 class Users:
-    def __init__(self, userID=None, userName=None, passWord=None, name=None, roleID=None, createAt=None, updateAt=None):
+    def __init__(self, userID=None, userName=None, passWord=None, name=None, roleID=None, createAt=None, updateAt=None, email=None, verificationCode=None, expirationDate=None):
         self.userID = userID
         self.userName = userName
         self.passWord = passWord
@@ -8,6 +8,9 @@ class Users:
         self.roleID = roleID
         self.createAt = createAt
         self.updateAt = updateAt
+        self.email = email
+        self.verificationCode = verificationCode
+        self.expirationDate = expirationDate
 
     @property
     def userID(self):
@@ -31,6 +34,7 @@ class Users:
 
     @passWord.setter
     def passWord(self, value):
+        # 实现密码加密存储
         self._passWord = value
 
     @property
@@ -64,3 +68,27 @@ class Users:
     @updateAt.setter
     def updateAt(self, value):
         self._updateAt = value
+
+    @property
+    def email(self):
+        return self._email
+
+    @email.setter
+    def email(self, value):
+        self._email = value
+
+    @property
+    def verificationCode(self):
+        return self._verificationCode
+
+    @verificationCode.setter
+    def verificationCode(self, value):
+        self._verificationCode = value
+
+    @property
+    def expirationDate(self):
+        return self._expirationDate
+
+    @expirationDate.setter
+    def expirationDate(self, value):
+        self._expirationDate = value
