@@ -1,2 +1,2 @@
-# An exam sysrem using python
+# A Python based test system
 python大作业
