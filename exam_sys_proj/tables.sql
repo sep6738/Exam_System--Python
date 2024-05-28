@@ -72,14 +72,19 @@ create table role
 
 create table users
 (
-    userID   int auto_increment
+    userID           int auto_increment
         primary key,
-    userName varchar(255) null,
-    passWord varchar(20)  null,
-    name     varchar(255) null,
-    roleID   int          null,
-    createAt varchar(255) null,
-    updateAt varchar(255) null,
+    userName         varchar(255) null,
+    passWord         varchar(20)  null,
+    name             varchar(255) null,
+    roleID           int          null,
+    createAt         varchar(255) null,
+    updateAt         varchar(255) null,
+    email            varchar(255) not null,
+    verificationCode varchar(6)   null,
+    expirationDate   datetime     null,
+    constraint email
+        unique (email),
     constraint users_role_roleID_fk
         foreign key (roleID) references role (roleID)
             on delete set null
@@ -107,7 +112,7 @@ create table teacher_course
     time       varchar(255) null,
     courseName varchar(255) null,
     isActive   bit          null,
-    class_     int          null,
+    class_     varchar(6)   not null,
     constraint teacher_course_users_userID_fk
         foreign key (userID) references users (userID)
 );
