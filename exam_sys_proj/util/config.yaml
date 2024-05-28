@@ -1,0 +1,7 @@
+database:
+  host: localhost
+  user:
+  password:
+  database:
+  mincached: 1
+  maxcached: 20
