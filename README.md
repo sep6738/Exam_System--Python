@@ -4,7 +4,9 @@
 pip install -r requirements.txt
 ```
 ### 分工安排
-4人小组两人做前端，两人做后端![](https://tse3-mm.cn.bing.net/th/id/OIP-C.LBVzOA0WvDhthZCpBMO3PgHaHZ?rs=1&pid=ImgDetMain)
+4人小组两人做前端，两人做后端
+
+![](https://tse3-mm.cn.bing.net/th/id/OIP-C.LBVzOA0WvDhthZCpBMO3PgHaHZ?rs=1&pid=ImgDetMain)
 
 ### 项目介绍
 目前将后端的数据库连接的框架写完了，框架分为dao，orm，util3个部分
