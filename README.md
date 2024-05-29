@@ -17,3 +17,5 @@ pip install -r requirements.txt
 ##### util
 对项目里面的静态和常用方法封装，保存配置文件
 
+###说明
+请各位组员将自己的代码中引入的依赖写到requirements.txt中
