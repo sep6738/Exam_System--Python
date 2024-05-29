@@ -75,7 +75,7 @@ create table users
     userID           int auto_increment
         primary key,
     userName         varchar(255) null,
-    passWord         varchar(20)  null,
+    passWord         varchar(255) null,
     name             varchar(255) null,
     roleID           int          null,
     createAt         varchar(255) null,
