@@ -1,6 +1,6 @@
 # python大作业
 ### 安装依赖
-```dos```
+```dos
 pip install -r requirements.txt
 ```
 ### 分工安排
