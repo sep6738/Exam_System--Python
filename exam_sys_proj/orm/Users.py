@@ -140,6 +140,7 @@ class Users:
     def expirationDate(self):
         """
         自动执行+5min操作
+        
         :return:
         """
         return self._expirationDate + datetime.timedelta(minutes=5)

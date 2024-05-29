@@ -24,6 +24,7 @@ class UsersDAO(BaseDAO):
     def InsertVerificationCode(self, entity, pk):
         """
         根据主键插入验证码和验证码过期时间
+
         :param entity:
         :return:
         """
