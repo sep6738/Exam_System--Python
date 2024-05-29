@@ -1,4 +1,4 @@
-from orm.Broadcast import Broadcast
+from ..orm.Broadcast import Broadcast
 from .base_dao import BaseDAO
 
 

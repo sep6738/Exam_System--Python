@@ -1,4 +1,4 @@
-from orm.HomeworkOrExamPool import HomeworkOrExamPool
+from ..orm.HomeworkOrExamPool import HomeworkOrExamPool
 from .base_dao import BaseDAO
 
 

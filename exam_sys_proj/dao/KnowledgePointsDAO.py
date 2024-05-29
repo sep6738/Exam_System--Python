@@ -1,4 +1,4 @@
-from orm.KnowledgePoints import KnowledgePoints
+from ..orm.KnowledgePoints import KnowledgePoints
 from .base_dao import BaseDAO
 
 

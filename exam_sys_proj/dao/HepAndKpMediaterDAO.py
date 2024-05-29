@@ -1,4 +1,4 @@
-from orm.HepAndKpMediater import HepAndKpMediater
+from ..orm.HepAndKpMediater import HepAndKpMediater
 from .base_dao import BaseDAO
 
 

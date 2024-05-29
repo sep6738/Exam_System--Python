@@ -1,4 +1,4 @@
-from orm.ExamPool import ExamPool
+from ..orm.ExamPool import ExamPool
 from .base_dao import BaseDAO
 
 

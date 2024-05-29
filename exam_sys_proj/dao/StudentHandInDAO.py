@@ -1,4 +1,4 @@
-from orm.StudentHandIn import StudentHandIn
+from ..orm.StudentHandIn import StudentHandIn
 from .base_dao import BaseDAO
 
 

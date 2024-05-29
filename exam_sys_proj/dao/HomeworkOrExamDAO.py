@@ -1,4 +1,4 @@
-from orm.HomeworkOrExam import HomeworkOrExam
+from ..orm.HomeworkOrExam import HomeworkOrExam
 from .base_dao import BaseDAO
 
 

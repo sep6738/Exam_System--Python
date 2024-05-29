@@ -1,4 +1,4 @@
-from orm.BAndTCMediater import BAndTCMediater
+from ..orm.BAndTCMediater import BAndTCMediater
 from .base_dao import BaseDAO
 
 

@@ -1,4 +1,4 @@
-from orm.Role import Role
+from ..orm.Role import Role
 from .base_dao import BaseDAO
 
 

@@ -1,4 +1,4 @@
-from orm.BroadcastShow import BroadcastShow
+from ..orm.BroadcastShow import BroadcastShow
 from .base_dao import BaseDAO
 
 

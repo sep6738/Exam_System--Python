@@ -1,4 +1,4 @@
-from orm.StudentCourse import StudentCourse
+from ..orm.StudentCourse import StudentCourse
 from .base_dao import BaseDAO
 
 
