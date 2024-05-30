@@ -40,21 +40,16 @@ class RegistrationCode:
 
     @property
     def expirationDate(self):
-        """
-        自动执行+5min操作
-
-        :return:
-        """
-        return self._expirationDate + datetime.timedelta(minutes=5)
+        return self._expirationDate
 
     @expirationDate.setter
     def expirationDate(self, value):
         """
-        检测传入是否是datetime.datetime类型数据，若是则保留到秒储存，若不是则自动获取当前系统时间
+        检测传入是否是datetime.datetime类型数据，若是则保留到秒储存，若不是则自动获取当前系统时间并+5min
         :param value:
         :return:
         """
         if isinstance(value, datetime.datetime):
             self._expirationDate = value.replace(microsecond=0)
         else:
-            self._expirationDate = datetime.datetime.now().replace(microsecond=0)
+            self._expirationDate = datetime.datetime.now().replace(microsecond=0) + datetime.timedelta(minutes=5)

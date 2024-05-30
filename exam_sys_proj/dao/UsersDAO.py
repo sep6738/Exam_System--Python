@@ -9,6 +9,9 @@ class UsersDAO(BaseDAO):
     def QueryPasswordViaEmail(self, email):
         """
         根据邮箱查询密码hash(bytes类型)
+        若查到则返回密码hash(bytes类型)
+        若没查到则返回"noResult"字符串
+        查询错误返回"error"字符串
         :param email:
         :return:Users的一个对象
         """
@@ -23,4 +26,7 @@ class UsersDAO(BaseDAO):
         except Exception as e:
             print(e)
             return "error"
+
+
+
 
