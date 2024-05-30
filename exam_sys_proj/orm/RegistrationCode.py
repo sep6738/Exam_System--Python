@@ -29,7 +29,7 @@ class RegistrationCode:
         :param value:
         :return:
         """
-        characters = string.ascii_lowercase + string.digits
+        characters = string.ascii_uppercase + string.digits
         if isinstance(value, str):
             if len(value) == 6 and all(char in characters for char in value):
                 self._verificationCode = value
