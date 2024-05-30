@@ -1,5 +1,3 @@
-use Exam_Sys;
-
 create table broadcast
 (
     broadcastID int auto_increment
@@ -85,6 +83,7 @@ create table users
     email            varchar(255) not null,
     verificationCode varchar(6)   null,
     expirationDate   datetime     null,
+    isActive         bit          not null,
     constraint email
         unique (email),
     constraint users_role_roleID_fk
