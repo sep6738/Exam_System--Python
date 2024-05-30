@@ -63,6 +63,14 @@ create table hep_and_kp_mediater
         foreign key (kpID) references knowledge_points (kpID)
 );
 
+create table registration_code
+(
+    email            varchar(255) not null
+        primary key,
+    verificationCode varchar(6)   null,
+    expirationDate   datetime     null
+);
+
 create table role
 (
     roleID   int auto_increment
@@ -86,6 +94,8 @@ create table users
     isActive         bit          not null,
     constraint email
         unique (email),
+    constraint users_registration_code_email_fk
+        foreign key (email) references registration_code (email),
     constraint users_role_roleID_fk
         foreign key (roleID) references role (roleID)
             on delete set null
