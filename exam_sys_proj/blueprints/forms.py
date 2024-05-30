@@ -1,6 +1,6 @@
 import wtforms
 from wtforms.validators import Email, Length, EqualTo, InputRequired
-from models import Users, RegistrationCode
+# from models import Users, RegistrationCode
 from exts import dbPool
 from exam_sys_proj.dao.RegistrationCodeDAO import RegistrationCodeDAO, RegistrationCode
 from exam_sys_proj.dao.UsersDAO import UsersDAO, Users

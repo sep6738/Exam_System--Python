@@ -9,7 +9,7 @@ app = Flask(__name__)
 # 绑定配置文件
 app.config.from_object(config)
 
-db.init_app(app)
+# db.init_app(app)
 mail.init_app(app)
 
 # app.register_blueprint(qa_bp)

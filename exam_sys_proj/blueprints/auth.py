@@ -4,9 +4,9 @@ from flask_mail import Message
 from flask import request
 import string
 import random
-from models import RegistrationCode
+# from models import RegistrationCode
 from .forms import RegisterForm, LoginForm
-from models import Users
+# from models import Users
 from werkzeug.security import generate_password_hash, check_password_hash
 import datetime
 from exam_sys_proj.dao.RegistrationCodeDAO import RegistrationCodeDAO, RegistrationCode
