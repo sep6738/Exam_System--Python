@@ -1,11 +1,9 @@
 from flask import Flask, session, g
 import config
-from exts import db, mail
-from models import Users
+from exts import mail, db
+from exam_sys_proj.private.models import Users
 # from blueprints.qa import bp as qa_bp
 from blueprints.auth import bp as auth_bp
-from flask_migrate import Migrate
-
 
 app = Flask(__name__)
 # 绑定配置文件

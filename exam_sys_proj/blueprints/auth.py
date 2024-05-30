@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, jsonify, redirect, url_for, session
-from exts import mail, db
+from exts import mail, dbPool
 from flask_mail import Message
 from flask import request
 import string
@@ -8,7 +8,9 @@ from models import RegistrationCode
 from .forms import RegisterForm, LoginForm
 from models import Users
 from werkzeug.security import generate_password_hash, check_password_hash
-
+import datetime
+from exam_sys_proj.dao.RegistrationCodeDAO import RegistrationCodeDAO, RegistrationCode
+from exam_sys_proj.dao.UsersDAO import UsersDAO, Users
 
 # /auth
 bp = Blueprint("auth", __name__, url_prefix="/auth")
@@ -19,6 +21,7 @@ def login():
     if request.method == 'GET':
         return render_template("login.html")
     else:
+
         form = LoginForm(request.form)
         if form.validate():
             email = form.email.data
@@ -49,6 +52,7 @@ def register():
     if request.method == 'GET':
         return render_template("register.html")
     else:
+        usersOperator = UsersDAO(dbPool)
         # 验证用户提交的邮箱和验证码是否对应且正确
         # 表单验证：flask-wtf: wtforms
         form = RegisterForm(request.form)
@@ -56,9 +60,12 @@ def register():
             email = form.email.data
             username = form.username.data
             password = form.password.data
-            user = Users(email=email, username=username, password=generate_password_hash(password))
-            db.session.add(user)
-            db.session.commit()
+            name = form.name.data
+            user = Users(userName=username, passWord=password, name=name, roleID=1, email=email)
+            usersOperator.insert(user)
+            # user = Users(email=email, username=username, password=generate_password_hash(password))
+            # db.session.add(user)
+            # db.session.commit()
             return redirect(url_for("auth.login"))
         else:
             print(form.errors)
@@ -74,21 +81,25 @@ def logout():
 # bp.route：如果没有指定methods参数，默认就是GET请求
 @bp.route("/captcha/email")
 def get_email_captcha():
+    register = RegistrationCodeDAO(dbPool)
+
     # /captcha/email/<email>
     # /captcha/email?email=xxx@qq.com
     email = request.args.get("email")
     # 4/6：随机数组、字母、数组和字母的组合
-    source = (string.digits+string.ascii_uppercase)*6
-    captcha = random.sample(source, 6)
-    captcha = "".join(captcha)
+    # source = (string.digits+string.ascii_uppercase)*6
+    # captcha = random.sample(source, 6)
+    # captcha = "".join(captcha)
     # I/O：Input/Output
-    message = Message(subject="测试系统验证码", recipients=[email], body=f"您的验证码是:{captcha}")
+    registerOrm = RegistrationCode()
+    message = Message(subject="测试系统验证码", recipients=[email], body=f"您的验证码是:{registerOrm.verificationCode}")
     mail.send(message)
     # memcached/redis
     # 用数据库表的方式存储
-    email_captcha = RegistrationCode(email=email,captcha=captcha)
-    db.session.add(email_captcha)
-    db.session.commit()
+    register.SetVerificationCode(registerOrm, email)
+    # email_captcha = RegistrationCode(email=email,verificationCode=captcha,expirationDate=datetime.datetime.now()+datetime.timedelta(minutes=5))
+    # db.session.add(email_captcha)
+    # db.session.commit()
     # RESTful API
     # {code: 200/400/500, message: "", data: {}}
     return jsonify({"code": 200, "message": "", "data": None})
