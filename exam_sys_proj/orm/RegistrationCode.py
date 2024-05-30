@@ -4,7 +4,7 @@ import string
 
 
 class RegistrationCode:
-    def __init__(self,email=None, verificationCode=None, expirationDate=None):
+    def __init__(self, email=None, verificationCode=None, expirationDate=None):
         self.email = email
         self.verificationCode = verificationCode
         self.expirationDate = expirationDate
