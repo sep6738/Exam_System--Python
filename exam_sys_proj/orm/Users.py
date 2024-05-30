@@ -66,7 +66,7 @@ class Users:
                 self._passWord = hashed_str
             elif len(value) < 9:
                 self._passWord = None
-                print("密码长度小于9位")
+                print("密码长度小于9位！")
             else:
                 # 若传入字符串长度大于20，则认为传入的是加密后的哈希，不做任何处理，直接存储
                 self._passWord = value
