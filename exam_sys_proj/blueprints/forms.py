@@ -28,7 +28,7 @@ class RegisterForm(wtforms.Form):
         if not captcha_model:
             raise wtforms.ValidationError(message="邮箱或验证码错误！")
         # else:)
-        #     #todo：可以删掉captcha_model
+        #     #
         #     db.session.delete(captcha_model)
         #     db.session.commit()
 
