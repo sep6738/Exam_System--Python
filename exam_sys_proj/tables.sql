@@ -80,18 +80,15 @@ create table role
 
 create table users
 (
-    userID           int auto_increment
+    userID   int auto_increment
         primary key,
-    userName         varchar(255) null,
-    passWord         varchar(255) null,
-    name             varchar(255) null,
-    roleID           int          null,
-    createAt         datetime     null,
-    updateAt         datetime     null,
-    email            varchar(255) not null,
-    verificationCode varchar(6)   null,
-    expirationDate   datetime     null,
-    isActive         bit          not null,
+    userName varchar(255) null,
+    passWord varchar(255) null,
+    name     varchar(255) null,
+    roleID   int          null,
+    createAt datetime     null,
+    updateAt datetime     null,
+    email    varchar(255) not null,
     constraint email
         unique (email),
     constraint users_registration_code_email_fk
