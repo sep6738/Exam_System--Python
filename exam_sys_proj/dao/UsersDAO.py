@@ -24,12 +24,3 @@ class UsersDAO(BaseDAO):
             print(e)
             return "error"
 
-    def InsertVerificationCode(self, entity, pk):
-        """
-        根据主键插入验证码和验证码创建时间
-        :param entity:
-        :return:
-        """
-
-        print()
-
