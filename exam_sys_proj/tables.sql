@@ -1,3 +1,5 @@
+use Exam_Sys;
+
 create table broadcast
 (
     broadcastID int auto_increment
