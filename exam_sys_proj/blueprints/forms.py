@@ -4,7 +4,7 @@ from models import Users, RegistrationCode
 from exts import dbPool
 from exam_sys_proj.dao.RegistrationCodeDAO import RegistrationCodeDAO, RegistrationCode
 from exam_sys_proj.dao.UsersDAO import UsersDAO, Users
-
+from datetime import datetime
 
 # Form：主要就是用来验证前端提交的数据是否符合要求
 class RegisterForm(wtforms.Form):
@@ -21,19 +21,19 @@ class RegisterForm(wtforms.Form):
         email = field.data
         usersOperator = UsersDAO(dbPool)
         entity = Users()
-        user=usersOperator.query(entity,email)
+        user = usersOperator.query(entity, email)
         # user = Users.query.filter_by(email=email).first()
         if user:
             raise wtforms.ValidationError(message="该邮箱已经被注册！")
 
     # 2. 验证码是否正确
     def validate_captcha(self, field):
-        captcha = field.data
+        captcha = field.data.upper()
         email = self.email.data
         varificater = RegistrationCodeDAO(dbPool)
-        entity=RegistrationCode()
-        entity=varificater.query(entity,email)
-        if captcha!=entity.verificationCode:
+        entity = RegistrationCode()
+        entity = varificater.query(entity, email)
+        if captcha != entity.verificationCode or entity.xpirationDate < datetime.now():
             raise wtforms.ValidationError(message="邮箱或验证码错误！")
         # captcha_model = RegistrationCode.query.filter_by(email=email, captcha=captcha).first()
         # if not captcha_model:
@@ -47,7 +47,6 @@ class RegisterForm(wtforms.Form):
 class LoginForm(wtforms.Form):
     email = wtforms.StringField(validators=[Email(message="邮箱格式错误！")])
     password = wtforms.StringField(validators=[Length(min=6, max=20, message="密码格式错误！")])
-
 
 # class QuestionForm(wtforms.Form):
 #     title = wtforms.StringField(validators=[Length(min=3, max=100, message="标题格式错误！")])
