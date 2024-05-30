@@ -2,3 +2,6 @@ exam_sys_proj/util/config.yaml
 *.yaml
 *.idea
 exam_sys_proj/private/
+
+
+exam_sys_proj/testRegistrationCode.py
