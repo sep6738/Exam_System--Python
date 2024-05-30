@@ -12,21 +12,24 @@ class UsersDAO(BaseDAO):
         :param email:
         :return:Users的一个对象
         """
-
-        query = f"SELECT passWord FROM {self.table_name} WHERE email = %s"
-        result = self.execute_query(query, (email,))
-        if result:
-            entity = self.entity_class()
-            entity.passWord = result[0][0]
-            return entity
-        return "noResult"
+        try:
+            query = f"SELECT passWord FROM {self.table_name} WHERE email = %s"
+            result = self.execute_query(query, (email,))
+            if result:
+                entity = self.entity_class()
+                entity.passWord = result[0][0]
+                return entity
+            return "noResult"
+        except Exception as e:
+            print(e)
+            return "error"
 
     def InsertVerificationCode(self, entity, pk):
         """
-        根据主键插入验证码和验证码过期时间
-
+        根据主键插入验证码和验证码创建时间
         :param entity:
         :return:
         """
+
         print()
 
