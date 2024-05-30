@@ -1,7 +1,0 @@
-database:
-  host: localhost
-  user:
-  password:
-  database: Exam_Sys
-  mincached: 1
-  maxcached: 20
