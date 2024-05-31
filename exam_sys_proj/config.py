@@ -1,3 +1,4 @@
+SECRET_KEY ='FleshIsWeak'
 # # 数据库的配置信息
 # HOSTNAME = '127.0.0.1'
 # PORT     = '3306'

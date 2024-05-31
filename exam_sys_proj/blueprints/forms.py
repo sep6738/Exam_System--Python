@@ -31,9 +31,8 @@ class RegisterForm(wtforms.Form):
         captcha = field.data.upper()
         email = self.email.data
         varificater = RegistrationCodeDAO(dbPool)
-        entity = RegistrationCode()
-        entity = varificater.query(entity, email)
-        if captcha != entity.verificationCode or entity.xpirationDate < datetime.now():
+        entity : RegistrationCode = varificater.query(email)
+        if captcha != entity.verificationCode or entity.expirationDate < datetime.now():
             raise wtforms.ValidationError(message="邮箱或验证码错误！")
         # captcha_model = RegistrationCode.query.filter_by(email=email, captcha=captcha).first()
         # if not captcha_model:

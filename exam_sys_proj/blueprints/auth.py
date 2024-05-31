@@ -27,7 +27,7 @@ def login():
         if form.validate():
             email = form.email.data
             password = form.password.data
-            user: Users = users_operator.QueryPasswordViaEmail(email)
+            user: Users = users_operator.query(email,'email')
             # user = Users.query.filter_by(email=email).first()
             if not user:
                 print("邮箱未注册！")
