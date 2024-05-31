@@ -1,17 +1,21 @@
 from flask import Blueprint, render_template, jsonify, redirect, url_for, session
-from exts import mail, db
+from exts import mail, dbPool
 from flask_mail import Message
 from flask import request
 import string
 import random
-from models import RegistrationCode
+# from models import RegistrationCode
 from .forms import RegisterForm, LoginForm
-from models import Users
+# from models import Users
+import bcrypt
 from werkzeug.security import generate_password_hash, check_password_hash
-
+import datetime
+from exam_sys_proj.dao.RegistrationCodeDAO import RegistrationCodeDAO, RegistrationCode
+from exam_sys_proj.dao.UsersDAO import UsersDAO, Users
 
 # /auth
 bp = Blueprint("auth", __name__, url_prefix="/auth")
+users_operator = UsersDAO(dbPool)
 
 
 @bp.route("/login", methods=['GET', 'POST'])
@@ -23,16 +27,17 @@ def login():
         if form.validate():
             email = form.email.data
             password = form.password.data
-            user = Users.query.filter_by(email=email).first()
+            user: Users = users_operator.QueryPasswordViaEmail(email)
+            # user = Users.query.filter_by(email=email).first()
             if not user:
-                print("邮箱在数据库中不存在！")
+                print("邮箱未注册！")
                 return redirect(url_for("auth.login"))
-            if check_password_hash(user.password, password):
+            if bcrypt.checkpw(password.encode("utf-8"), user.passWord):
                 # cookie：
                 # cookie中不适合存储太多的数据，只适合存储少量的数据
                 # cookie一般用来存放登录授权的东西
                 # flask中的session，是经过加密后存储在cookie中的
-                session['user_id'] = user.id
+                session['user_id'] = user.userID
                 return redirect("/")
             else:
                 print("密码错误！")
@@ -56,9 +61,12 @@ def register():
             email = form.email.data
             username = form.username.data
             password = form.password.data
-            user = Users(email=email, username=username, password=generate_password_hash(password))
-            db.session.add(user)
-            db.session.commit()
+            name = form.name.data
+            user = Users(userName=username, passWord=password, name=name, roleID=1, email=email)
+            users_operator.insert(user)
+            # user = Users(email=email, username=username, password=generate_password_hash(password))
+            # db.session.add(user)
+            # db.session.commit()
             return redirect(url_for("auth.login"))
         else:
             print(form.errors)
@@ -74,21 +82,26 @@ def logout():
 # bp.route：如果没有指定methods参数，默认就是GET请求
 @bp.route("/captcha/email")
 def get_email_captcha():
+    register = RegistrationCodeDAO(dbPool)
+
     # /captcha/email/<email>
     # /captcha/email?email=xxx@qq.com
     email = request.args.get("email")
     # 4/6：随机数组、字母、数组和字母的组合
-    source = (string.digits+string.ascii_uppercase)*6
-    captcha = random.sample(source, 6)
-    captcha = "".join(captcha)
+    # source = (string.digits+string.ascii_uppercase)*6
+    # captcha = random.sample(source, 6)
+    # captcha = "".join(captcha)
     # I/O：Input/Output
-    message = Message(subject="测试系统验证码", recipients=[email], body=f"您的验证码是:{captcha}")
+    registerOrm = RegistrationCode()
+    message = Message(subject="好得不能再好了！测试系统验证码", recipients=[email],
+                      body=f"恭喜您受邀参与“好得不能再好了测试系统”的内测，您的验证码是:{registerOrm.verificationCode}，测试网址请向坎诺特先生支付1000至纯源石获得")
     mail.send(message)
     # memcached/redis
     # 用数据库表的方式存储
-    email_captcha = RegistrationCode(email=email,captcha=captcha)
-    db.session.add(email_captcha)
-    db.session.commit()
+    register.SetVerificationCode(registerOrm, email)
+    # email_captcha = RegistrationCode(email=email,verificationCode=captcha,expirationDate=datetime.datetime.now()+datetime.timedelta(minutes=5))
+    # db.session.add(email_captcha)
+    # db.session.commit()
     # RESTful API
     # {code: 200/400/500, message: "", data: {}}
     return jsonify({"code": 200, "message": "", "data": None})

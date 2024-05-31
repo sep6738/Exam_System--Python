@@ -1,63 +1,82 @@
+
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #343a40;
-}
+    /*background-color: #343a40; !* 深灰色背景 *!*/
+    color: #ffffff; /* 白色文本 */
+    font-family: 'Arial', sans-serif; /* 使用Arial字体 */
+    background-image: url('/static/img/mybackground.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+   }
 
 .container {
-    width: 40%;
-    margin: 0 auto;
+
+    max-width: 500px; /* 容器最大宽度 */
+    margin: 50px auto; /* 上下边距50px，左右自动居中 */
+    padding: 20px; /* 内边距 */
+    background-color: #424a52; /* 容器背景颜色稍浅的灰色 */
+    border-radius: 8px; /* 边角圆滑 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 盒子阴影效果 */
 }
 
-header {
-    background-color: #343a40;
-    color: white;
-    padding: 1rem 0;
-    text-align: center;
+h2 {
+    text-align: center; /* 标题居中 */
+    margin-bottom: 20px; /* 标题下边距 */
 }
 
-header h1 {
-    margin: 0;
+.form-group {
+    margin-bottom: 15px; /* 表单组件下边距 */
 }
 
-nav {
-    margin: 1rem 0;
-    text-align: center;
+label {
+    display: block; /* 标签显示为块级元素 */
+    margin-bottom: 5px; /* 标签下边距 */
 }
 
-nav a {
-    margin: 0 1rem;
-    text-decoration: none;
-    color: #007bff;
+input[type="email"],
+input[type="text"],
+input[type="password"] {
+    width: 100%; /* 输入框宽度 */
+    padding: 10px; /* 输入框内边距 */
+    border: 1px solid #ced4da; /* 输入框边框 */
+    border-radius: 4px; /* 输入框边角圆滑 */
+    background-color: #495057; /* 输入框背景颜色 */
+    color: #ffffff; /* 输入框文本颜色 */
 }
 
-nav a:hover {
-    text-decoration: underline;
-}
-
-footer {
-    background-color: #343a40;
-    color: white;
-    text-align: center;
-    padding: 1rem 0;
-    position: fixed;
-    width: 100%;
-    bottom: 0;
-}
-
-body {
-    background-color: #1a1a1a;
-    color: #ffffff;
-}
-
-.form-control {
-    background-color: #333333;
-    color: #ffffff;
-    border: none;
+input[type="email"]:focus,
+input[type="text"]:focus,
+input[type="password"]:focus {
+    border-color: #80bdff; /* 输入框聚焦时边框颜色 */
+    outline: none; /* 去除聚焦时的默认轮廓线 */
 }
 
 .btn-primary {
-    background-color: #007bff;
-    border: none;
+    background-color: #007bff; /* 按钮背景颜色 */
+    border-color: #007bff; /* 按钮边框颜色 */
 }
+
+.btn-primary:hover {
+    background-color: #0069d9; /* 按钮悬停时背景颜色 */
+    border-color: #0062cc; /* 按钮悬停时边框颜色 */
+}
+
+.btn-block {
+    margin-top: 30px;
+    display: block; /* 按钮显示为块级元素 */
+    height: 50px;
+    width: 100%; /* 按钮宽度 */
+    font-size: 1.2em;
+}
+
+.small {
+    font-size: 0.8em; /* 辅助文本字体大小 */
+}
+
+.title h1 {
+    text-align: center;
+    color: #ffffff;
+    font-size: 50px;
+    font-family: 'Arial', sans-serif;
+    /*margin-top: 10px;*/
+}
+

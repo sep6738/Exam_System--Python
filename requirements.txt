@@ -8,3 +8,4 @@ flask_migrate
 flask_mail
 flask-mail
 wtforms
+email_validator

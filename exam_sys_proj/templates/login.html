@@ -1,27 +1,31 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试系统</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/bootstrap.4.6.min.css') }}">
+{#    <link rel="stylesheet" href="{{ url_for('static', filename='css/init.css') }}">#}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="{{ url_for('static', filename='jquery/jquery.3.6.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/register.js') }}"></script>
 
-{% block title %}测试系统-登录{% endblock %}
+</head>
+<body>
 
-{% block head %}{% endblock %}
-
-{% block body %}
-<div class="row mt-4">
-            <div class="col"></div>
-            <div class="col">
-                <form method="POST">
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">邮箱</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email">
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputPassword1">密码</label>
-                        <input type="password" name="password" class="form-control" id="exampleInputPassword1">
-                    </div>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary btn-block">立即登录</button>
-                    </div>
-                </form>
-            </div>
-            <div class="col"></div>
+<div class="container">
+    <h2>用户登录</h2>
+    <form method="POST">
+        <div class="form-group">
+            <label for="exampleInputEmail1">邮箱</label>
+            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email">
         </div>
-{% endblock %}1
+        <div class="form-group">
+            <label for="exampleInputPassword1">密码</label>
+            <input type="password" class="form-control" id="exampleInputPassword1" name="password">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">登录</button>
+    </form>
+</div>
+</body>
+</html>
