@@ -16,8 +16,8 @@ mail.init_app(app)
 app.register_blueprint(auth_bp)
 
 # blueprint：用来做模块化的
-print(os.path.abspath('.'))
-print(os.getcwd())
+# print(os.path.abspath('.'))
+# print(os.getcwd())
 
 # before_request/ before_first_request/ after_request
 # hook

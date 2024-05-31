@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, jsonify, redirect, url_for, session
+from flask import Blueprint, render_template, jsonify, redirect, url_for, session, flash
 from exts import mail, dbPool
 from flask_mail import Message
 from flask import request
@@ -40,10 +40,13 @@ def login():
                 session['user_id'] = user.userID
                 return redirect("/")
             else:
-                print("密码错误！")
+                flash(f"密码错误！", 'danger')
                 return redirect(url_for("auth.login"))
         else:
-            print(form.errors)
+            for field, errors in form.errors.items():
+                for error in errors:
+                    # flash(f"Error in {getattr(form, field).label.text}: {error}", 'danger')
+                    flash(f"{error}", 'danger')
             return redirect(url_for("auth.login"))
 
 
@@ -69,8 +72,12 @@ def register():
             # db.session.commit()
             return redirect(url_for("auth.login"))
         else:
-            print(form.errors)
+            for field, errors in form.errors.items():
+                for error in errors:
+                    # flash(f"Error in {getattr(form, field).label.text}: {error}", 'danger')
+                    flash(f"{error}", 'danger')
             return redirect(url_for("auth.register"))
+            # return render_template('register.html', form=form)
 
 
 @bp.route("/logout")
