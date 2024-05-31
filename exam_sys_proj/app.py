@@ -1,7 +1,7 @@
 from flask import Flask, session, g
 import config
 from exts import mail, db
-from exam_sys_proj.private.models import Users
+# from exam_sys_proj.private.models import Users
 # from blueprints.qa import bp as qa_bp
 from blueprints.auth import bp as auth_bp
 

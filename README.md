@@ -28,4 +28,4 @@ pip install -r requirements.txt
 
 登录页面：http://127.0.0.1:5000/auth/login
 
-![](https://i.ecywang.com/upload/1/img2.baidu.com/it/u=1692210954,3405949213&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=1092)
+![](https://tiebapic.baidu.com/forum/pic/item/1905a40f4bfbfbedb0d153433ef0f736aec31faf.jpg?tbpicau=2024-06-11-05_235fed4b9fbc811241c6ee44bfa6c12e)

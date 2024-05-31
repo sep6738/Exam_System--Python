@@ -20,8 +20,7 @@ class RegisterForm(wtforms.Form):
     def validate_email(self, field):
         email = field.data
         usersOperator = UsersDAO(dbPool)
-        entity = Users()
-        user = usersOperator.query(entity, email)
+        user = usersOperator.query(email)
         # user = Users.query.filter_by(email=email).first()
         if user:
             raise wtforms.ValidationError(message="该邮箱已经被注册！")
