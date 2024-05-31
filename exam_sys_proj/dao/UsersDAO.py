@@ -19,10 +19,11 @@ class UsersDAO(BaseDAO):
             query = f"SELECT passWord FROM {self.table_name} WHERE email = %s"
             result = self.execute_query(query, (email,))
             if result:
-                entity = self.entity_class()
-                entity.passWord = result[0][0]
+                # entity = self.entity_class()
+                entity = self._create_entity_from_row(result[0])
+                print(vars(entity))
                 return entity
-            return "noResult"
+            return None
         except Exception as e:
             print(e)
             return "error"

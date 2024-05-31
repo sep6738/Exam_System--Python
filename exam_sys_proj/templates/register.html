@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>用户注册</title>
+    <title>测试系统</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/bootstrap.4.6.min.css') }}">
 {#    <link rel="stylesheet" href="{{ url_for('static', filename='css/init.css') }}">#}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
@@ -19,7 +19,7 @@
         <div class="form-group">
             <label for="exampleInputEmail1">邮箱</label>
             <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email">
-            <small id="emailHelp" style="color: #9b9b9b;">我们不会把邮箱用于其他用户</small>
+            <small id="emailHelp" style="color: #9b9b9b;">一个邮箱只能注册一个账号</small>
         </div>
         <div class="form-group">
             <label for="exampleInputEmail1">验证码</label>
@@ -33,14 +33,17 @@
         <div class="form-group">
             <label for="exampleInputEmail1">用户名</label>
             <input type="text" class="form-control" name="username">
+            <small id="emailHelp" style="color: #9b9b9b;">不超过20个字符</small>
         </div>
         <div class="form-group">
             <label for="exampleInputEmail1">姓名</label>
             <input type="text" class="form-control" name="name">
+            <small id="emailHelp" style="color: #9b9b9b;">请输入真实姓名</small>
         </div>
         <div class="form-group">
             <label for="exampleInputPassword1">密码</label>
             <input type="password" class="form-control" id="exampleInputPassword1" name="password">
+            <small id="emailHelp" style="color: #9b9b9b;">密码长度需在9到20位之间</small>
         </div>
         <div class="form-group">
             <label for="exampleInputPassword1">确认密码</label>
