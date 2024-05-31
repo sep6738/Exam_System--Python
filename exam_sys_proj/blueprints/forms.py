@@ -6,6 +6,7 @@ from exam_sys_proj.dao.RegistrationCodeDAO import RegistrationCodeDAO, Registrat
 from exam_sys_proj.dao.UsersDAO import UsersDAO, Users
 from datetime import datetime
 
+
 # Form：主要就是用来验证前端提交的数据是否符合要求
 class RegisterForm(wtforms.Form):
     email = wtforms.StringField(validators=[Email(message="邮箱格式错误！")])
@@ -30,7 +31,7 @@ class RegisterForm(wtforms.Form):
         captcha = field.data.upper()
         email = self.email.data
         varificater = RegistrationCodeDAO(dbPool)
-        entity : RegistrationCode = varificater.query(email)
+        entity: RegistrationCode = varificater.query(email)
         if captcha != entity.verificationCode or entity.expirationDate < datetime.now():
             raise wtforms.ValidationError(message="邮箱或验证码错误！")
         # captcha_model = RegistrationCode.query.filter_by(email=email, captcha=captcha).first()

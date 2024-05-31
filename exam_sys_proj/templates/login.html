@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>测试系统</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/bootstrap.4.6.min.css') }}">
-{#    <link rel="stylesheet" href="{{ url_for('static', filename='css/init.css') }}">#}
+    {#    <link rel="stylesheet" href="{{ url_for('static', filename='css/init.css') }}">#}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script src="{{ url_for('static', filename='jquery/jquery.3.6.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/register.js') }}"></script>
@@ -20,35 +20,35 @@
             <label for="exampleInputEmail1">邮箱</label>
             <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email">
             {% with messages = get_flashed_messages(with_categories=true) %}
-            <ul class="flashes">
-                {% for category, message in messages %}
-                    {% if message=="邮箱格式错误！" %}
-                        <li class="{{ category }}">{{ message }}</li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
+                <ul class="flashes">
+                    {% for category, message in messages %}
+                        {% if message=="邮箱格式错误！" %}
+                            <li class="{{ category }}">{{ message }}</li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
             {% endwith %}
         </div>
         <div class="form-group">
             <label for="exampleInputPassword1">密码</label>
             <input type="password" class="form-control" id="exampleInputPassword1" name="password">
-{#            {% with messages = get_flashed_messages(with_categories=true) %}#}
-{#            <ul class="flashes">#}
-{#                {% for category, message in messages %}#}
-{#                    {% if message=="密码格式错误！" %}#}
-{#                        <li class="{{ category }}">{{ message }}</li>#}
-{#                    {% endif %}#}
-{#                {% endfor %}#}
-{#            </ul>#}
-{#            {% endwith %}#}
+            {#            {% with messages = get_flashed_messages(with_categories=true) %}#}
+            {#            <ul class="flashes">#}
+            {#                {% for category, message in messages %}#}
+            {#                    {% if message=="密码格式错误！" %}#}
+            {#                        <li class="{{ category }}">{{ message }}</li>#}
+            {#                    {% endif %}#}
+            {#                {% endfor %}#}
+            {#            </ul>#}
+            {#            {% endwith %}#}
             {% with messages = get_flashed_messages(with_categories=true) %}
-            <ul class="flashes">
-                {% for category, message in messages %}
-                    {% if message=="密码错误！" %}
-                        <li class="{{ category }}">{{ message }}</li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
+                <ul class="flashes">
+                    {% for category, message in messages %}
+                        {% if message=="密码错误！" %}
+                            <li class="{{ category }}">{{ message }}</li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
             {% endwith %}
         </div>
         <button type="submit" class="btn btn-primary btn-block">登录</button>

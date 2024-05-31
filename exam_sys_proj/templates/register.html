@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>测试系统</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/bootstrap.4.6.min.css') }}">
-{#    <link rel="stylesheet" href="{{ url_for('static', filename='css/init.css') }}">#}
+    {#    <link rel="stylesheet" href="{{ url_for('static', filename='css/init.css') }}">#}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script src="{{ url_for('static', filename='jquery/jquery.3.6.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/register.js') }}"></script>
@@ -20,22 +20,22 @@
             <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email">
             <small id="emailHelp" style="color: #9b9b9b;">一个邮箱只能注册一个账号</small>
             {% with messages = get_flashed_messages(with_categories=true) %}
-            <ul class="flashes">
-                {% for category, message in messages %}
-                    {% if message=="邮箱格式错误！" %}
-                        <li class="{{ category }}">{{ message }}</li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
+                <ul class="flashes">
+                    {% for category, message in messages %}
+                        {% if message=="邮箱格式错误！" %}
+                            <li class="{{ category }}">{{ message }}</li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
             {% endwith %}
             {% with messages = get_flashed_messages(with_categories=true) %}
-            <ul class="flashes">
-                {% for category, message in messages %}
-                    {% if message=="该邮箱已经被注册！" %}
-                        <li class="{{ category }}">{{ message }}</li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
+                <ul class="flashes">
+                    {% for category, message in messages %}
+                        {% if message=="该邮箱已经被注册！" %}
+                            <li class="{{ category }}">{{ message }}</li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
             {% endwith %}
         </div>
         <div class="form-group">
@@ -47,22 +47,22 @@
                 </div>
             </div>
             {% with messages = get_flashed_messages(with_categories=true) %}
-            <ul class="flashes">
-                {% for category, message in messages %}
-                    {% if message=="验证码格式错误！" %}
-                        <li class="{{ category }}">{{ message }}</li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
+                <ul class="flashes">
+                    {% for category, message in messages %}
+                        {% if message=="验证码格式错误！" %}
+                            <li class="{{ category }}">{{ message }}</li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
             {% endwith %}
             {% with messages = get_flashed_messages(with_categories=true) %}
-            <ul class="flashes">
-                {% for category, message in messages %}
-                    {% if message=="邮箱或验证码错误！" %}
-                        <li class="{{ category }}">{{ message }}</li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
+                <ul class="flashes">
+                    {% for category, message in messages %}
+                        {% if message=="邮箱或验证码错误！" %}
+                            <li class="{{ category }}">{{ message }}</li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
             {% endwith %}
         </div>
         <div class="form-group">
@@ -70,13 +70,13 @@
             <input type="text" class="form-control" name="username">
             <small id="emailHelp" style="color: #9b9b9b;">不超过20个字符</small>
             {% with messages = get_flashed_messages(with_categories=true) %}
-            <ul class="flashes">
-                {% for category, message in messages %}
-                    {% if message=="用户名格式错误！" %}
-                        <li class="{{ category }}">{{ message }}</li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
+                <ul class="flashes">
+                    {% for category, message in messages %}
+                        {% if message=="用户名格式错误！" %}
+                            <li class="{{ category }}">{{ message }}</li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
             {% endwith %}
         </div>
         <div class="form-group">
@@ -84,13 +84,13 @@
             <input type="text" class="form-control" name="name">
             <small id="emailHelp" style="color: #9b9b9b;">请输入真实姓名</small>
             {% with messages = get_flashed_messages(with_categories=true) %}
-            <ul class="flashes">
-                {% for category, message in messages %}
-                    {% if message=="姓名格式错误！" %}
-                        <li class="{{ category }}">{{ message }}</li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
+                <ul class="flashes">
+                    {% for category, message in messages %}
+                        {% if message=="姓名格式错误！" %}
+                            <li class="{{ category }}">{{ message }}</li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
             {% endwith %}
         </div>
         <div class="form-group">
@@ -98,26 +98,26 @@
             <input type="password" class="form-control" id="exampleInputPassword1" name="password">
             <small id="emailHelp" style="color: #9b9b9b;">密码长度需在9到20位之间</small>
             {% with messages = get_flashed_messages(with_categories=true) %}
-            <ul class="flashes">
-                {% for category, message in messages %}
-                    {% if message=="密码长度需在9到20位之间！" %}
-                        <li class="{{ category }}">{{ message }}</li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
+                <ul class="flashes">
+                    {% for category, message in messages %}
+                        {% if message=="密码长度需在9到20位之间！" %}
+                            <li class="{{ category }}">{{ message }}</li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
             {% endwith %}
         </div>
         <div class="form-group">
             <label for="exampleInputPassword1">确认密码</label>
             <input type="password" class="form-control" name="password_confirm">
             {% with messages = get_flashed_messages(with_categories=true) %}
-            <ul class="flashes">
-                {% for category, message in messages %}
-                    {% if message=="两次密码不一致！" %}
-                        <li class="{{ category }}">{{ message }}</li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
+                <ul class="flashes">
+                    {% for category, message in messages %}
+                        {% if message=="两次密码不一致！" %}
+                            <li class="{{ category }}">{{ message }}</li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
             {% endwith %}
         </div>
         <button type="submit" class="btn btn-primary btn-block">立即注册</button>
