@@ -19,3 +19,7 @@ pip install -r requirements.txt
 
 ### 说明
 请各位组员将自己的代码中引入的依赖写到requirements.txt中.
+运行前请修改exam_sys_proj/util/config.yaml连接自己的数据库
+运行app.py以打开网页
+注册页面：http://127.0.0.1:5000/auth/register
+登录页面：http://127.0.0.1:5000/auth/login
