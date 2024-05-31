@@ -91,8 +91,6 @@ create table users
     email    varchar(255) not null,
     constraint email
         unique (email),
-    constraint users_registration_code_email_fk
-        foreign key (email) references registration_code (email),
     constraint users_role_roleID_fk
         foreign key (roleID) references role (roleID)
             on delete set null
