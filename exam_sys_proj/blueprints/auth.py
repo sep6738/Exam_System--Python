@@ -27,12 +27,12 @@ def login():
         if form.validate():
             email = form.email.data
             password = form.password.data
-            user: Users= users_operator.QueryPasswordViaEmail(email)
+            user: Users = users_operator.QueryPasswordViaEmail(email)
             # user = Users.query.filter_by(email=email).first()
             if not user:
                 print("邮箱未注册！")
                 return redirect(url_for("auth.login"))
-            if bcrypt.checkpw(password.encode("utf-8"),user.passWord):
+            if bcrypt.checkpw(password.encode("utf-8"), user.passWord):
                 # cookie：
                 # cookie中不适合存储太多的数据，只适合存储少量的数据
                 # cookie一般用来存放登录授权的东西
