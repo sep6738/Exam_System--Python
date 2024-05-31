@@ -6,7 +6,7 @@ class UsersDAO(BaseDAO):
     def __init__(self, db_util):
         super().__init__(db_util, Users, "users", "userID")
 
-    def QueryPasswordViaEmail(self, email):
+    def QueryViaEmail(self, email):
         """
         根据邮箱查询密码hash(bytes类型)
         若查到则返回密码hash(bytes类型)
@@ -16,12 +16,11 @@ class UsersDAO(BaseDAO):
         :return:Users的一个对象
         """
         try:
-            query = f"SELECT passWord FROM {self.table_name} WHERE email = %s"
+            columns = [attr for attr in dir(self.entity_class) if not callable(getattr(self.entity_class, attr)) and not attr.startswith("_")]
+            query = f"SELECT {', '.join(columns)} FROM {self.table_name} WHERE email = %s"
             result = self.execute_query(query, (email,))
             if result:
-                entity = self.entity_class()
-                entity.passWord = result[0][0]
-                return entity
+                return self._create_entity_from_row(result[0])
             return "noResult"
         except Exception as e:
             print(e)

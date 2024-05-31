@@ -28,13 +28,13 @@ class BaseDAO:
             placeholders = ", ".join(["%s"] * len(columns))
             # 构建sql
             query = f"INSERT INTO {self.table_name} ({', '.join(columns)}) VALUES ({placeholders})"
-            # print(query)
+            print(query)
             # 传sql
             new_pk = self.execute_update(query, values)
             return new_pk
         except Exception as e:
             print(e)
-            return None
+            return "error"
 
     # 根据主键查询
     def query(self, entity, primary_key_value):
@@ -44,12 +44,16 @@ class BaseDAO:
         :param primary_key_value:
         :return:
         """
-        columns = [attr for attr in dir(entity) if not callable(getattr(entity, attr)) and not attr.startswith("_")]
-        query = f"SELECT {', '.join(columns)} FROM {self.table_name} WHERE {self.primary_key} = %s"
-        result = self.execute_query(query, (primary_key_value,))
-        if result:
-            return self._create_entity_from_row(result[0])
-        return None
+        try:
+            columns = [attr for attr in dir(entity) if not callable(getattr(entity, attr)) and not attr.startswith("_")]
+            query = f"SELECT {', '.join(columns)} FROM {self.table_name} WHERE {self.primary_key} = %s"
+            result = self.execute_query(query, (primary_key_value,))
+            if result:
+                return self._create_entity_from_row(result[0])
+            return None
+        except Exception as e:
+            print(e)
+            return "error"
 
     def update(self, entity):
         """
