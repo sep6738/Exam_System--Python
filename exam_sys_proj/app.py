@@ -1,5 +1,5 @@
 from flask import Flask, session, g
-import config
+import config,os
 from exts import mail, db
 # from exam_sys_proj.private.models import Users
 # from blueprints.qa import bp as qa_bp
@@ -16,7 +16,8 @@ mail.init_app(app)
 app.register_blueprint(auth_bp)
 
 # blueprint：用来做模块化的
-
+print(os.path.abspath('.'))
+print(os.getcwd())
 
 # before_request/ before_first_request/ after_request
 # hook

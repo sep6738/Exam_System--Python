@@ -16,6 +16,11 @@
 <div class="container">
     <h2>用户注册</h2>
     <form method="POST">
+        {% for field, errors in form.errors.items() %}
+        <div class="error">
+            {{ field }}: {{ errors[0] }}
+        </div>
+    {% endfor %}
         <div class="form-group">
             <label for="exampleInputEmail1">邮箱</label>
             <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email">
