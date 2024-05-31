@@ -28,4 +28,4 @@ pip install -r requirements.txt
 
 登录页面：http://127.0.0.1:5000/auth/login
 
-![](https://tiebapic.baidu.com/forum/pic/item/1905a40f4bfbfbedb0d153433ef0f736aec31faf.jpg?tbpicau=2024-06-11-05_235fed4b9fbc811241c6ee44bfa6c12e)
+![](https://p3-pc-sign.douyinpic.com/tos-cn-i-0813/226b9baade6c45058933a63fb6cadcf9~tplv-dy-aweme-images-v2:3000:3000:q75.webp?biz_tag=aweme_images&from=3213915784&s=PackSourceEnum_AWEME_DETAIL&sc=image&se=false&x-expires=1719763200&x-signature=a4becisRjxm%2F%2B%2FjinVd1Z2zPyAY%3D)
