@@ -8,9 +8,10 @@ class UsersDAO(BaseDAO):
 
     def QueryViaEmail(self, email):
         """
-        根据邮箱查询密码hash(bytes类型)
+        根据邮箱查询整个行的数据，其中查询到的密码
+        是加密后的密码hash(bytes类型)
         若查到则返回密码hash(bytes类型)
-        若没查到则返回"noResult"字符串
+        若没查到则返回None
         查询错误返回"error"字符串
         :param email:
         :return:Users的一个对象

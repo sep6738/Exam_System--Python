@@ -11,7 +11,8 @@ class RegistrationCodeDAO(BaseDAO):
         根据email插入验证码和验证码过期时间
         先检查是否存在email
         若存在则更新数据，不存在则插入数据
-        :param entity:
+        :param email:
+        :param entity:SetVerificationCode的orm类
         :return:
         """
         # 查询是否存在email
