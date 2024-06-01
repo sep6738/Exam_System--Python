@@ -7,8 +7,10 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/bootstrap.4.6.min.css') }}">
     {#    <link rel="stylesheet" href="{{ url_for('static', filename='css/init.css') }}">#}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script src="{{ url_for('static', filename='jquery/jquery.3.6.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/register.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='jquery/jquery.js') }}" charset="utf-8"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/register.js') }}" charset="utf-8"></script>
+    {#    <script src="{{ STATIC_URL }}/jquery/jquery.js"></script>#}
+    {#    <script src="{{ STATIC_URL }}/js/register.js"></script>#}
 
 </head>
 <body>
@@ -43,7 +45,7 @@
             <div class="input-group">
                 <input type="text" class="form-control" name="captcha">
                 <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button" id="captcha-btn">获取验证码</button>
+                    <button class="btn btn-info" type="button" id="captcha-btn">获取验证码</button>
                 </div>
             </div>
             {% with messages = get_flashed_messages(with_categories=true) %}
