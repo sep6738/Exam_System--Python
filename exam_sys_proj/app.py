@@ -1,9 +1,21 @@
+import sys, os
+
+# 添加搜索路径
+dir_path = os.path.dirname(os.path.realpath(__file__))
+parent_dir_path = os.path.abspath(os.path.join(dir_path, os.pardir))
+sys.path.insert(0, parent_dir_path)
+
 from flask import Flask, session, g
-from .src import config
-from .src.extents import mail
+from exam_sys_proj.src import config
+from exam_sys_proj.src.extents import mail
 # from exam_sys_proj.private.models import Users
 # from blueprints.qa import bp as qa_bp
-from .blueprints.auth import bp as auth_bp
+from exam_sys_proj.blueprints.auth import bp as auth_bp
+
+
+
+
+
 
 app = Flask(__name__)
 # 绑定配置文件
