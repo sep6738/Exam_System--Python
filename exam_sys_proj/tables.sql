@@ -90,10 +90,7 @@ create table users
     updateAt datetime     null,
     email    varchar(255) not null,
     constraint email
-        unique (email),
-    constraint users_role_roleID_fk
-        foreign key (roleID) references role (roleID)
-            on delete set null
+        unique (email)
 );
 
 create table broadcast_show
@@ -184,4 +181,7 @@ create table student_hand_in
         foreign key (userID) references users (userID)
             on delete cascade
 );
+
+create index users_role_roleID_fk
+    on users (roleID);
 
