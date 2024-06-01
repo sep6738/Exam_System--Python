@@ -20,6 +20,8 @@ from exam_sys_proj.blueprints.auth import bp as auth_bp
 app = Flask(__name__)
 # 绑定配置文件
 app.config.from_object(config)
+app.config['STATIC_URL'] = '/static'
+
 
 # db.init_app(app)
 mail.init_app(app)
