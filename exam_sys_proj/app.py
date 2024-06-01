@@ -12,10 +12,8 @@ from exam_sys_proj.src.extents import mail
 # from blueprints.qa import bp as qa_bp
 from exam_sys_proj.blueprints.auth import bp as auth_bp
 
-
-
-
-
+# todo:修改密码
+# todo:导航条，创建实体，用户名显示，登出，未登录时跳转登陆界面
 
 app = Flask(__name__)
 # 绑定配置文件
