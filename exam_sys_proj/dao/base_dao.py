@@ -6,6 +6,29 @@ class BaseDAO:
         self.table_name = table_name
         self.primary_key = primary_key
 
+
+    def batchInsert(self, entity_list:list, access_protected):
+        try:
+            entity = entity_list[0]
+            columns = [attr for attr in dir(entity) if not callable(getattr(entity, attr)) and not attr.startswith("_")]
+            # 获取各属性的值
+            # 对代码["_"+pp for pp in columns]的解释：
+            # 加入_直接取只经过set方法处理的数据，如果不要_那么取到的值会经过set方法和get方法的处理
+            if access_protected:
+                values = [getattr(entity, col) for col in ["_"+pp for pp in columns]]
+            else:
+                values = [getattr(entity, col) for col in columns]
+            # 构建占位符
+            placeholders = ", ".join(["%s"] * len(columns))
+            # 构建sql
+            query = f"INSERT INTO {self.table_name} ({', '.join(columns)}) VALUES ({placeholders})"
+            # print(query)
+            # 传sql
+            new_pk = self.execute_update(query, values)
+            return new_pk
+        except Exception as e:
+            print(e)
+            return "error"
     # 插入数据，传入orm的一个实例
     def insert(self, entity, access_protected=True):
         """
