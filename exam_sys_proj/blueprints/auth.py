@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, jsonify, redirect, url_for, session, flash
-from exam_sys_proj.flask.extents import mail, dbPool
+from exam_sys_proj.src.extents import mail, dbPool
 from flask_mail import Message
 from flask import request
 import string
@@ -58,7 +58,7 @@ def register():
         return render_template("register.html")
     else:
         # 验证用户提交的邮箱和验证码是否对应且正确
-        # 表单验证：flask-wtf: wtforms
+        # 表单验证：src-wtf: wtforms
         form = RegisterForm(request.form)
         if form.validate():
             email = form.email.data
@@ -95,8 +95,8 @@ def get_email_captcha():
     # /captcha/email?email=xxx@qq.com
     email = request.args.get("email")
     # 4/6：随机数组、字母、数组和字母的组合
-    # source = (string.digits+string.ascii_uppercase)*6
-    # captcha = random.sample(source, 6)
+    # src = (string.digits+string.ascii_uppercase)*6
+    # captcha = random.sample(src, 6)
     # captcha = "".join(captcha)
     # I/O：Input/Output
     registerOrm = RegistrationCode()
