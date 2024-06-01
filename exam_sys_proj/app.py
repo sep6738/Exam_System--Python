@@ -1,9 +1,9 @@
 from flask import Flask, session, g
-import config,os
-from exts import mail, db
+from exam_sys_proj.flask import config
+from exam_sys_proj.flask.extents import mail
 # from exam_sys_proj.private.models import Users
 # from blueprints.qa import bp as qa_bp
-from blueprints.auth import bp as auth_bp
+from exam_sys_proj.blueprints.auth import bp as auth_bp
 
 app = Flask(__name__)
 # 绑定配置文件

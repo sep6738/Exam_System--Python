@@ -3,7 +3,7 @@
 # flask-sqlalchemy
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
-from util.db_util import DBUtil
+from exam_sys_proj.util.db_util import DBUtil
 
 dbPool = DBUtil('exam_sys_proj/util/config.yaml')
 db = SQLAlchemy()

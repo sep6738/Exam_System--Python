@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, jsonify, redirect, url_for, session, flash
-from exts import mail, dbPool
+from exam_sys_proj.flask.extents import mail, dbPool
 from flask_mail import Message
 from flask import request
 import string
