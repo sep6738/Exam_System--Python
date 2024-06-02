@@ -7,18 +7,6 @@ create table broadcast
     courseID    varchar(255) null
 );
 
-create table exam_pool
-(
-    epID           int auto_increment
-        primary key,
-    examID         int null,
-    questionID     int null,
-    questionNumber int null
-);
-
-create index exam_pool_examID_index
-    on exam_pool (examID);
-
 create table homework_or_exam_pool
 (
     hepID           int auto_increment
@@ -28,17 +16,23 @@ create table homework_or_exam_pool
     answer          json         null,
     courseName      varchar(255) null,
     difficultyLevel int          null,
-    knowledgePoint  int          null,
-    isActive        bit          null,
-    kpID            int          null,
-    constraint homework_or_exam_pool_exam_pool_examID_fk
-        foreign key (hepID) references exam_pool (examID)
+    isActive        bit          null
 );
 
-alter table exam_pool
-    add constraint exam_pool_homework_or_exam_pool_hepID_fk
+create table exam_pool
+(
+    epID           int auto_increment
+        primary key,
+    examID         int null,
+    questionID     int null,
+    questionNumber int null,
+    constraint exam_pool_homework_or_exam_pool_hepID_fk
         foreign key (questionID) references homework_or_exam_pool (hepID)
-            on delete cascade;
+            on delete cascade
+);
+
+create index exam_pool_examID_index
+    on exam_pool (examID);
 
 create index homework_or_exam_pool_hepID_index
     on homework_or_exam_pool (hepID);
