@@ -186,11 +186,11 @@
                 form.on('submit(choice_question)', function (data) {
                     var field = data.field; // 获取表单字段值
                     // 显示填写结果，仅作演示用
-                    filed.type = "选择题"
+                    filed.leixing = "选择题"
                     var xhr = new XMLHttpRequest();
-                    xhr.open('POST', '/teacher/api/question_create', true);
-                    xhr.setRequestHeader('Content-Type', 'application/json');
-                    xhr.send(JSON.stringify(field));
+                    {#xhr.open('POST', '/teacher/api/question_create', true);#}
+                    {#xhr.setRequestHeader('Content-Type', 'application/json');#}
+                    {#xhr.send(JSON.stringify(field));#}
 
                     layer.alert(JSON.stringify(field), {
                         title: '当前填写的字段值'
