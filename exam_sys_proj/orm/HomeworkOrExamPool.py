@@ -6,9 +6,7 @@ class HomeworkOrExamPool:
         self.answer = answer
         self.courseName = courseName
         self.difficultyLevel = difficultyLevel
-        self.knowledgePoint = knowledgePoint
         self.isActive = isActive
-        self.kpID = kpID
 
     @property
     def hepID(self):
@@ -59,25 +57,9 @@ class HomeworkOrExamPool:
         self._difficultyLevel = value
 
     @property
-    def knowledgePoint(self):
-        return self._knowledgePoint
-
-    @knowledgePoint.setter
-    def knowledgePoint(self, value):
-        self._knowledgePoint = value
-
-    @property
     def isActive(self):
         return self._isActive
 
     @isActive.setter
     def isActive(self, value):
         self._isActive = value
-
-    @property
-    def kpID(self):
-        return self._kpID
-
-    @kpID.setter
-    def kpID(self, value):
-        self._kpID = value
