@@ -1,16 +1,17 @@
 import sys, os
-
 # 添加搜索路径
 dir_path = os.path.dirname(os.path.realpath(__file__))
 parent_dir_path = os.path.abspath(os.path.join(dir_path, os.pardir))
 sys.path.insert(0, parent_dir_path)
 
+from exam_sys_proj.dao.UsersDAO import UsersDAO, Users
 from flask import Flask, session, g
 from exam_sys_proj.src import config
-from exam_sys_proj.src.extents import mail
+from exam_sys_proj.src.extensions import mail, dbPool
 # from exam_sys_proj.private.models import Users
 # from blueprints.qa import bp as qa_bp
 from exam_sys_proj.blueprints.auth import bp as auth_bp
+from exam_sys_proj.blueprints.teacher import bp as teacher_bp
 
 # todo:修改密码
 # todo:导航条，创建实体，用户名显示，登出，未登录时跳转登陆界面
@@ -20,11 +21,12 @@ app = Flask(__name__)
 app.config.from_object(config)
 app.config['STATIC_URL'] = '/static'
 
+users_operator = UsersDAO(dbPool)
 
 # db.init_app(app)
 mail.init_app(app)
 
-# app.register_blueprint(qa_bp)
+app.register_blueprint(teacher_bp)
 app.register_blueprint(auth_bp)
 
 # blueprint：用来做模块化的
@@ -37,7 +39,7 @@ app.register_blueprint(auth_bp)
 def my_before_request():
     user_id = session.get("user_id")
     if user_id:
-        user = Users.query.get(user_id)
+        user: Users = users_operator.query(user_id)
         setattr(g, "user", user)
     else:
         setattr(g, "user", None)
