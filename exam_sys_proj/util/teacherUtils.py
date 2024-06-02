@@ -1,5 +1,6 @@
 from ..dao.HomeworkOrExamPoolDAO import HomeworkOrExamPool, HomeworkOrExamPoolDAO
 from ..dao.KnowledgePointsDAO import KnowledgePointsDAO, KnowledgePoints
+import json
 
 
 class TeacherUtils:
@@ -24,5 +25,5 @@ class TeacherUtils:
         del question_dict['knowledge_point']
         del question_dict['difficulty']
         del question_dict['subject']
-        homeworkOrExamPool.question = str(question_dict)
+        homeworkOrExamPool.question = json.dumps(question_dict)
         hoeppk = homeworkOrExamPoolDao.insert(homeworkOrExamPool)

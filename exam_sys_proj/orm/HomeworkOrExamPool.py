@@ -1,5 +1,5 @@
 class HomeworkOrExamPool:
-    def __init__(self, hepID=None, type=None, question=None, answer=None, courseName=None, difficultyLevel=None, knowledgePoint=None, isActive=None, kpID=None):
+    def __init__(self, hepID=None, type=None, question=None, answer=None, courseName=None, difficultyLevel=None, isActive=None):
         self.hepID = hepID
         self.type = type
         self.question = question
