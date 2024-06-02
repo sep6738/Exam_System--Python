@@ -109,7 +109,7 @@ create table teacher_course
     time       varchar(255) null,
     courseName varchar(255) null,
     isActive   bit          null,
-    class_     varchar(6)   not null,
+    class_     varchar(255) not null,
     constraint teacher_course_users_userID_fk
         foreign key (userID) references users (userID)
 );
