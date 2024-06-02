@@ -1,5 +1,216 @@
 {% extends "teacher_base.html" %}
 
 {% block body %}
+    <div class="layui-tab layui-tab-brief">
+        <ul class="layui-tab-title">
+            <li class="layui-this">选择题</li>
+            <li>判断题</li>
+            <li>填空题</li>
+            <li>主观题</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <form class="layui-form" action="" lay-filter="choice_question">
+                    {#                    <div class="layui-btn-container" style="margin-bottom: 6px; text-align: center;">#}
+                    {#                        <button type="button" class="layui-btn layui-btn-normal" id="LAY-component-form-setval">赋值#}
+                    {#                        </button>#}
+                    {#                        <button type="button" class="layui-btn layui-btn-normal" id="LAY-component-form-getval">取值#}
+                    {#                        </button>#}
+                    {#                    </div>#}
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">题干</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="main_content" lay-verify="title" autocomplete="off"
+                                   placeholder="请输入题干" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">选项1</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="selection1" placeholder="请输入选项1" autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">选项2</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="selection2" placeholder="请输入选项2" autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">选项3</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="selection3" placeholder="请输入选项3" autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">选项4</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="selection4" placeholder="请输入选项4" autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form">
+                        <label class="layui-form-label">答案：</label>
+                        <input type="radio" name="answer" value="1" title="1" checked>
+                        <input type="radio" name="answer" value="2" title="2">
+                        <input type="radio" name="answer" value="3" title="3">
+                        <input type="radio" name="answer" value="4" title="4">
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">学科</label>
+                        <div class="layui-input-block">
+                            <select name="subject" lay-filter="subject">
+                                <option value=""></option>
+                                <option value="语文">语文</option>
+                                <option value="数学">数学</option>
+                                <option value="数据结构">数据结构</option>
+                                <option value="计算机组成原理">计算机组成原理</option>
+                                <option value="操作系统原理">操作系统原理</option>
+                                <option value="计算机网络">计算机网络</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">知识点</label>
+                        <div class="layui-input-block">
+                            <input type="checkbox" name="knowledge_point[1]" title="1">
+                            <input type="checkbox" name="knowledge_point[2]" title="2">
+                            <input type="checkbox" name="knowledge_point[3]" title="3">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">是否打乱选项</label>
+                        <div class="layui-input-block">
+                            <input type="checkbox" name="shuffle" lay-skin="switch" lay-text="TRUE|FALSE">
+                        </div>
+                    </div>
+                    {#                    <div class="layui-form-item layui-form-text">#}
+                    {#                        <label class="layui-form-label lay-creatable">文本域</label>#}
+                    {#                        <div class="layui-input-block">#}
+                    {#                            <textarea placeholder="请输入" class="layui-textarea" name="desc"></textarea>#}
+                    {#                        </div>#}
+                    {#                    </div>#}
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button type="submit" class="layui-btn" lay-submit lay-filter="choice_question">立即提交
+                            </button>
+                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="layui-tab-item">
+                <form class="layui-form" action="" lay-filter="True_or_False">
+                    {#                    <div class="layui-btn-container" style="margin-bottom: 6px; text-align: center;">#}
+                    {#                        <button type="button" class="layui-btn layui-btn-normal" id="LAY-component-form-setval">赋值#}
+                    {#                        </button>#}
+                    {#                        <button type="button" class="layui-btn layui-btn-normal" id="LAY-component-form-getval">取值#}
+                    {#                        </button>#}
+                    {#                    </div>#}
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">题干</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="main_content" lay-verify="title" autocomplete="off"
+                                   placeholder="请输入题干" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">学科</label>
+                        <div class="layui-input-block">
+                            <select name="subject" lay-filter="subject">
+                                <option value=""></option>
+                                <option value="语文">语文</option>
+                                <option value="数学">数学</option>
+                                <option value="数据结构">数据结构</option>
+                                <option value="计算机组成原理">计算机组成原理</option>
+                                <option value="操作系统原理">操作系统原理</option>
+                                <option value="计算机网络">计算机网络</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">知识点</label>
+                        <div class="layui-input-block">
+                            <input type="checkbox" name="knowledge_point[1]" title="1">
+                            <input type="checkbox" name="knowledge_point[2]" title="2">
+                            <input type="checkbox" name="knowledge_point[3]" title="3">
+                        </div>
+                    </div>
+                    {#                    <div class="layui-form-item layui-form-text">#}
+                    {#                        <label class="layui-form-label lay-creatable">文本域</label>#}
+                    {#                        <div class="layui-input-block">#}
+                    {#                            <textarea placeholder="请输入" class="layui-textarea" name="desc"></textarea>#}
+                    {#                        </div>#}
+                    {#                    </div>#}
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button type="submit" class="layui-btn" lay-submit lay-filter="True_or_False">立即提交
+                            </button>
+                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="layui-tab-item">内容-3</div>
+            <div class="layui-tab-item">内容-4</div>
+
+        </div>
+
+
+        <script>
+            layui.use(function () {
+                var $ = layui.$;
+                var form = layui.form;
+                // 表单赋值
+                {#$('#LAY-component-form-setval').on('click', function () {#}
+                {#    form.val('demo-val-filter', {#}
+                {#        "username": "贤心", // "name": "value"#}
+                {#        "password": "AAAAAA",#}
+                {#        "interest": 1,#}
+                {#        "like[write]": true, // 复选框选中状态#}
+                {#        "close": true, // 开关状态#}
+                {#        "sex": "女",#}
+                {#        "desc": "Layui 用于更简单快速地构建网页界面"#}
+                {#    });#}
+                // 表单取值
+                layui.$('#LAY-component-form-getval').on('click', function () {
+                    var data = form.val('demo-val-filter');
+                    alert(JSON.stringify(data));
+                });
+                // 提交事件
+                form.on('submit(choice_question)', function (data) {
+                    var field = data.field; // 获取表单字段值
+                    // 显示填写结果，仅作演示用
+                    filed.type = "选择题"
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('POST', '/teacher/api/question_create', true);
+                    xhr.setRequestHeader('Content-Type', 'application/json');
+                    xhr.send(JSON.stringify(field));
+
+                    layer.alert(JSON.stringify(field), {
+                        title: '当前填写的字段值'
+                    });
+                    return false; // 阻止默认 form 跳转
+                })
+                form.on('submit(True_or_False)', function (data) {
+                    var field = data.field; // 获取表单字段值
+                    field.shuffle = true
+                    field.questions = ["√", "X"]
+                    // 显示填写结果，仅作演示用
+                    layer.alert(JSON.stringify(field), {
+                        title: '当前填写的字段值'
+                    });
+                    // 此处可执行 Ajax 等操作
+                    // …
+                    return false; // 阻止默认 form 跳转
+                })
+                ;
+            })
+        </script>
 
 {% endblock %}

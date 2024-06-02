@@ -18,7 +18,19 @@ def detail():
 
 @bp.route("/question_create")
 def question_create():
-    return render_template("teacher_question_create.html")
+    if request.method == 'GET':
+        return render_template("teacher_question_create.html")
+    # else:
+    #     data = request.get_json()
+    #     print(data)
+    #     return jsonify({'message': 'Data received successfully'})
+
+
+@bp.route("/api/question_create", methods=['POST'])
+def question_create_api():
+    data = request.get_json()
+    print(data)
+    return jsonify({'message': 'Data received successfully'})
 
 # @bp.route("/qa/public", methods=['GET', 'POST'])
 # @login_required
