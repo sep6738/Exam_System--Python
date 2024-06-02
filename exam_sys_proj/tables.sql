@@ -23,9 +23,10 @@ create table exam_pool
 (
     epID           int auto_increment
         primary key,
-    examID         int null,
-    questionID     int null,
-    questionNumber int null,
+    examID         int          null,
+    questionID     int          null,
+    questionNumber int          null,
+    title          varchar(255) null,
     constraint exam_pool_homework_or_exam_pool_hepID_fk
         foreign key (questionID) references homework_or_exam_pool (hepID)
             on delete cascade
