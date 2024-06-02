@@ -20,7 +20,6 @@ def detail():
 @bp.route("/question_create")
 def question_create():
     if request.method == 'GET':
-
         return render_template("teacher_question_create.html")
     # else:
     #     data = request.get_json()
@@ -45,7 +44,8 @@ def question_create_api():
             question['shuffle'] = False
         question['subject'] = data['subject']
         question['difficulty'] = int(data['difficulty'])
-        question['score'] = float(data['score'])
+        question['score'] = []
+        question['score'].append(float(data['score']))
         question['knowledge_point'] = []
         for i in data.keys():
             if i.startswith('knowledge_point'):
