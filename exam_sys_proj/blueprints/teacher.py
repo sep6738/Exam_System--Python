@@ -6,6 +6,7 @@ from .forms import RegisterForm, LoginForm
 import bcrypt
 from exam_sys_proj.dao.RegistrationCodeDAO import RegistrationCodeDAO, RegistrationCode
 from exam_sys_proj.dao.UsersDAO import UsersDAO, Users
+from exam_sys_proj.util.teacherUtils import TeacherUtils
 
 bp = Blueprint("teacher", __name__, url_prefix="/teacher")
 
@@ -19,6 +20,7 @@ def detail():
 @bp.route("/question_create")
 def question_create():
     if request.method == 'GET':
+
         return render_template("teacher_question_create.html")
     # else:
     #     data = request.get_json()
@@ -29,7 +31,27 @@ def question_create():
 @bp.route("/api/question_create", methods=['POST'])
 def question_create_api():
     data = request.get_json()
-    print(data)
+    # print(data)
+    question = {}
+    if data['question_type'] == '选择题':
+        question['main_content'] = data['main_content']
+        question['type'] = '选择题'
+        question['questions'] = [data['selection1'], data['selection2'], data['selection3'], data['selection4']]
+        question['answer'] = []
+        question['answer'].append(data['answer'])
+        if data['shuffle'] == 'on':
+            question['shuffle'] = True
+        else:
+            question['shuffle'] = False
+        question['subject'] = data['subject']
+        question['difficulty'] = int(data['difficulty'])
+        question['score'] = float(data['score'])
+        question['knowledge_point'] = []
+        for i in data.keys():
+            if i.startswith('knowledge_point'):
+                question['knowledge_point'].append(i[16:])
+    # print(question)
+    TeacherUtils.insertOneQuestion(dbPool, question)
     return jsonify({'message': 'Data received successfully'})
 
 # @bp.route("/qa/public", methods=['GET', 'POST'])
