@@ -1,8 +1,8 @@
-import sys, os
+from flask import Flask, render_template
 
-print(sys.path)
+app = Flask(__name__)
 
-dir_path = os.path.dirname(os.path.realpath(__file__))
-parent_dir_path = os.path.abspath(os.path.join(dir_path, os.pardir))
-sys.path.insert(0, parent_dir_path)
-print(sys.path)
+
+@app.route('/')
+def index():
+    return render_template('teacher_base.html')

@@ -1,15 +1,9 @@
 from flask import Blueprint, render_template, jsonify, redirect, url_for, session, flash
-from exam_sys_proj.src.extents import mail, dbPool
+from exam_sys_proj.src.extensions import mail, dbPool
 from flask_mail import Message
 from flask import request
-import string
-import random
-# from models import RegistrationCode
 from .forms import RegisterForm, LoginForm
-# from models import Users
 import bcrypt
-from werkzeug.security import generate_password_hash, check_password_hash
-import datetime
 from exam_sys_proj.dao.RegistrationCodeDAO import RegistrationCodeDAO, RegistrationCode
 from exam_sys_proj.dao.UsersDAO import UsersDAO, Users
 
@@ -38,7 +32,10 @@ def login():
                 # cookie一般用来存放登录授权的东西
                 # flask中的session，是经过加密后存储在cookie中的
                 session['user_id'] = user.userID
-                return redirect("/")
+                if user.roleID == 1:
+                    return redirect("/student/detail")
+                if user.roleID == 2:
+                    return redirect("/teacher/detail")
             else:
                 flash(f"密码错误！", 'danger')
                 return redirect(url_for("auth.login"))
@@ -83,7 +80,7 @@ def register():
 @bp.route("/logout")
 def logout():
     session.clear()
-    return redirect("/")
+    return redirect("/auth/login")
 
 
 # bp.route：如果没有指定methods参数，默认就是GET请求
