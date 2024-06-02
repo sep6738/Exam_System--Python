@@ -4,7 +4,9 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
 from ..util.db_util import DBUtil
-
-dbPool = DBUtil('./util/config.yaml')
+try:
+    dbPool = DBUtil('./util/config.yaml')
+except Exception as e:
+    dbPool = DBUtil('exam_sys_proj/util/config.yaml')
 db = SQLAlchemy()
 mail = Mail()
