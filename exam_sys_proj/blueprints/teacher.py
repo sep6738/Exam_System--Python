@@ -20,7 +20,9 @@ def detail():
 @bp.route("/question_create")
 def question_create():
     if request.method == 'GET':
-        return render_template("teacher_question_create.html")
+        knowledge_points = TeacherUtils.queryTeacherSubjectKP(dbPool, session.get("user_id"))
+        # print(knowledge_points)
+        return render_template("teacher_question_create.html", knowledge_points=knowledge_points)
     # else:
     #     data = request.get_json()
     #     print(data)

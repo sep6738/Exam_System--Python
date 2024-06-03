@@ -64,7 +64,8 @@
                         <label class="layui-form-label">学科</label>
                         <div class="layui-input-block">
                             <select name="subject" lay-filter="subject">
-                                <option value=""></option>
+                                <option value="{{ knowledge_points[0].subject }}"
+                                        selected>{{ knowledge_points[0].subject }}</option>
                                 <option value="语文">语文</option>
                                 <option value="数学">数学</option>
                                 <option value="数据结构">数据结构</option>
@@ -77,9 +78,10 @@
                     <div class="layui-form-item">
                         <label class="layui-form-label">知识点</label>
                         <div class="layui-input-block">
-                            <input type="checkbox" name="knowledge_point:线性代数" title="线性代数">
-                            <input type="checkbox" name="knowledge_point:微积分" title="微积分">
-                            <input type="checkbox" name="knowledge_point:三角函数" title="三角函数">
+                            {% for knowledge_point in knowledge_points %}
+                                <input type="checkbox" name="knowledge_point:{{ knowledge_point.kpID }}"
+                                       title="{{ knowledge_point.kpName }}">
+                            {% endfor %}
                         </div>
                     </div>
                     <div class="layui-form-item">
@@ -104,7 +106,7 @@
                     <div class="layui-form-item">
                         <label class="layui-form-label">分数</label>
                         <div class="layui-col-xs6">
-                            <input type="number" lay-affix="number" value="5" step="0.5" min="0.5"
+                            <input type="number" lay-affix="number" value="4" step="0.5" min="0.5"
                                    max="100" class="layui-input" name="score">
                         </div>
                     </div>
@@ -134,12 +136,10 @@
                                    placeholder="请输入题干" class="layui-input">
                         </div>
                     </div>
-
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">学科</label>
-                        <div class="layui-input-block">
+                    <div class="layui-input-block">
                             <select name="subject" lay-filter="subject">
-                                <option value=""></option>
+                                <option value="{{ knowledge_points[0].subject }}"
+                                        selected>{{ knowledge_points[0].subject }}</option>
                                 <option value="语文">语文</option>
                                 <option value="数学">数学</option>
                                 <option value="数据结构">数据结构</option>
@@ -148,13 +148,13 @@
                                 <option value="计算机网络">计算机网络</option>
                             </select>
                         </div>
-                    </div>
                     <div class="layui-form-item">
                         <label class="layui-form-label">知识点</label>
                         <div class="layui-input-block">
-                            <input type="checkbox" name="knowledge_point[1]" title="1">
-                            <input type="checkbox" name="knowledge_point[2]" title="2">
-                            <input type="checkbox" name="knowledge_point[3]" title="3">
+                            {% for knowledge_point in knowledge_points %}
+                                <input type="checkbox" name="knowledge_point:{{ knowledge_point.kpID }}"
+                                       title="{{ knowledge_point.kpName }}">
+                            {% endfor %}
                         </div>
                     </div>
                     {#                    <div class="layui-form-item layui-form-text">#}
