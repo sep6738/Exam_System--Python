@@ -9,7 +9,6 @@ class TeacherUtils:
     @classmethod
     def insertOneQuestion(cls, db_util, question_dict: dict):
         homeworkOrExamPoolDao = HomeworkOrExamPoolDAO(db_util)
-        knowledgePointsDAO = KnowledgePointsDAO(db_util)
         hepAndKpMediaterDAO = HepAndKpMediaterDAO(db_util)
         homeworkOrExamPool = HomeworkOrExamPool(
             type=question_dict["type"],
@@ -18,24 +17,22 @@ class TeacherUtils:
             difficultyLevel=question_dict['difficulty'],
             isActive=True
         )
-        knowledgePoints = KnowledgePoints(
-            subject=question_dict['subject']
-        )
+        # knowledgePoints = KnowledgePoints(
+        #     subject=question_dict['subject']
+        # )
         kp_list = []
         for i in question_dict['knowledge_point']:
-            kp = knowledgePointsDAO.query(value=i, column_name="kpName")
-            if kp is not None:
-                kp_list.append(kp)
+            kp_list.append(int(i))
         del question_dict["answer"]
         del question_dict['knowledge_point']
         del question_dict['difficulty']
         del question_dict['subject']
         homeworkOrExamPool.question = json.dumps(question_dict)
         hepID = homeworkOrExamPoolDao.insert(homeworkOrExamPool)
-        print(kp_list)
+        print(kp_list, 5)
         if len(kp_list) > 0:
             for i in kp_list:
-                hepAndKpMediater = HepAndKpMediater(hepID=hepID, kpID=i.kpID)
+                hepAndKpMediater = HepAndKpMediater(hepID=hepID, kpID=i)
                 hepAndKpMediaterDAO.insert(hepAndKpMediater)
 
 
@@ -51,6 +48,5 @@ class TeacherUtils:
         teacherCourseDAO = TeacherCourseDAO(db_util)
         knowledgePointsDAO = KnowledgePointsDAO(db_util)
         subject_list = teacherCourseDAO.querySubjectViaTeacherID(userID)
-        print(subject_list[0].subject)
         result_list = knowledgePointsDAO.query(value=subject_list[0].subject, column_name="subject",  is_all=True)
         return result_list
