@@ -4,3 +4,4 @@ exam_sys_proj/util/config.yaml
 exam_sys_proj/private/
 #exam_sys_proj/config.py
 exam_sys_proj/testRegistrationCode.py
+exam_sys_proj/testTeacherUtils.py
