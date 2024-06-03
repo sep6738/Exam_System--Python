@@ -136,7 +136,81 @@
                                    placeholder="请输入题干" class="layui-input">
                         </div>
                     </div>
+                    <div class="layui-form">
+                        <label class="layui-form-label">答案：</label>
+                        <input type="radio" name="answer" value="1" title="√" checked>
+                        <input type="radio" name="answer" value="2" title="×">
+                    </div>
                     <div class="layui-input-block">
+                        <select name="subject" lay-filter="subject">
+                            <option value="{{ knowledge_points[0].subject }}"
+                                    selected>{{ knowledge_points[0].subject }}</option>
+                            <option value="语文">语文</option>
+                            <option value="数学">数学</option>
+                            <option value="数据结构">数据结构</option>
+                            <option value="计算机组成原理">计算机组成原理</option>
+                            <option value="操作系统原理">操作系统原理</option>
+                            <option value="计算机网络">计算机网络</option>
+                        </select>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">知识点</label>
+                        <div class="layui-input-block">
+                            {% for knowledge_point in knowledge_points %}
+                                <input type="checkbox" name="knowledge_point:{{ knowledge_point.kpID }}"
+                                       title="{{ knowledge_point.kpName }}">
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">难度</label>
+                        <div class="layui-col-xs6">
+                            <input type="number" lay-affix="number" value="5" step="1" max="10" min="1"
+                                   class="layui-input" name="difficulty">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">分数</label>
+                        <div class="layui-col-xs6">
+                            <input type="number" lay-affix="number" value="4" step="0.5" min="0.5"
+                                   max="100" class="layui-input" name="score">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button type="submit" class="layui-btn" lay-submit lay-filter="True_or_False">立即提交
+                            </button>
+                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="layui-tab-item">
+                <form class="layui-form" action="" lay-filter="gap_filling">
+                    {#                    <div class="layui-btn-container" style="margin-bottom: 6px; text-align: center;">#}
+                    {#                        <button type="button" class="layui-btn layui-btn-normal" id="LAY-component-form-setval">赋值#}
+                    {#                        </button>#}
+                    {#                        <button type="button" class="layui-btn layui-btn-normal" id="LAY-component-form-getval">取值#}
+                    {#                        </button>#}
+                    {#                    </div>#}
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">题干</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="main_content" lay-verify="title" autocomplete="off"
+                                   placeholder="请输入题干" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">答案：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="answer" placeholder="请输入答案" autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">学科</label>
+                        <div class="layui-input-block">
                             <select name="subject" lay-filter="subject">
                                 <option value="{{ knowledge_points[0].subject }}"
                                         selected>{{ knowledge_points[0].subject }}</option>
@@ -148,6 +222,7 @@
                                 <option value="计算机网络">计算机网络</option>
                             </select>
                         </div>
+                    </div>
                     <div class="layui-form-item">
                         <label class="layui-form-label">知识点</label>
                         <div class="layui-input-block">
@@ -157,23 +232,120 @@
                             {% endfor %}
                         </div>
                     </div>
-                    {#                    <div class="layui-form-item layui-form-text">#}
-                    {#                        <label class="layui-form-label lay-creatable">文本域</label>#}
-                    {#                        <div class="layui-input-block">#}
-                    {#                            <textarea placeholder="请输入" class="layui-textarea" name="desc"></textarea>#}
-                    {#                        </div>#}
-                    {#                    </div>#}
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">难度</label>
+                        <div class="layui-col-xs6">
+                            <input type="number" lay-affix="number" value="5" step="1" max="10" min="1"
+                                   class="layui-input" name="difficulty">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">分数</label>
+                        <div class="layui-col-xs6">
+                            <input type="number" lay-affix="number" value="4" step="0.5" min="0.5"
+                                   max="100" class="layui-input" name="score">
+                        </div>
+                    </div>
+
+
                     <div class="layui-form-item">
                         <div class="layui-input-block">
-                            <button type="submit" class="layui-btn" lay-submit lay-filter="True_or_False">立即提交
+                            <button type="submit" class="layui-btn" lay-submit lay-filter="gap_filling">立即提交
                             </button>
                             <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                         </div>
                     </div>
                 </form>
             </div>
-            <div class="layui-tab-item">内容-3</div>
-            <div class="layui-tab-item">内容-4</div>
+            <div class="layui-tab-item">
+                <form class="layui-form" action="" lay-filter="subjective_question">
+                    {#                    <div class="layui-btn-container" style="margin-bottom: 6px; text-align: center;">#}
+                    {#                        <button type="button" class="layui-btn layui-btn-normal" id="LAY-component-form-setval">赋值#}
+                    {#                        </button>#}
+                    {#                        <button type="button" class="layui-btn layui-btn-normal" id="LAY-component-form-getval">取值#}
+                    {#                        </button>#}
+                    {#                    </div>#}
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label lay-creatable">题干</label>
+                        <div class="layui-input-block">
+                            <textarea placeholder="请输入题干" class="layui-textarea" name="main_content"></textarea>
+                        </div>
+                    </div>
+                    <div class="layui-input-block">
+                        <button id="add" type="button" class="layui-btn layui-btn-warm layui-btn-sm">
+                            <i class="layui-icon">&#xe654;</i>
+                            添加小题
+                        </button>
+                    </div>
+
+                    <div class="layui-input-block" id="last">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">小题1</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="childQuestion:1" placeholder="请输入小题1" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">答案：</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="answer:1" placeholder="请输入答案1" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">分数</label>
+                            <div class="layui-col-xs6">
+                                <input type="number" lay-affix="number" value="5.0" step="0.5" min="0.5"
+                                       max="100" class="layui-input" name="score:1">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">学科</label>
+                        <div class="layui-input-block">
+                            <select name="subject" lay-filter="subject">
+                                <option value="{{ knowledge_points[0].subject }}"
+                                        selected>{{ knowledge_points[0].subject }}</option>
+                                <option value="语文">语文</option>
+                                <option value="数学">数学</option>
+                                <option value="数据结构">数据结构</option>
+                                <option value="计算机组成原理">计算机组成原理</option>
+                                <option value="操作系统原理">操作系统原理</option>
+                                <option value="计算机网络">计算机网络</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">知识点</label>
+                        <div class="layui-input-block">
+                            {% for knowledge_point in knowledge_points %}
+                                <input type="checkbox" name="knowledge_point:{{ knowledge_point.kpID }}"
+                                       title="{{ knowledge_point.kpName }}">
+                            {% endfor %}
+                        </div>
+                    </div>
+
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">难度</label>
+                        <div class="layui-col-xs6">
+                            <input type="number" lay-affix="number" value="5" step="1" max="10" min="1"
+                                   class="layui-input" name="difficulty">
+                        </div>
+                    </div>
+
+
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button type="submit" class="layui-btn" lay-submit lay-filter="subjective_question">立即提交
+                            </button>
+                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
 
         </div>
 
@@ -215,9 +387,13 @@
                 })
                 form.on('submit(True_or_False)', function (data) {
                     var field = data.field; // 获取表单字段值
-                    field.shuffle = true;
-                    field.questions = ["√", "X"];
+                    field.question_type = "判断题";
                     // 显示填写结果，仅作演示用
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('POST', '/teacher/api/question_create', true);
+                    xhr.setRequestHeader('Content-Type', 'application/json');
+                    xhr.send(JSON.stringify(field));
+
                     layer.alert(JSON.stringify(field), {
                         title: '当前填写的字段值'
                     });
@@ -225,7 +401,62 @@
                     // …
                     return false; // 阻止默认 form 跳转
                 })
+                form.on('submit(gap_filling)', function (data) {
+                    var field = data.field; // 获取表单字段值
+                    // 显示填写结果，仅作演示用
+                    field.question_type = "填空题";
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('POST', '/teacher/api/question_create', true);
+                    xhr.setRequestHeader('Content-Type', 'application/json');
+                    xhr.send(JSON.stringify(field));
+
+                    layer.alert(JSON.stringify(field), {
+                        title: '当前填写的字段值'
+                    });
+                    return false; // 阻止默认 form 跳转
+                })
+                var x = 2;
+                $("#add").click(function () {
+                    var str = '<div class="layui-form-item">' +
+                        '<label class="layui-form-label">小题' + x + '</label>' +
+                        '<div class="layui-input-block">' +
+                        '<input type="text" name="childQuestion:' + x + '" placeholder="请输入小题' + x + '" autocomplete="off"' +
+                        'class="layui-input">' +
+                        '</div>' +
+                        '</div>' +
+                        '<div class="layui-form-item">' +
+                        '<label class="layui-form-label">答案：</label>' +
+                        '<div class="layui-input-block">' +
+                        '<input type="text" name="answer:' + x + '" placeholder="请输入答案' + x + '" autocomplete="off"' +
+                        'class="layui-input">' +
+                        '</div>' +
+                        '</div>' +
+                        '<div class="layui-form-item">' +
+                        '<label class="layui-form-label">分数</label>' +
+                        '<div class="layui-col-xs6">' +
+                        '<input type="number" lay-affix="number" value="5.0" step="0.5" min="0.5"' +
+                        'max="100" class="layui-input" name="score:' + x + '">' +
+                        '</div>' +
+                        '</div>'
+                    ;
+                    $("#last").append(str);
+                    x++;
+                });
                 ;
+                form.on('submit(subjective_question)', function (data) {
+                    var field = data.field; // 获取表单字段值
+                    // 显示填写结果，仅作演示用
+                    field.question_type = "主观题";
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('POST', '/teacher/api/question_create', true);
+                    xhr.setRequestHeader('Content-Type', 'application/json');
+                    xhr.send(JSON.stringify(field));
+
+                    layer.alert(JSON.stringify(field), {
+                        title: '当前填写的字段值'
+                    });
+                    return false; // 阻止默认 form 跳转
+                })
             })
         </script>
 
