@@ -56,7 +56,7 @@ def question_create_api():
         question['questions'] = [data['selection1'], data['selection2'], data['selection3'], data['selection4']]
         question['answer'] = []
         question['answer'].append(data['answer'])
-        if data['shuffle'] == 'on':
+        if 'shuffle' in data:
             question['shuffle'] = True
         else:
             question['shuffle'] = False
