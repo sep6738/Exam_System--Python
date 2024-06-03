@@ -29,7 +29,7 @@ create table exam_pool
     title          varchar(255) null,
     constraint exam_pool_homework_or_exam_pool_hepID_fk
         foreign key (questionID) references homework_or_exam_pool (hepID)
-            on delete cascade
+            on update cascade on delete cascade
 );
 
 create index exam_pool_examID_index
@@ -53,9 +53,11 @@ create table hep_and_kp_mediater
     hepID      int null,
     kpID       int null,
     constraint hep_and_kp_mediater_homework_or_exam_pool_hepID_fk
-        foreign key (hepID) references homework_or_exam_pool (hepID),
+        foreign key (hepID) references homework_or_exam_pool (hepID)
+            on update cascade on delete cascade,
     constraint hep_and_kp_mediater_knowledge_points_kpID_fk
         foreign key (kpID) references knowledge_points (kpID)
+            on update cascade on delete cascade
 );
 
 create table registration_code
@@ -96,9 +98,11 @@ create table broadcast_show
     broadcastID     int null,
     isActive        bit null,
     constraint broadcast_show_broadcast_broadcastID_fk
-        foreign key (broadcastID) references broadcast (broadcastID),
+        foreign key (broadcastID) references broadcast (broadcastID)
+            on update cascade on delete cascade,
     constraint broadcast_show_users_userID_fk
         foreign key (userID) references users (userID)
+            on update cascade on delete cascade
 );
 
 create table teacher_course
@@ -110,7 +114,8 @@ create table teacher_course
     time       varchar(255) null,
     courseName varchar(255) null,
     isActive   bit          null,
-    class_     varchar(255) not null,
+    class_     varchar(6)   not null,
+    subject    varchar(255) null,
     constraint teacher_course_users_userID_fk
         foreign key (userID) references users (userID)
 );
@@ -122,9 +127,11 @@ create table b_and_tc_mediater
     broadcastID int null,
     courseID    int null,
     constraint b_and_tc_mediater_broadcast_broadcastID_fk
-        foreign key (broadcastID) references broadcast (broadcastID),
+        foreign key (broadcastID) references broadcast (broadcastID)
+            on update cascade on delete cascade,
     constraint b_and_tc_mediater_teacher_course_courseID_fk
         foreign key (courseID) references teacher_course (courseID)
+            on update cascade on delete cascade
 );
 
 create table homework_or_exam
@@ -137,9 +144,10 @@ create table homework_or_exam
     result             json         null,
     constraint homework_or_exam_homework_or_exam_pool_hepID_fk
         foreign key (homeworkExamPoolID) references homework_or_exam_pool (hepID)
-            on delete cascade,
+            on update cascade on delete cascade,
     constraint homework_or_exam_teacher_course_courseID_fk
         foreign key (courseID) references teacher_course (courseID)
+            on update cascade on delete cascade
 );
 
 create table student_course
@@ -154,9 +162,11 @@ create table student_course
     courseID   int           null,
     isDelete   bit           null,
     constraint student_course_teacher_course_courseID_fk
-        foreign key (courseID) references teacher_course (courseID),
+        foreign key (courseID) references teacher_course (courseID)
+            on update cascade on delete cascade,
     constraint student_course_users_userID_fk
         foreign key (userID) references users (userID)
+            on update cascade on delete cascade
 );
 
 create table student_hand_in
@@ -171,10 +181,11 @@ create table student_hand_in
     teacherComment  varchar(255)  null,
     resultDetails   json          null,
     constraint student_hand_in_homework_or_exam_heID_fk
-        foreign key (homeworkExamID) references homework_or_exam (heID),
+        foreign key (homeworkExamID) references homework_or_exam (heID)
+            on update cascade on delete cascade,
     constraint student_hand_in_users_userID_fk
         foreign key (userID) references users (userID)
-            on delete cascade
+            on update cascade on delete cascade
 );
 
 create index users_role_roleID_fk
