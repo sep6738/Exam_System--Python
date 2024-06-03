@@ -17,10 +17,28 @@ def detail():
     return render_template("teacher_detail.html")
 
 
+@bp.route("/question_import")
+def question_import():
+    return render_template("teacher_question_import.html")
+
+
+@bp.route("/api/question_import", methods=['GET', 'POST'])
+def question_import_api():
+    print('文件接受成功')
+    return jsonify({
+        'code': 0,
+        'message': "成功！",
+        'data': {
+        }
+    })
+
+
 @bp.route("/question_create")
 def question_create():
     if request.method == 'GET':
-        return render_template("teacher_question_create.html")
+        knowledge_points = TeacherUtils.queryTeacherSubjectKP(dbPool, session.get("user_id"))
+        # print(knowledge_points)
+        return render_template("teacher_question_create.html", knowledge_points=knowledge_points)
     # else:
     #     data = request.get_json()
     #     print(data)
@@ -50,7 +68,58 @@ def question_create_api():
         for i in data.keys():
             if i.startswith('knowledge_point'):
                 question['knowledge_point'].append(i[16:])
-    # print(question)
+    elif data['question_type'] == '判断题':
+        question['main_content'] = data['main_content']
+        question['type'] = '判断题'
+        question['questions'] = ["√", "X"]
+        question['answer'] = []
+        question['answer'].append(data['answer'])
+        question['shuffle'] = True
+        question['subject'] = data['subject']
+        question['difficulty'] = int(data['difficulty'])
+        question['score'] = []
+        question['score'].append(float(data['score']))
+        question['knowledge_point'] = []
+        for i in data.keys():
+            if i.startswith('knowledge_point'):
+                question['knowledge_point'].append(i[16:])
+    elif data['question_type'] == '填空题':
+        question['main_content'] = data['main_content']
+        question['type'] = '填空题'
+        question['questions'] = []
+        question['questions'].append(None)
+        question['answer'] = []
+        question['answer'].append(data['answer'])
+        question['shuffle'] = False
+        question['subject'] = data['subject']
+        question['difficulty'] = int(data['difficulty'])
+        question['score'] = []
+        question['score'].append(float(data['score']))
+        question['knowledge_point'] = []
+        for i in data.keys():
+            if i.startswith('knowledge_point'):
+                question['knowledge_point'].append(i[16:])
+    elif data['question_type'] == '主观题':
+        question['main_content'] = data['main_content']
+        question['type'] = '选择题'
+        question['questions'] = []
+        question['answer'] = []
+        question['score'] = []
+        question['knowledge_point'] = []
+        for key, value in data.items():
+            if key.startswith('knowledge_point'):
+                question['knowledge_point'].append(key[16:])
+            elif key.startswith('answer'):
+                question['answer'].append(value)
+            elif key.startswith('score'):
+                question['score'].append(float(value))
+            elif key.startswith('childQuestion'):
+                question['questions'].append(value)
+            question['shuffle'] = False
+        question['subject'] = data['subject']
+        question['difficulty'] = int(data['difficulty'])
+
+    print(question)
     TeacherUtils.insertOneQuestion(dbPool, question)
     return jsonify({'message': 'Data received successfully'})
 
