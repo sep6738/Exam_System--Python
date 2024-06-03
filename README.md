@@ -28,4 +28,10 @@ pip install -r requirements.txt
 
 登录页面：http://127.0.0.1:5000/auth/login
 
+测试账户：
+student@test.com
+teacher@test.com
+admin@test.com
+密码都是123456789，需要在数据库运行insert.sql后使用
+
 ![](https://p3-pc-sign.douyinpic.com/tos-cn-i-0813/226b9baade6c45058933a63fb6cadcf9~tplv-dy-aweme-images-v2:3000:3000:q75.webp?biz_tag=aweme_images&from=3213915784&s=PackSourceEnum_AWEME_DETAIL&sc=image&se=false&x-expires=1719763200&x-signature=a4becisRjxm%2F%2B%2FjinVd1Z2zPyAY%3D)
