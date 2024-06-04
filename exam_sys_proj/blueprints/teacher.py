@@ -25,6 +25,10 @@ def question_import():
 @bp.route("/api/question_import", methods=['GET', 'POST'])
 def question_import_api():
     print('文件接受成功')
+    fileRecived = request.files.get('file')
+    fileRecived.save('./import.json')
+    with open('./import.json', 'r') as f:
+        print(f.read())
     return jsonify({
         'code': 0,
         'message': "成功！",

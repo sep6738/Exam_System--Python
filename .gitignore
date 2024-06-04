@@ -6,3 +6,4 @@ exam_sys_proj/private/
 exam_sys_proj/testRegistrationCode.py
 exam_sys_proj/testTeacherUtils.py
 exam_sys_proj/test_sep.py
+import.json
