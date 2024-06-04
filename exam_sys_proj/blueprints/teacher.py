@@ -3,7 +3,7 @@ from exam_sys_proj.src.extensions import mail, dbPool
 from flask_mail import Message
 from flask import request
 from .forms import RegisterForm, LoginForm
-import bcrypt
+import os
 from exam_sys_proj.dao.RegistrationCodeDAO import RegistrationCodeDAO, RegistrationCode
 from exam_sys_proj.dao.UsersDAO import UsersDAO, Users
 from exam_sys_proj.util.teacherUtils import TeacherUtils
@@ -26,9 +26,11 @@ def question_import():
 def question_import_api():
     print('文件接受成功')
     fileRecived = request.files.get('file')
-    fileRecived.save('./import.json')
+    filename = './' + str(session.get("user_id")) + '.json'
+    fileRecived.save(filename)
     with open('./import.json', 'r') as f:
         print(f.read())
+    os.remove(filename)
     return jsonify({
         'code': 0,
         'message': "成功！",
