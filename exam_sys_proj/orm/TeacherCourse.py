@@ -1,6 +1,6 @@
 
 class TeacherCourse:
-    def __init__(self, courseID=None, userID=None, semester=None, time=None, courseName=None, isActive=None, class_=None):
+    def __init__(self, courseID=None, userID=None, semester=None, time=None, courseName=None, isActive=None, class_=None, subject=None):
         self.courseID = courseID
         self.userID = userID
         self.semester = semester
@@ -8,6 +8,7 @@ class TeacherCourse:
         self.courseName = courseName
         self.isActive = isActive
         self.class_ = class_
+        self.subject = subject
 
     @property
     def courseID(self):
@@ -64,3 +65,11 @@ class TeacherCourse:
     @class_.setter
     def class_(self, value):
         self._class_ = value
+
+    @property
+    def subject(self):
+        return self._subject
+
+    @subject.setter
+    def subject(self, value):
+        self._subject = value

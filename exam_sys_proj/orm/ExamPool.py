@@ -1,10 +1,10 @@
-
 class ExamPool:
-    def __init__(self, epID=None, examID=None, questionID=None, questionNumber=None):
+    def __init__(self, epID=None, examID=None, questionID=None, questionNumber=None, title=None):
         self.epID = epID
         self.examID = examID
         self.questionID = questionID
         self.questionNumber = questionNumber
+        self.title = title
 
     @property
     def epID(self):
@@ -37,3 +37,11 @@ class ExamPool:
     @questionNumber.setter
     def questionNumber(self, value):
         self._questionNumber = value
+
+    @property
+    def title(self):
+        return self._title
+
+    @title.setter
+    def title(self, value):
+        self._title = value
