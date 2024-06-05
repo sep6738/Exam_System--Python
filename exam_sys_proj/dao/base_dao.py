@@ -10,7 +10,7 @@ class BaseDAO:
         几乎等同insert
         :param entity_list: 元素为对应表的orm对象的list
         :param access_protected:
-        :return:
+        :return:若成功则返回新插入数据的所有主键组成的列表,仅适用于插入数据主键为空的情况
         """
         if len(entity_list) == 0:
             return "error"
@@ -31,7 +31,8 @@ class BaseDAO:
             # print(query)
             # 传sql
             new_pk = self.execute_update(query, values)
-            return new_pk
+            new_pk_list = list(range(new_pk, new_pk+len(entity_list)))
+            return new_pk_list
         except Exception as e:
             print(e)
             return "error"
