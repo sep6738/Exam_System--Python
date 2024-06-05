@@ -156,6 +156,10 @@ class TeacherUtils:
     #     #     print("batchInsertQuestions error!")
     #     #     return "error"
 
+    @classmethod
+    def querySubjectQuestionsViaUID(cls, db_util, userID, entity):
+        pass
+
     @staticmethod
     def _readOurJson(json_path: str):
         with open(json_path, "r", encoding="utf-8") as f:
