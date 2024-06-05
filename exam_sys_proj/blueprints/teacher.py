@@ -27,7 +27,7 @@ def question_import_api():
     print('文件接受成功')
     fileRecived = request.files.get('file')
     filename = './' + str(session.get("user_id")) + '.json'
-    fileRecived.save(filename)
+    fileRecived.save(filename)  # 在暂存的导入文件名前添加用户id，可以多个用户同时导入，导入后删除该文件
     with open('./import.json', 'r') as f:
         print(f.read())
     os.remove(filename)
@@ -107,7 +107,7 @@ def question_create_api():
                 question['knowledge_point'].append(i[16:])
     elif data['question_type'] == '主观题':
         question['main_content'] = data['main_content']
-        question['type'] = '选择题'
+        question['type'] = '主观题'
         question['questions'] = []
         question['answer'] = []
         question['score'] = []
