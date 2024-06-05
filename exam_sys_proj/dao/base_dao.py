@@ -125,19 +125,21 @@ class BaseDAO:
             columns.append(i)
             values.append(entity_dict[i])
         if len(columns) > 1:
-            placeholders = [(co + "= %s") for co in columns]
-            if mod == "AND":
-                placeholders = mod.join(placeholders)
-            elif mod == "OR":
-                placeholders = mod.join(placeholders)
+            placeholders = [(co[1:] + "= %s") for co in columns]
+            if mod.upper() == "AND":
+                placeholders = (" "+mod+" ").join(placeholders)
+            elif mod.upper() == "OR":
+                placeholders = (" "+mod+" ").join(placeholders)
             else:
                 mod = "AND"
-                placeholders = mod.join(placeholders)
+                placeholders = (" "+mod+" ").join(placeholders)
         else:
-            placeholders = columns[0] + "= %s"
+            placeholders = columns[0][1:] + "= %s"
         columns = [attr for attr in dir(self.entity_class) if
                    not callable(getattr(self.entity_class, attr)) and not attr.startswith("_")]
         query = f"SELECT {', '.join(columns)} FROM {self.table_name} WHERE {placeholders}"
+        print(query)
+        print(values)
         result = self.execute_query(query, values)
         if result:
             if is_all:
