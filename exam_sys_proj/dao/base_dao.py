@@ -10,7 +10,7 @@ class BaseDAO:
         几乎等同insert
         :param entity_list: 元素为对应表的orm对象的list
         :param access_protected:
-        :return:
+        :return:若成功则返回新插入数据的所有主键组成的列表,仅适用于插入数据主键为空的情况
         """
         if len(entity_list) == 0:
             return "error"
@@ -31,12 +31,12 @@ class BaseDAO:
             # print(query)
             # 传sql
             new_pk = self.execute_update(query, values)
-            return new_pk
+            new_pk_list = list(range(new_pk, new_pk+len(entity_list)))
+            return new_pk_list
         except Exception as e:
             print(e)
             return "error"
 
-    # 插入数据，传入orm的一个实例
     def insert(self, entity, access_protected=True):
         """
         插入一条数据，传入orm的一个对象，若表的主键自增建议设置主键为None,函数会返回此次插入的数据的主键\n
@@ -76,7 +76,6 @@ class BaseDAO:
             print(e)
             return "error"
 
-    # 根据主键查询
     def query(self, value, column_name=None, is_all=False):
         """
         根据某个属性查询，默认根据主键查询\n
@@ -113,6 +112,42 @@ class BaseDAO:
         except Exception as e:
             print(e)
             return "error"
+
+    def columnsQuery(self, entity, mod="AND", is_all=False):
+        entity_dict = vars(entity)
+        temp_dict = entity_dict.copy()
+        for i in temp_dict:
+            if entity_dict[i] is None:
+                del entity_dict[i]
+        del temp_dict
+        columns, values = [], []
+        for i in entity_dict:
+            columns.append(i)
+            values.append(entity_dict[i])
+        if len(columns) > 1:
+            placeholders = [(co + "= %s") for co in columns]
+            if mod == "AND":
+                placeholders = mod.join(placeholders)
+            elif mod == "OR":
+                placeholders = mod.join(placeholders)
+            else:
+                mod = "AND"
+                placeholders = mod.join(placeholders)
+        else:
+            placeholders = columns[0] + "= %s"
+        columns = [attr for attr in dir(self.entity_class) if
+                   not callable(getattr(self.entity_class, attr)) and not attr.startswith("_")]
+        query = f"SELECT {', '.join(columns)} FROM {self.table_name} WHERE {placeholders}"
+        result = self.execute_query(query, values)
+        if result:
+            if is_all:
+                result_list = []
+                for i in result:
+                    result_list.append(self._create_entity_from_row(i))
+                return result_list
+            else:
+                return self._create_entity_from_row(result[0])
+        return None
 
     def update(self, entity, value, column_name=None):
         """
