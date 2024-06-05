@@ -28,8 +28,9 @@ def question_import_api():
     fileRecived = request.files.get('file')
     filename = './' + str(session.get("user_id")) + '.json'
     fileRecived.save(filename)  # 在暂存的导入文件名前添加用户id，可以多个用户同时导入，导入后删除该文件
-    with open('./import.json', 'r') as f:
-        print(f.read())
+    TeacherUtils.batchInsertQuestions(dbPool, filename)
+    # with open(filename, 'r',encoding='utf-8') as f:
+    # print(f.read())
     os.remove(filename)
     return jsonify({
         'code': 0,
