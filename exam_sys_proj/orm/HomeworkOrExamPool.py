@@ -1,3 +1,5 @@
+import json
+
 class HomeworkOrExamPool:
     def __init__(self, hepID=None, type=None, question=None, answer=None, courseName=None, difficultyLevel=None, isActive=None):
         self.hepID = hepID
@@ -30,7 +32,14 @@ class HomeworkOrExamPool:
 
     @question.setter
     def question(self, value):
-        self._question = value
+        try:
+            if isinstance(value, list) or isinstance(value, dict):
+                self._question = json.dumps(value)
+            else:
+                self._question = value
+        except Exception as e:
+            print(e)
+            self._question = json.dumps(list())
 
     @property
     def answer(self):
@@ -38,7 +47,14 @@ class HomeworkOrExamPool:
 
     @answer.setter
     def answer(self, value):
-        self._answer = value
+        try:
+            if isinstance(value, list) or isinstance(value, dict):
+                self._answer = json.dumps(value)
+            else:
+                self._answer = value
+        except Exception as e:
+            print(e)
+            self._answer = json.dumps(list())
 
     @property
     def courseName(self):

@@ -5,7 +5,7 @@ parent_dir_path = os.path.abspath(os.path.join(dir_path, os.pardir))
 sys.path.insert(0, parent_dir_path)
 
 from exam_sys_proj.dao.UsersDAO import UsersDAO, Users
-from flask import Flask, session, g
+from flask import Flask, session, g, redirect, url_for
 from exam_sys_proj.src import config
 from exam_sys_proj.src.extensions import mail, dbPool
 # from exam_sys_proj.private.models import Users
@@ -48,6 +48,11 @@ def my_before_request():
 @app.context_processor
 def my_context_processor():
     return {"user": g.user}
+
+
+@app.route('/')
+def index():
+    return redirect(url_for("auth.login"))
 
 
 

@@ -1,9 +1,9 @@
 
 class HepAndKpMediater:
-    def __init__(self, mediaterID=None, hepID=None, kpID=None):
+    def __init__(self, mediaterID=None, hepID=None, kpName=None):
         self.mediaterID = mediaterID
         self.hepID = hepID
-        self.kpID = kpID
+        self.kpName = kpName
 
     @property
     def mediaterID(self):
@@ -22,9 +22,9 @@ class HepAndKpMediater:
         self._hepID = value
 
     @property
-    def kpID(self):
-        return self._kpID
+    def kpName(self):
+        return self._kpName
 
-    @kpID.setter
-    def kpID(self, value):
-        self._kpID = value
+    @kpName.setter
+    def kpName(self, value):
+        self._kpName = value
