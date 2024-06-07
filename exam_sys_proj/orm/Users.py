@@ -3,8 +3,10 @@ import datetime
 import random
 import string
 
+
 class Users:
-    def __init__(self, userID=None, userName=None, passWord=None, name=None, roleID=None, createAt=None, updateAt=None, email=None):
+    def __init__(self, userID=None, userName=None, passWord=None, name=None, roleID=None, createAt=None, updateAt=None,
+                 email=None):
         self.userID = userID
         self.userName = userName
         self.passWord = passWord

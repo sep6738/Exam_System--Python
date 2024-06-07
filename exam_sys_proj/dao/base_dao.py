@@ -31,7 +31,7 @@ class BaseDAO:
             # print(query)
             # 传sql
             new_pk = self.execute_update(query, values)
-            new_pk_list = list(range(new_pk, new_pk+len(entity_list)))
+            new_pk_list = list(range(new_pk, new_pk + len(entity_list)))
             return new_pk_list
         except Exception as e:
             print(e)
@@ -127,12 +127,12 @@ class BaseDAO:
         if len(columns) > 1:
             placeholders = [(co[1:] + "= %s") for co in columns]
             if mod.upper() == "AND":
-                placeholders = (" "+mod+" ").join(placeholders)
+                placeholders = (" " + mod + " ").join(placeholders)
             elif mod.upper() == "OR":
-                placeholders = (" "+mod+" ").join(placeholders)
+                placeholders = (" " + mod + " ").join(placeholders)
             else:
                 mod = "AND"
-                placeholders = (" "+mod+" ").join(placeholders)
+                placeholders = (" " + mod + " ").join(placeholders)
         else:
             placeholders = columns[0][1:] + "= %s"
         columns = [attr for attr in dir(self.entity_class) if

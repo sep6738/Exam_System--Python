@@ -1,4 +1,5 @@
 import sys, os
+
 # 添加搜索路径
 dir_path = os.path.dirname(os.path.realpath(__file__))
 parent_dir_path = os.path.abspath(os.path.join(dir_path, os.pardir))
@@ -29,6 +30,7 @@ mail.init_app(app)
 app.register_blueprint(teacher_bp)
 app.register_blueprint(auth_bp)
 
+
 # blueprint：用来做模块化的
 # print(os.path.abspath('.'))
 # print(os.getcwd())
@@ -53,8 +55,6 @@ def my_context_processor():
 @app.route('/')
 def index():
     return redirect(url_for("auth.login"))
-
-
 
 
 if __name__ == '__main__':

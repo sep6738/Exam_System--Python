@@ -22,4 +22,3 @@ class TeacherCourseDAO(BaseDAO):
             setattr(entity, attr, i[0])
             result_list.append(entity)
         return result_list
-

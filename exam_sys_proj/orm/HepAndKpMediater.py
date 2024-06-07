@@ -1,4 +1,3 @@
-
 class HepAndKpMediater:
     def __init__(self, mediaterID=None, hepID=None, kpName=None):
         self.mediaterID = mediaterID

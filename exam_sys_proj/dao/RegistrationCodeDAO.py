@@ -35,4 +35,3 @@ class RegistrationCodeDAO(BaseDAO):
                 self.execute_update(query, values)
         except Exception as e:
             print(e)
-

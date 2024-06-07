@@ -28,7 +28,8 @@ class BroadcastDAO(BaseDAO):
         except Exception as e:
             print(e)
             return "error"
-    def get_broadcastid_to_userid(self,broadcast_id : int):
+
+    def get_broadcastid_to_userid(self, broadcast_id: int):
         '''
         传入要查询的广播ID,查找courseID，进而查找所有在该courseID中的userid
         注意:返回值是一个userid组成的列表，不是orm封装对象
@@ -41,11 +42,11 @@ class BroadcastDAO(BaseDAO):
             if result:
                 course_id = result[0][0]
                 db_util = DBUtil()
-                studentcoursedao  = StudentCourseDAO(db_util)
-                ans = studentcoursedao.query(course_id,'courseID',1)
+                studentcoursedao = StudentCourseDAO(db_util)
+                ans = studentcoursedao.query(course_id, 'courseID', 1)
                 lis = []
                 for i in ans:
-                    lis.append(getattr(i,'userID'))
+                    lis.append(getattr(i, 'userID'))
                 return lis
             else:
                 return "noResult"

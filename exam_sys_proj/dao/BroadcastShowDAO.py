@@ -23,7 +23,7 @@ class BroadcastShowDAO(BaseDAO):
                 for i in result:
                     broadcastid_list.append(i[0])
                 db_util = DBUtil()
-                broadcastdao =BroadcastDAO(db_util)
+                broadcastdao = BroadcastDAO(db_util)
                 ans = broadcastdao.select_broadcast_by_broadcastid(broadcastid_list)
                 return ans
             else:

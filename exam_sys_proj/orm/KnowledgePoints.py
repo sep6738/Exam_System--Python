@@ -1,4 +1,3 @@
-
 class KnowledgePoints:
     def __init__(self, kpID=None, kpName=None, subject=None):
         self.kpID = kpID

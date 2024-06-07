@@ -1,6 +1,6 @@
-
 class TeacherCourse:
-    def __init__(self, courseID=None, userID=None, semester=None, time=None, courseName=None, isActive=None, class_=None, subject=None):
+    def __init__(self, courseID=None, userID=None, semester=None, time=None, courseName=None, isActive=None,
+                 class_=None, subject=None):
         self.courseID = courseID
         self.userID = userID
         self.semester = semester

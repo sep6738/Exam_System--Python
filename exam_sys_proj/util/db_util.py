@@ -3,6 +3,7 @@ import pymysql
 from .config import Config
 import threading
 
+
 class DBUtil:
     _instance_lock = threading.Lock()
     _pool = None
