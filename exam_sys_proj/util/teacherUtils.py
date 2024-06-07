@@ -157,8 +157,26 @@ class TeacherUtils:
     #     #     return "error"
 
     @classmethod
-    def querySubjectQuestionsViaUID(cls, db_util, userID, entity):
-        pass
+    def querySubjectQuestionsViaUID(cls, db_util, userID, entity: HomeworkOrExamPool):
+        """
+        查询试题\n
+        示例说明：\n
+        有一个：HomeworkOrExamPool对象：homeworkOrExamPool\n
+        userid = 24\n
+        homeworkOrExamPool.type = "选择题"\n
+        homeworkOrExamPool.difficultyLevel = 5\n
+        将userid和homeworkOrExamPool传入方法，查询得到24号老师所教学科的所有难度为5的选择题
+        :param db_util: 数据库连接池对象
+        :param userID: 教师的userid
+        :param entity: HomeworkOrExamPool对象
+        :return: 元素是HomeworkOrExamPool对象的列表
+        """
+        teacherCourseDAO = TeacherCourseDAO(db_util)
+        homeworkOrExamPoolDAO = HomeworkOrExamPoolDAO(db_util)
+        subject_list = teacherCourseDAO.querySubjectViaTeacherID(userID)
+        entity.courseName = subject_list[0].subject
+        result_list = homeworkOrExamPoolDAO.columnsQuery(entity, is_all=True)
+        return result_list
 
     @staticmethod
     def _readOurJson(json_path: str):
