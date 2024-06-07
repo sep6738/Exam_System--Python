@@ -1,6 +1,6 @@
-
 class StudentHandIn:
-    def __init__(self, studentHandInID=None, userID=None, homeworkExamID=None, content=None, upTime=None, score=None, teacherComment=None, resultDetails=None):
+    def __init__(self, studentHandInID=None, userID=None, homeworkExamID=None, content=None, upTime=None, score=None,
+                 teacherComment=None, resultDetails=None):
         self.studentHandInID = studentHandInID
         self.userID = userID
         self.homeworkExamID = homeworkExamID

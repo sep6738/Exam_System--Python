@@ -11,7 +11,7 @@ function bindEmailCaptchaClick() {
         $.ajax({
             // http://127.0.0.1:500
             // /auth/captcha/email?email=xx@qq.com
-            url: "/auth/captcha/email?email=" + email,
+            url: "/auth/captcha/reset?email=" + email,
             method: "GET",
             success: function (result) {
                 var code = result['code'];
@@ -47,5 +47,9 @@ function bindEmailCaptchaClick() {
 
 // 整个网页都加载完毕后再执行的
 $(function () {
-    bindEmailCaptchaClick()
+    bindEmailCaptchaClick();
+    $("#reset-btn").click(function () {
+        $(this).text("正在发送邮件");
+        $(this).attr("disabled", "true");
+    });
 });

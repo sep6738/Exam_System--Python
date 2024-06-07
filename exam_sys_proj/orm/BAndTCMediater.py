@@ -1,4 +1,3 @@
-
 class BAndTCMediater:
     def __init__(self, mediaterID=None, broadcastID=None, courseID=None):
         self.mediaterID = mediaterID

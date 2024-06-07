@@ -1,4 +1,3 @@
-
 class HomeworkOrExam:
     def __init__(self, heID=None, courseID=None, duringTime=None, homeworkExamPoolID=None, result=None):
         self.heID = heID

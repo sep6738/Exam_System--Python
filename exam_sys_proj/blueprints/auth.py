@@ -3,9 +3,10 @@ from exam_sys_proj.src.extensions import mail, dbPool
 from flask_mail import Message
 from flask import request
 from .forms import RegisterForm, LoginForm
-import bcrypt
+import bcrypt, random, string
 from exam_sys_proj.dao.RegistrationCodeDAO import RegistrationCodeDAO, RegistrationCode
 from exam_sys_proj.dao.UsersDAO import UsersDAO, Users
+from datetime import datetime
 
 # /auth
 bp = Blueprint("auth", __name__, url_prefix="/auth")
@@ -24,7 +25,8 @@ def login():
             user: Users = users_operator.query(email, 'email')
             # user = Users.query.filter_by(email=email).first()
             if not user:
-                print("邮箱未注册！")
+                # print("邮箱未注册！")
+                flash(f"邮箱未注册！", 'danger')
                 return redirect(url_for("auth.login"))
             if bcrypt.checkpw(password.encode("utf-8"), user.passWord):
                 # cookie：
@@ -109,6 +111,50 @@ def get_email_captcha():
     # RESTful API
     # {code: 200/400/500, message: "", data: {}}
     return jsonify({"code": 200, "message": "", "data": None})
+
+
+@bp.route("/captcha/reset")
+def get_reset_captcha():
+    email = request.args.get("email")
+    reset = RegistrationCodeDAO(dbPool)
+    user: Users = users_operator.query(email, 'email')
+    if not user:
+        flash(f"邮箱未注册！", 'danger')
+        return redirect(url_for("auth.forget"))
+    registrationOrm = RegistrationCode()
+    message = Message(subject="重置密码请求", recipients=[email],
+                      body=f"您正在申请重置密码。您的验证码是:{registrationOrm.verificationCode}，如果您没有发起该请求，请忽略此邮件。")
+    mail.send(message)
+    reset.SetVerificationCode(registrationOrm, email)
+    return jsonify({"code": 200, "message": "", "data": None})
+
+
+@bp.route("/forget", methods=["GET", "POST"])
+def forget():
+    if request.method == "GET":
+        return render_template("forget.html")
+    else:
+        form = request.form
+        email = form.get("email")
+        user: Users = users_operator.query(email, 'email')
+        captcha = form.get("captcha").upper()
+        varificater = RegistrationCodeDAO(dbPool)
+        entity: RegistrationCode = varificater.query(email)
+        if captcha != entity.verificationCode or entity.expirationDate < datetime.now():
+            flash(f"验证码错误！", 'danger')
+            return redirect(url_for("auth.forget"))
+        if not user:
+            # print("邮箱未注册！")
+            flash(f"邮箱未注册！", 'danger')
+            return redirect(url_for("auth.forget"))
+        else:
+            ran_password = ''.join(random.sample(string.ascii_letters + string.digits, 9))
+            newpassword = Users(passWord=ran_password)
+            users_operator.update(newpassword, user.userID)
+            message = Message(subject="密码重置", recipients=[email],
+                              body=f"您的密码已被重置为:{ran_password}。")
+            mail.send(message)
+            return redirect(url_for("auth.login"))
 
 
 @bp.route("/mail/test")

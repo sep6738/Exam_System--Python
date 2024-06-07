@@ -1,4 +1,3 @@
-
 class BroadcastShow:
     def __init__(self, broadcastShowID=None, userID=None, broadcastID=None, isActive=None):
         self.broadcastShowID = broadcastShowID

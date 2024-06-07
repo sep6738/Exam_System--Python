@@ -17,7 +17,8 @@ class UsersDAO(BaseDAO):
         :return:Users的一个对象
         """
         try:
-            columns = [attr for attr in dir(self.entity_class) if not callable(getattr(self.entity_class, attr)) and not attr.startswith("_")]
+            columns = [attr for attr in dir(self.entity_class) if
+                       not callable(getattr(self.entity_class, attr)) and not attr.startswith("_")]
             query = f"SELECT {', '.join(columns)} FROM {self.table_name} WHERE email = %s"
             result = self.execute_query(query, (email,))
             if result:
@@ -26,7 +27,3 @@ class UsersDAO(BaseDAO):
         except Exception as e:
             print(e)
             return "error"
-
-
-
-

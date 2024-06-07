@@ -1,6 +1,6 @@
-
 class StudentCourse:
-    def __init__(self, scID=None, courseName=None, userID=None, semester=None, time=None, grade=None, courseID=None, isDelete=None):
+    def __init__(self, scID=None, courseName=None, userID=None, semester=None, time=None, grade=None, courseID=None,
+                 isDelete=None):
         self.scID = scID
         self.courseName = courseName
         self.userID = userID
