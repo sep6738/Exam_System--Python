@@ -42,7 +42,7 @@ class TeacherUtils:
         hepID = homeworkOrExamPoolDao.insert(homeworkOrExamPool)
         if len(kp_list) > 0:
             for i in kp_list:
-                hepAndKpMediater = HepAndKpMediater(hepID=hepID, kpID=i)
+                hepAndKpMediater = HepAndKpMediater(hepID=hepID, kpName=i)
                 hepAndKpMediaterDAO.insert(hepAndKpMediater)
 
     @classmethod
@@ -97,7 +97,7 @@ class TeacherUtils:
             for i in range(len(kp_list_all)):
                 if len(kp_list_all[i]) > 0:
                     for j in kp_list_all[i]:
-                        hepAndKpMediater = HepAndKpMediater(hepID=pk_list[i], kpID=j)
+                        hepAndKpMediater = HepAndKpMediater(hepID=pk_list[i], kpName=j)
                         hepAndKpMediater_list.append(hepAndKpMediater)
             hepAndKpMediaterDAO.batchInsert(hepAndKpMediater_list)
         except Exception as e:
@@ -146,7 +146,7 @@ class TeacherUtils:
     #     for i in range(len(kp_list_all)):
     #         if len(kp_list_all[i]) > 0:
     #             for j in kp_list_all[i]:
-    #                 hepAndKpMediater = HepAndKpMediater(hepID=pk_list[i], kpID=j)
+    #                 hepAndKpMediater = HepAndKpMediater(hepID=pk_list[i], kpName=j)
     #                 hepAndKpMediater_list.append(hepAndKpMediater)
     #     print(hepAndKpMediater_list, 333)
     #     hepAndKpMediaterDAO.batchInsert(hepAndKpMediater_list)
