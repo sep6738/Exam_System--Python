@@ -130,6 +130,39 @@ def question_create_api():
     TeacherUtils.insertOneQuestion(dbPool, question)
     return jsonify({'message': 'Data received successfully'})
 
+
+@bp.route("/paper_create", methods=["GET", "POST"])
+def paper_create():
+    question_types = ['选择题', '判断题', '填空题', '主观题']
+    knowledge_points = TeacherUtils.queryTeacherSubjectKP(dbPool, session.get("user_id"))
+    if request.method == 'GET':
+        return render_template("teacher_paper_create.html", question_types=question_types,
+                               knowledge_points=knowledge_points)
+    else:
+        data = request.get_json()
+        # print(data)
+        paper = {}
+        paper['title'] = data['title']
+        paper['subject'] = data['subject']
+        paper['type'] = data['type']
+        paper['overall_difficulty_easy'] = data['overall_difficulty_easy']
+        paper['overall_difficulty_normal'] = data['overall_difficulty_normal']
+        paper['overall_difficulty_hard'] = data['overall_difficulty_hard']
+        if 'shuffle' in data:
+            paper['shuffle'] = False
+        else:
+            paper['shuffle'] = True
+        for question_type in question_types:
+            paper[question_type] = {}
+            paper[question_type]["difficulty_min"] = data[question_type + "_difficulty_min"]
+            paper[question_type]["difficulty_max"] = data[question_type + "_difficulty_max"]
+            for knowledge_point in knowledge_points:
+                paper[question_type][knowledge_point.kpName] = data[question_type + "_" + knowledge_point.kpName]
+    print(paper)
+    return jsonify({'message': 'Data received successfully'})
+
+
+
 # @bp.route("/qa/public", methods=['GET', 'POST'])
 # @login_required
 # def public_question():

@@ -1,5 +1,126 @@
 {% extends "teacher_base.html" %}
 
 {% block body %}
+    <form class="layui-form layui-form-pane" action="" style="margin-left: 50px;margin-top: 100px">
+        <div class="layui-form-item">
+            <label class="layui-form-label">试卷标题</label>
+            <div class="layui-input-block">
+                <input type="text" name="title" autocomplete="off" value="{{ knowledge_points[0].subject }}试卷"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">试卷类型</label>
+            <div class="layui-input-block">
+                <input type="text" name="type" autocomplete="off" value="考试" class="layui-input">
+            </div>
+        </div>
 
+        <div class="layui-form-item">
+            <label class="layui-form-label">学科</label>
+            <div class="layui-input-block">
+                <select name="subject" readonly lay-filter="subject">
+                    <option value="{{ knowledge_points[0].subject }}"
+                            selected>{{ knowledge_points[0].subject }}</option>
+                    <option value="语文">语文</option>
+                    <option value="数学">数学</option>
+                    <option value="数据结构">数据结构</option>
+                    <option value="计算机组成原理">计算机组成原理</option>
+                    <option value="操作系统原理">操作系统原理</option>
+                    <option value="计算机网络">计算机网络</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <h4>难度比例</h4>
+            <div class="layui-input-inline" style="width: 150px;">
+                <label class="layui-form-label">简单(1~3)</label>
+                <div class="layui-col-xs6">
+                    <input type="number" lay-affix="number" value="5" step="1" max="10" min="1"
+                           class="layui-input" name="overall_difficulty_easy">
+                </div>
+            </div>
+            <div class="layui-input-inline" style="width: 150px;">
+                <label class="layui-form-label">普通(4~7)</label>
+                <div class="layui-col-xs6">
+                    <input type="number" lay-affix="number" value="5" step="1" max="10" min="1"
+                           class="layui-input" name="overall_difficulty_normal">
+                </div>
+            </div>
+            <div class="layui-input-inline" style="width: 150px;">
+                <label class="layui-form-label">困难(8~10)</label>
+                <div class="layui-col-xs6">
+                    <input type="number" lay-affix="number" value="5" step="1" max="10" min="1"
+                           class="layui-input" name="overall_difficulty_hard">
+                </div>
+            </div>
+        </div>
+        {% for question_type in question_types %}
+            <h3>{{ question_type }}</h3>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">难度范围</label>
+                    <div class="layui-input-inline" style="width: 100px;">
+                        <input type="number" lay-affix="number" lay-precision=0 step="1" max="10" min="1"
+                               name="{{ question_type }}_difficulty_min" value="1" autocomplete="off"
+                               class="layui-input">
+                    </div>
+                    <div class="layui-form-mid">-</div>
+                    <div class="layui-input-inline" style="width: 100px;">
+                        <input type="number" lay-affix="number" lay-precision=0 step="1" max="10" min="1"
+                               name="{{ question_type }}_difficulty_max" value="10" autocomplete="off"
+                               class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <h5>题目数量</h5>
+            {% for knowledge_point in knowledge_points %}
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{{ knowledge_point.kpName }}</label>
+                    <div class="layui-input-block">
+                        <div class="layui-input-inline" style="width: 100px;">
+                            <input type="number" lay-affix="number" lay-precision=0 step="1" max="10" min="0"
+                                   name="{{ question_type }}_{{ knowledge_point.kpName }}" value="0" autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        <div class="layui-form-item">
+            <h4>是否按照从易到难顺序排序</h4>
+            <div class="layui-input-block" style="margin-left: 0px">
+                <input type="checkbox" checked name="shuffle" lay-skin="switch" lay-filter="switchTest"
+                       title="打乱|不打乱">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <button class="layui-btn" lay-submit lay-filter="paper">确认</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </form>
+
+
+    <script>
+        layui.use(['form'], function () {
+            var form = layui.form;
+            var layer = layui.layer;
+            // 提交事件
+            form.on('submit(paper)', function (data) {
+                var field = data.field; // 获取表单字段值
+                // 显示填写结果，仅作演示用
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', '/teacher/paper_create', true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.send(JSON.stringify(field));
+                layer.alert(JSON.stringify(field), {
+                    title: '当前填写的字段值'
+                });
+                // 此处可执行 Ajax 等操作
+                // …
+                return false; // 阻止默认 form 跳转
+            });
+        });
+    </script>
 {% endblock %}

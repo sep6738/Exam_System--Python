@@ -51,7 +51,8 @@
                     <a class="" href="javascript:;">试卷</a>
                     <dl class="layui-nav-child">
                         <dd><a href="javascript:;">试卷管理</a></dd>
-                        <dd><a href="javascript:;">试卷创建</a></dd>
+                        <dd><a href="{{ url_for('teacher.paper_create') }}">试卷创建</a></dd>
+                        <dd><a href="javascript:;">试卷发布</a></dd>
                         <dd><a href="javascript:;">试卷批改</a></dd>
                     </dl>
                 </li>
@@ -67,6 +68,7 @@
             </ul>
         </div>
     </div>
+</div>
     <div class="layui-body">
         {% block body %}{% endblock %}
         {#        <div class="layui-footer">#}
