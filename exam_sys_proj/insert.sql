@@ -5,16 +5,20 @@
 -- "shuffle": false,
 -- "score": [5]
 -- }', '{}', '数学', 1, true);
-SET @new_hoep_id = LAST_INSERT_ID();
-insert into knowledge_points (kpName, subject) VALUES ('四则运算', '数学');
+SET
+@new_hoep_id = LAST_INSERT_ID();
+insert into knowledge_points (kpID, kpName, subject)
+VALUES (6661, '四则运算', '数学');
+insert into knowledge_points (kpID, kpName, subject)
+VALUES (6662, '三角函数', '数学');
 insert into knowledge_points (kpName, subject)
-VALUES ('三角函数', '数学');
+VALUES (6663, '线性代数', '数学');
 insert into knowledge_points (kpName, subject)
-VALUES ('线性代数', '数学');
-insert into knowledge_points (kpName, subject)
-VALUES ('微积分', '数学');
-SET @new_kp_id = LAST_INSERT_ID();
-insert into hep_and_kp_mediater (hepID, kpID) VALUES (@new_hoep_id, @new_kp_id);
+VALUES (6664, '微积分', '数学');
+SET
+@new_kp_id = LAST_INSERT_ID();
+insert into hep_and_kp_mediater (hepID, kpID)
+VALUES (@new_hoep_id, @new_kp_id);
 insert into users (userID, userName, passWord, name, roleID, email)
 VALUES (666, 'Homura Akemi', '$2b$08$C2pRyZ4v8WHy1BYml6kw1enOkUMvjCbbdrULL6ZThC92ej4TttYzG', 'Homura Akemi
 ', 1, 'student@test.com');
