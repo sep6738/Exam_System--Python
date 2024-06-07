@@ -47,5 +47,5 @@ function bindEmailCaptchaClick(){
 
 // 整个网页都加载完毕后再执行的
 $(function (){
-  bindEmailCaptchaClick();
+  bindEmailCaptchaClick()
 });
