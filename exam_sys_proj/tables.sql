@@ -43,22 +43,27 @@ create table knowledge_points
     kpID    int auto_increment
         primary key,
     kpName  varchar(255) null,
-    subject varchar(255) null
+    subject varchar(255) null,
+    constraint kpname_u
+        unique (kpName)
 );
 
 create table hep_and_kp_mediater
 (
     mediaterID int auto_increment
         primary key,
-    hepID      int null,
-    kpID       int null,
+    hepID      int          null,
+    kpName     varchar(255) null,
     constraint hep_and_kp_mediater_homework_or_exam_pool_hepID_fk
         foreign key (hepID) references homework_or_exam_pool (hepID)
             on update cascade on delete cascade,
-    constraint hep_and_kp_mediater_knowledge_points_kpID_fk
-        foreign key (kpID) references knowledge_points (kpID)
+    constraint hep_and_kp_mediater_knowledge_points_kpName_fk
+        foreign key (kpName) references knowledge_points (kpName)
             on update cascade on delete cascade
 );
+
+create index hep_and_kp_mediater_kpName_index
+    on hep_and_kp_mediater (kpName);
 
 create table registration_code
 (
