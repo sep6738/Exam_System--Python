@@ -2,4 +2,115 @@
 
 {% block body %}
 
+    <div class="layui-row layui-col-space15">
+        {% if broadcasts!='noResult' %}
+            {% for broadcast in broadcasts %}
+                <div class="layui-col-md6">
+                    <div class="layui-card">
+                        <div class="layui-card-header">{{ broadcast['title'] }}</div>
+                        <div class="layui-card-body">
+                            {{ broadcast['content'] }}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+        <div class="layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-header" style="background-color: #f39c12;">更改密码</div>
+                <div class="layui-card-body">
+                    <form class="layui-form">
+                        <div class="layui-form-item">
+                            <div class="layui-input-wrap">
+                                <div class="layui-input-prefix">
+                                    <i class="layui-icon layui-icon-password"></i>
+                                </div>
+                                <input type="password" name="old_password" value="" lay-verify="required"
+                                       placeholder="旧密码"
+                                       autocomplete="off" class="layui-input" id="old_password" lay-affix="eye">
+                            </div>
+                        </div>
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                            <ul class="flashes">
+                                {% for category, message in messages %}
+                                    {% if message=="密码错误！" %}
+                                        <li class="{{ category }}">{{ message }}</li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        {% endwith %}
+                        <div class="layui-form-item">
+                            <div class="layui-input-wrap">
+                                <div class="layui-input-prefix">
+                                    <i class="layui-icon layui-icon-password"></i>
+                                </div>
+                                <input type="password" name="new_password" value="" lay-verify="required"
+                                       placeholder="新密码"
+                                       autocomplete="off" class="layui-input" id="new_password" lay-affix="eye">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-wrap">
+                                <div class="layui-input-prefix">
+                                    <i class="layui-icon layui-icon-password"></i>
+                                </div>
+                                <input type="password" name="confirmPassword" value=""
+                                       lay-verify="required|confirmPassword"
+                                       placeholder="确认新密码" autocomplete="off" class="layui-input" lay-affix="eye">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="change">修改密码</button>
+                        </div>
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                            <ul class="flashes">
+                                {% for category, message in messages %}
+                                    {% if message=="密码错误！" %}
+                                        <li class="{{ category }}">{{ message }}</li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        {% endwith %}
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script>
+        layui.use(function () {
+            var $ = layui.$;
+            var form = layui.form;
+            var layer = layui.layer;
+
+            // 自定义验证规则
+            form.verify({
+                // 确认密码
+                confirmPassword: function (value, item) {
+                    var passwordValue = $('#new_password').val();
+                    if (value !== passwordValue) {
+                        return '两次密码输入不一致';
+                    }
+                }
+            });
+
+            // 提交事件
+            form.on('submit(change)', function (data) {
+                var field = data.field; // 获取表单字段值
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', '/teacher/change_password', true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.send(JSON.stringify(field));
+                xhr.onreadystatechange = function () {
+                    //若响应完成且请求成功
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        layer.alert(xhr.responseText);
+                    }
+                };
+
+                {#layer.alert(xhr.responseText());#}
+                return false; // 阻止默认 form 跳转
+            });
+        });
+    </script>
 {% endblock %}

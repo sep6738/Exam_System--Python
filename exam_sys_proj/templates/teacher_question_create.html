@@ -11,12 +11,6 @@
         <div class="layui-tab-content">
             <div class="layui-tab-item layui-show">
                 <form class="layui-form" action="" lay-filter="choice_question">
-                    {#                    <div class="layui-btn-container" style="margin-bottom: 6px; text-align: center;">#}
-                    {#                        <button type="button" class="layui-btn layui-btn-normal" id="LAY-component-form-setval">赋值#}
-                    {#                        </button>#}
-                    {#                        <button type="button" class="layui-btn layui-btn-normal" id="LAY-component-form-getval">取值#}
-                    {#                        </button>#}
-                    {#                    </div>#}
                     <div class="layui-form-item">
                         <label class="layui-form-label">题干</label>
                         <div class="layui-input-block">
@@ -63,7 +57,7 @@
                     <div class="layui-form-item">
                         <label class="layui-form-label">学科</label>
                         <div class="layui-input-block">
-                            <select name="subject" disabled lay-filter="subject">
+                            <select name="subject" readonly lay-filter="subject">
                                 <option value="{{ knowledge_points[0].subject }}"
                                         selected>{{ knowledge_points[0].subject }}</option>
                                 <option value="语文">语文</option>
@@ -90,24 +84,18 @@
                             <input type="checkbox" name="shuffle" lay-skin="switch" lay-text="TRUE|FALSE">
                         </div>
                     </div>
-                    {#                    <div class="layui-form-item layui-form-text">#}
-                    {#                        <label class="layui-form-label lay-creatable">文本域</label>#}
-                    {#                        <div class="layui-input-block">#}
-                    {#                            <textarea placeholder="请输入" class="layui-textarea" name="desc"></textarea>#}
-                    {#                        </div>#}
-                    {#                    </div>#}
                     <div class="layui-form-item">
                         <label class="layui-form-label">难度</label>
                         <div class="layui-col-xs6">
                             <input type="number" lay-affix="number" value="5" step="1" max="10" min="1"
-                                   class="layui-input" name="difficulty">
+                                   class="layui-input" name="difficulty" lay-precision=0>
                         </div>
                     </div>
                     <div class="layui-form-item">
                         <label class="layui-form-label">分数</label>
                         <div class="layui-col-xs6">
                             <input type="number" lay-affix="number" value="4" step="0.5" min="0.5"
-                                   max="100" class="layui-input" name="score">
+                                   max="10" class="layui-input" name="score" lay-precision=1>
                         </div>
                     </div>
 
@@ -123,12 +111,6 @@
             </div>
             <div class="layui-tab-item">
                 <form class="layui-form" action="" lay-filter="True_or_False">
-                    {#                    <div class="layui-btn-container" style="margin-bottom: 6px; text-align: center;">#}
-                    {#                        <button type="button" class="layui-btn layui-btn-normal" id="LAY-component-form-setval">赋值#}
-                    {#                        </button>#}
-                    {#                        <button type="button" class="layui-btn layui-btn-normal" id="LAY-component-form-getval">取值#}
-                    {#                        </button>#}
-                    {#                    </div>#}
                     <div class="layui-form-item">
                         <label class="layui-form-label">题干</label>
                         <div class="layui-input-block">
@@ -142,7 +124,7 @@
                         <input type="radio" name="answer" value="2" title="×">
                     </div>
                     <div class="layui-input-block">
-                        <select name="subject" disabled lay-filter="subject">
+                        <select name="subject" readonly lay-filter="subject">
                             <option value="{{ knowledge_points[0].subject }}"
                                     selected>{{ knowledge_points[0].subject }}</option>
                             <option value="语文">语文</option>
@@ -166,14 +148,14 @@
                         <label class="layui-form-label">难度</label>
                         <div class="layui-col-xs6">
                             <input type="number" lay-affix="number" value="5" step="1" max="10" min="1"
-                                   class="layui-input" name="difficulty">
+                                   class="layui-input" name="difficulty" lay-precision=0>
                         </div>
                     </div>
                     <div class="layui-form-item">
                         <label class="layui-form-label">分数</label>
                         <div class="layui-col-xs6">
                             <input type="number" lay-affix="number" value="4" step="0.5" min="0.5"
-                                   max="100" class="layui-input" name="score">
+                                   max="10" class="layui-input" name="score" lay-precision=1>
                         </div>
                     </div>
                     <div class="layui-form-item">
@@ -211,7 +193,7 @@
                     <div class="layui-form-item">
                         <label class="layui-form-label">学科</label>
                         <div class="layui-input-block">
-                            <select name="subject" disabled lay-filter="subject">
+                            <select name="subject" readonly lay-filter="subject">
                                 <option value="{{ knowledge_points[0].subject }}"
                                         selected>{{ knowledge_points[0].subject }}</option>
                                 <option value="语文">语文</option>
@@ -236,14 +218,14 @@
                         <label class="layui-form-label">难度</label>
                         <div class="layui-col-xs6">
                             <input type="number" lay-affix="number" value="5" step="1" max="10" min="1"
-                                   class="layui-input" name="difficulty">
+                                   class="layui-input" name="difficulty" lay-precision=0>
                         </div>
                     </div>
                     <div class="layui-form-item">
                         <label class="layui-form-label">分数</label>
                         <div class="layui-col-xs6">
                             <input type="number" lay-affix="number" value="4" step="0.5" min="0.5"
-                                   max="100" class="layui-input" name="score">
+                                   max="10" class="layui-input" name="score" lay-precision=1>
                         </div>
                     </div>
 
@@ -297,7 +279,7 @@
                             <label class="layui-form-label">分数</label>
                             <div class="layui-col-xs6">
                                 <input type="number" lay-affix="number" value="5.0" step="0.5" min="0.5"
-                                       max="100" class="layui-input" name="score:1">
+                                       max="60" class="layui-input" name="score:1">
                             </div>
                         </div>
                     </div>
@@ -305,7 +287,7 @@
                     <div class="layui-form-item">
                         <label class="layui-form-label">学科</label>
                         <div class="layui-input-block">
-                            <select name="subject" disabled lay-filter="subject">
+                            <select name="subject" readonly lay-filter="subject">
                                 <option value="{{ knowledge_points[0].subject }}"
                                         selected>{{ knowledge_points[0].subject }}</option>
                                 <option value="语文">语文</option>
@@ -332,7 +314,7 @@
                         <label class="layui-form-label">难度</label>
                         <div class="layui-col-xs6">
                             <input type="number" lay-affix="number" value="5" step="1" max="10" min="1"
-                                   class="layui-input" name="difficulty">
+                                   class="layui-input" name="difficulty" lay-precision=0>
                         </div>
                     </div>
 

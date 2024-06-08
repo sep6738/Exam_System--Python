@@ -20,6 +20,7 @@ pip install -r requirements.txt
 ### 说明
 请各位组员将自己的代码中引入的依赖写到requirements.txt中.
 运行前请修改exam_sys_proj/util/config.yaml连接自己的数据库
+commit&push前请reformat code
 
 ### 网页
 运行app.py以打开网页
