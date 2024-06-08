@@ -1,7 +1,7 @@
 {% extends "teacher_base.html" %}
 
 {% block body %}
-    <form class="layui-form layui-form-pane" action="" style="margin-left: 50px;margin-top: 100px">
+    <form class="layui-form layui-form-pane" action="">
         <div class="layui-form-item">
             <label class="layui-form-label">试卷标题</label>
             <div class="layui-input-block">
@@ -143,8 +143,6 @@
                 layer.alert(JSON.stringify(field), {
                     title: '当前填写的字段值'
                 });
-                // 此处可执行 Ajax 等操作
-                // …
                 return false; // 阻止默认 form 跳转
             });
         });

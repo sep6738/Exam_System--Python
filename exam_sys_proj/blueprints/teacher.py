@@ -3,10 +3,11 @@ from exam_sys_proj.src.extensions import mail, dbPool
 from flask_mail import Message
 from flask import request
 from .forms import RegisterForm, LoginForm
-import os
+import os, bcrypt
 from exam_sys_proj.dao.RegistrationCodeDAO import RegistrationCodeDAO, RegistrationCode
 from exam_sys_proj.dao.UsersDAO import UsersDAO, Users
 from exam_sys_proj.util.teacherUtils import TeacherUtils
+from exam_sys_proj.dao.BroadcastShowDAO import BroadcastShowDAO
 
 bp = Blueprint("teacher", __name__, url_prefix="/teacher")
 
@@ -14,8 +15,24 @@ bp = Blueprint("teacher", __name__, url_prefix="/teacher")
 # http://127.0.0.1:5000
 @bp.route("/detail")
 def detail():
-    return render_template("teacher_detail.html")
+    broadcast_getter = BroadcastShowDAO(dbPool)
+    broadcasts = broadcast_getter.get_user_All_Broadcast(session.get("user_id"))
 
+    return render_template("teacher_detail.html", broadcasts=broadcasts)
+
+
+@bp.route("/change_password", methods=["POST"])
+def change_password():
+    data = request.get_json()
+    user_id = session.get("user_id")
+    users_operator = UsersDAO(dbPool)
+    user: Users = users_operator.query(user_id)
+    if bcrypt.checkpw(data['old_password'].encode("utf-8"), user.passWord):
+        newpassword = Users(passWord=data['new_password'])
+        users_operator.update(newpassword, user.userID)
+        return '修改成功！'
+    else:
+        return '密码错误！'
 
 @bp.route("/question_import")
 def question_import():
