@@ -36,57 +36,83 @@
             <div class="layui-input-inline" style="width: 150px;">
                 <label class="layui-form-label">简单(1~3)</label>
                 <div class="layui-col-xs6">
-                    <input type="number" lay-affix="number" value="5" step="1" max="10" min="1"
+                    <input type="number" lay-affix="number" lay-precision=0 value="5" step="1" max="10" min="1"
                            class="layui-input" name="overall_difficulty_easy">
                 </div>
             </div>
             <div class="layui-input-inline" style="width: 150px;">
                 <label class="layui-form-label">普通(4~7)</label>
                 <div class="layui-col-xs6">
-                    <input type="number" lay-affix="number" value="5" step="1" max="10" min="1"
+                    <input type="number" lay-affix="number" lay-precision=0 value="5" step="1" max="10" min="1"
                            class="layui-input" name="overall_difficulty_normal">
                 </div>
             </div>
             <div class="layui-input-inline" style="width: 150px;">
                 <label class="layui-form-label">困难(8~10)</label>
                 <div class="layui-col-xs6">
-                    <input type="number" lay-affix="number" value="5" step="1" max="10" min="1"
+                    <input type="number" lay-affix="number" lay-precision=0 value="5" step="1" max="10" min="1"
                            class="layui-input" name="overall_difficulty_hard">
                 </div>
             </div>
         </div>
-        {% for question_type in question_types %}
-            <h3>{{ question_type }}</h3>
-            <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label">难度范围</label>
-                    <div class="layui-input-inline" style="width: 100px;">
-                        <input type="number" lay-affix="number" lay-precision=0 step="1" max="10" min="1"
-                               name="{{ question_type }}_difficulty_min" value="1" autocomplete="off"
-                               class="layui-input">
-                    </div>
-                    <div class="layui-form-mid">-</div>
-                    <div class="layui-input-inline" style="width: 100px;">
-                        <input type="number" lay-affix="number" lay-precision=0 step="1" max="10" min="1"
-                               name="{{ question_type }}_difficulty_max" value="10" autocomplete="off"
-                               class="layui-input">
-                    </div>
-                </div>
-            </div>
-            <h5>题目数量</h5>
-            {% for knowledge_point in knowledge_points %}
-                <div class="layui-form-item">
-                    <label class="layui-form-label">{{ knowledge_point.kpName }}</label>
-                    <div class="layui-input-block">
-                        <div class="layui-input-inline" style="width: 100px;">
-                            <input type="number" lay-affix="number" lay-precision=0 step="1" max="10" min="0"
-                                   name="{{ question_type }}_{{ knowledge_point.kpName }}" value="0" autocomplete="off"
-                                   class="layui-input">
+
+        <div class="layui-collapse">
+            <p>试题设置</p>
+
+
+
+            {% for question_type in question_types %}
+                <div class="layui-colla-item">
+                    <div class="layui-colla-title">{{ question_type }}</div>
+                    <div class="layui-colla-content">
+                        {% if question_type!="主观题" %}
+                            <p>设置为0表示使用题目在题库中设置的分数</p>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">每题分数</label>
+                                <div class="layui-col-xs6">
+                                    <input type="number" lay-affix="number" value="0" step="0.5" max="10" min="0"
+                                           class="layui-input" name="{{ question_type }}_score_per_question"
+                                           lay-precision=1>
+                                </div>
+                            </div>
+
+                        {% endif %}
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">难度范围</label>
+                                <div class="layui-input-inline" style="width: 100px;">
+                                    <input type="number" lay-affix="number" lay-precision=0 step="1" max="10" min="1"
+                                           name="{{ question_type }}_difficulty_min" value="1" autocomplete="off"
+                                           class="layui-input">
+                                </div>
+                                <div class="layui-form-mid">-</div>
+                                <div class="layui-input-inline" style="width: 100px;">
+                                    <input type="number" lay-affix="number" lay-precision=0 step="1" max="10" min="1"
+                                           name="{{ question_type }}_difficulty_max" value="10" autocomplete="off"
+                                           class="layui-input">
+                                </div>
+                            </div>
                         </div>
+                        <h5>题目数量</h5>
+                        {% for knowledge_point in knowledge_points %}
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">{{ knowledge_point.kpName }}</label>
+                                <div class="layui-input-block">
+                                    <div class="layui-input-inline" style="width: 100px;">
+                                        <input type="number" lay-affix="number" lay-precision=0 step="1" max="10"
+                                               min="0"
+                                               name="{{ question_type }}_{{ knowledge_point.kpName }}" value="0"
+                                               autocomplete="off"
+                                               class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
                     </div>
+
                 </div>
             {% endfor %}
-        {% endfor %}
+        </div>
 
         <div class="layui-form-item">
             <h4>是否按照从易到难顺序排序</h4>

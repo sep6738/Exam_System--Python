@@ -154,10 +154,16 @@ def paper_create():
             paper['shuffle'] = True
         for question_type in question_types:
             paper[question_type] = {}
+            if question_type != "主观题":
+                paper[question_type]["score_per_question"] = data[question_type + "_score_per_question"]
+            else:
+                paper[question_type]["score_per_question"] = 0
             paper[question_type]["difficulty_min"] = data[question_type + "_difficulty_min"]
             paper[question_type]["difficulty_max"] = data[question_type + "_difficulty_max"]
+            paper[question_type]["amount_per_knowledge_point"] = {}
             for knowledge_point in knowledge_points:
-                paper[question_type][knowledge_point.kpName] = data[question_type + "_" + knowledge_point.kpName]
+                paper[question_type]["amount_per_knowledge_point"][knowledge_point.kpName] = data[
+                    question_type + "_" + knowledge_point.kpName]
     print(paper)
     return jsonify({'message': 'Data received successfully'})
 
