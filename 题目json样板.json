@@ -67,3 +67,10 @@
 "score": [5, 10]
 }
 答案：["在某些特定的情况下", "请老师根据回答酌情给分"]
+
+
+广播中content
+{
+"title": "Weekly announcement",
+"message": "Please be reminded of the upcoming exam schedule."
+}
