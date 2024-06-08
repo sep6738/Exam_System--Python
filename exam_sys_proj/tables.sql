@@ -2,7 +2,7 @@ create table broadcast
 (
     broadcastID int auto_increment
         primary key,
-    content     varchar(255) null,
+    content     json         null,
     duringTime  varchar(255) null,
     courseID    varchar(255) null
 );
@@ -12,20 +12,20 @@ create table homework_or_exam_pool
     hepID           int auto_increment
         primary key,
     type            varchar(255) null,
-    question        json null,
-    answer          json null,
+    question        json         null,
+    answer          json         null,
     courseName      varchar(255) null,
-    difficultyLevel int null,
-    isActive        bit null
+    difficultyLevel int          null,
+    isActive        bit          null
 );
 
 create table exam_pool
 (
     epID           int auto_increment
         primary key,
-    examID         int null,
-    questionID     int null,
-    questionNumber int null,
+    examID         int          null,
+    questionID     int          null,
+    questionNumber int          null,
     title          varchar(255) null,
     constraint exam_pool_homework_or_exam_pool_hepID_fk
         foreign key (questionID) references homework_or_exam_pool (hepID)
@@ -52,7 +52,7 @@ create table hep_and_kp_mediater
 (
     mediaterID int auto_increment
         primary key,
-    hepID int null,
+    hepID      int          null,
     kpName     varchar(255) null,
     constraint hep_and_kp_mediater_homework_or_exam_pool_hepID_fk
         foreign key (hepID) references homework_or_exam_pool (hepID)
@@ -69,8 +69,8 @@ create table registration_code
 (
     email            varchar(255) not null
         primary key,
-    verificationCode varchar(6) null,
-    expirationDate   datetime null
+    verificationCode varchar(6)   null,
+    expirationDate   datetime     null
 );
 
 create table role
@@ -87,9 +87,9 @@ create table users
     userName varchar(255) null,
     passWord varchar(255) null,
     name     varchar(255) null,
-    roleID   int null,
-    createAt datetime null,
-    updateAt datetime null,
+    roleID   int          null,
+    createAt datetime     null,
+    updateAt datetime     null,
     email    varchar(255) not null,
     constraint email
         unique (email)
@@ -114,12 +114,12 @@ create table teacher_course
 (
     courseID   int auto_increment
         primary key,
-    userID   int null,
+    userID     int          null,
     semester   varchar(255) null,
     time       varchar(255) null,
     courseName varchar(255) null,
-    isActive bit null,
-    class_   varchar(6) not null,
+    isActive   bit          null,
+    class_     varchar(6)   not null,
     subject    varchar(255) null,
     constraint teacher_course_users_userID_fk
         foreign key (userID) references users (userID)
@@ -143,10 +143,10 @@ create table homework_or_exam
 (
     heID               int auto_increment
         primary key,
-    courseID           int null,
+    courseID           int          null,
     duringTime         varchar(255) null,
-    homeworkExamPoolID int null,
-    result             json null,
+    homeworkExamPoolID int          null,
+    result             json         null,
     constraint homework_or_exam_homework_or_exam_pool_hepID_fk
         foreign key (homeworkExamPoolID) references homework_or_exam_pool (hepID)
             on update cascade on delete cascade,
@@ -159,13 +159,13 @@ create table student_course
 (
     scID       int auto_increment
         primary key,
-    courseName varchar(255) null,
-    userID     int null,
-    semester   varchar(255) null,
-    time       varchar(255) null,
+    courseName varchar(255)  null,
+    userID     int           null,
+    semester   varchar(255)  null,
+    time       varchar(255)  null,
     grade      decimal(5, 2) null,
-    courseID   int null,
-    isDelete   bit null,
+    courseID   int           null,
+    isDelete   bit           null,
     constraint student_course_teacher_course_courseID_fk
         foreign key (courseID) references teacher_course (courseID)
             on update cascade on delete cascade,
@@ -178,13 +178,13 @@ create table student_hand_in
 (
     studentHandInID int auto_increment
         primary key,
-    userID         int null,
-    homeworkExamID int null,
-    content        json null,
-    upTime         varchar(255) null,
+    userID          int           null,
+    homeworkExamID  int           null,
+    content         json          null,
+    upTime          varchar(255)  null,
     score           decimal(5, 2) null,
-    teacherComment varchar(255) null,
-    resultDetails  json null,
+    teacherComment  varchar(255)  null,
+    resultDetails   json          null,
     constraint student_hand_in_homework_or_exam_heID_fk
         foreign key (homeworkExamID) references homework_or_exam (heID)
             on update cascade on delete cascade,
