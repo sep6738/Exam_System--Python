@@ -7,9 +7,9 @@
             {% for broadcast in broadcasts %}
                 <div class="layui-col-md6">
                     <div class="layui-card">
-                        <div class="layui-card-header">{{ broadcast['title'] }}</div>
+                        <div class="layui-card-header">{{ broadcast.content['title'] }}</div>
                         <div class="layui-card-body">
-                            {{ broadcast['content'] }}
+                            {{ broadcast.content['message'] }}
                         </div>
                     </div>
                 </div>

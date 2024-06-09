@@ -3,7 +3,7 @@ from exam_sys_proj.src.extensions import mail, dbPool
 from flask_mail import Message
 from flask import request
 from .forms import RegisterForm, LoginForm
-import os, bcrypt
+import os, bcrypt, json
 from exam_sys_proj.dao.RegistrationCodeDAO import RegistrationCodeDAO, RegistrationCode
 from exam_sys_proj.dao.UsersDAO import UsersDAO, Users
 from exam_sys_proj.util.teacherUtils import TeacherUtils
@@ -17,7 +17,8 @@ bp = Blueprint("teacher", __name__, url_prefix="/teacher")
 def detail():
     broadcast_getter = BroadcastShowDAO(dbPool)
     broadcasts = broadcast_getter.get_user_All_Broadcast(session.get("user_id"))
-
+    for broadcast in broadcasts:
+        broadcast.content = json.loads(broadcast.content)
     return render_template("teacher_detail.html", broadcasts=broadcasts)
 
 
@@ -27,7 +28,9 @@ def change_password():
     user_id = session.get("user_id")
     users_operator = UsersDAO(dbPool)
     user: Users = users_operator.query(user_id)
-    if bcrypt.checkpw(data['old_password'].encode("utf-8"), user.passWord):
+    if len(data['new_password']) < 9 or len(data['new_password']) > 20:
+        return '密码长度需在9到20位之间！'
+    elif bcrypt.checkpw(data['old_password'].encode("utf-8"), user.passWord):
         newpassword = Users(passWord=data['new_password'])
         users_operator.update(newpassword, user.userID)
         return '修改成功！'
