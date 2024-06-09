@@ -34,7 +34,8 @@ values (6666, '500', '数学', 1, '亚瑟王速成班', '数学');
 insert into broadcast (content, duringTime, courseID)
 values ('{
 "title": "Weekly announcement",
-"message": "Please be reminded of the upcoming exam schedule."
+"message": "Please be reminded of the upcoming exam schedule.",
+"color": "red"
 }', '2025-05-01 08:00:00', '数学');
 insert into broadcast_show (userID, broadcastID, isActive)
 values (6666, 1, 1);
