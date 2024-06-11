@@ -11,7 +11,7 @@
                              style="background-color: {{ broadcast.content['color'] }}" {% endif %}>
                             <h2>{{ broadcast.content['title'] }}</h2></div>
                         <div class="layui-card-body">
-                            {{ broadcast.content['message'] }}
+                            {{ broadcast.content['message']|safe }}
                         </div>
                     </div>
                 </div>

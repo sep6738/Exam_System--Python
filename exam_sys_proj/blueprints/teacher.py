@@ -3,7 +3,8 @@ from exam_sys_proj.src.extensions import mail, dbPool
 from flask_mail import Message
 from flask import request
 from .forms import RegisterForm, LoginForm
-import os, bcrypt, json
+import os, bcrypt, json, markdown
+from markupsafe import Markup
 from exam_sys_proj.dao.RegistrationCodeDAO import RegistrationCodeDAO, RegistrationCode
 from exam_sys_proj.dao.UsersDAO import UsersDAO, Users
 from exam_sys_proj.util.teacherUtils import TeacherUtils
@@ -19,6 +20,8 @@ def detail():
     broadcasts = broadcast_getter.get_user_All_Broadcast(session.get("user_id"))
     for broadcast in broadcasts:
         broadcast.content = json.loads(broadcast.content)
+        broadcast.content['message'] = Markup(
+            markdown.markdown(broadcast.content['message'], extensions=['extra', 'codehilite', 'nl2br']))
     return render_template("teacher_detail.html", broadcasts=broadcasts)
 
 
@@ -177,7 +180,7 @@ def paper_create():
             if question_type != "主观题":
                 paper[question_type]["score_per_question"] = data[question_type + "_score_per_question"]
             else:
-                paper[question_type]["score_per_question"] = 0
+                paper[question_type]["score_per_question"] = '0'
             paper[question_type]["difficulty_min"] = data[question_type + "_difficulty_min"]
             paper[question_type]["difficulty_max"] = data[question_type + "_difficulty_max"]
             paper[question_type]["amount_per_knowledge_point"] = {}
