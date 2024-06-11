@@ -5,6 +5,7 @@ from ..util.db_util import DBUtil
 import pandas as pd
 from matplotlib import pyplot as plt
 
+
 class TeacherCourseDAO(BaseDAO):
     def __init__(self, db_util):
         super().__init__(db_util, TeacherCourse, "teacher_course", "courseID")
@@ -35,18 +36,19 @@ class TeacherCourseDAO(BaseDAO):
         db_util = DBUtil()
         studentcoursedao = StudentCourseDAO(db_util)
         try:
-            result = studentcoursedao.query(courseID,'CourseID',1)
-            data={'userid':[],'grade':[]}
+            result = studentcoursedao.query(courseID, 'CourseID', 1)
+            data = {'userid': [], 'grade': []}
             for row in result:
-                data['userid'].append(getattr(row,'userID'))
-                data['grade'].append(getattr(row,'grade'))
+                data['userid'].append(getattr(row, 'userID'))
+                data['grade'].append(getattr(row, 'grade'))
             df = pd.DataFrame(data)
             df.set_index("userid", inplace=True)
             for x in df.index:
                 if df.loc[x, 'grade'] is None:
                     df.loc[x, "grade"] = 0
 
-            num = pd.cut(df['grade'], bins=[0, 60, 70, 80, 90, 100],labels=['0-59', '60-69', '70-79', '80-89', '90-100'],
+            num = pd.cut(df['grade'], bins=[0, 60, 70, 80, 90, 100],
+                         labels=['0-59', '60-69', '70-79', '80-89', '90-100'],
                          right=False)
             counts = num.value_counts(sort=False)
             plt.rcParams['font.sans-serif'] = ['SimHei']  # 显示中文字体
