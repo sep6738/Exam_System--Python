@@ -9,3 +9,5 @@ flask_mail
 flask-mail
 wtforms
 email_validator
+pandas
+matplotlib
