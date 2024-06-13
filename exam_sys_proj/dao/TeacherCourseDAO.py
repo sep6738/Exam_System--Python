@@ -1,6 +1,9 @@
 from .StudentCourseDAO import StudentCourseDAO
+from .UsersDAO import UsersDAO
+from ..orm.StudentCourse import StudentCourse
 from ..orm.TeacherCourse import TeacherCourse
 from .base_dao import BaseDAO
+from ..orm.Users import Users
 from ..util.db_util import DBUtil
 import pandas as pd
 from matplotlib import pyplot as plt
@@ -59,6 +62,47 @@ class TeacherCourseDAO(BaseDAO):
             path = file_name.format(name=courseID)
             plt.savefig(path)
             return path
+        except Exception as e:
+            print(e)
+            return 'error'
+
+    def getcourse_user(self,courseID : int):
+        '''
+        传入courseID，得到student_course表上所有是该班级的user的所有信息
+        :param courseID:
+        :return: 由字典组成的列表
+        '''
+        try:
+            student_course = StudentCourse()
+            users = Users()
+            column1 = [attr for attr in dir(student_course) if
+                       not callable(getattr(student_course, attr)) and not attr.startswith("_")]
+            column2 = [attr for attr in dir(users) if
+                       not callable(getattr(users, attr)) and not attr.startswith("_")]
+            columns = list(set(column1 + column2))
+            columns.remove('userID')
+            columns.append('users.userID')
+
+            query = f"SELECT {', '.join(columns)} FROM student_course,users WHERE student_course.userID=users.userID and courseID=%s"
+            conn = self.db_util.get_connection()
+            params = courseID
+
+            try:
+                with conn.cursor() as cursor:
+                    cursor.execute(query, params)
+                    result = cursor.fetchall()
+            finally:
+                conn.close()
+
+            columns.remove('users.userID')
+            columns.append('userID')
+            ans = []
+            for row in result:
+                data = dict()
+                for j in range(len(columns)):
+                    data[columns[j]] = row[j]
+                ans.append(data)
+            return ans
         except Exception as e:
             print(e)
             return 'error'
