@@ -1,0 +1,49 @@
+{% extends "teacher_base.html" %}
+
+{% block body %}
+    <div class="layui-tab layui-tab-brief">
+        <ul class="layui-tab-title">
+            {% for course in data['courses'] %}
+                <li>{{ course.courseName }}</li>
+            {% endfor %}
+
+        </ul>
+        <div class="layui-tab-content">
+            {% for course in data['courses'] %}
+                <div class="layui-tab-item">
+                    <table class="layui-table"
+                           lay-data="{height:315, url:'/teacher/api/get_student/{{ course.courseID }}'}"
+                           id="ID-table-demo-init">
+                        <thead>
+                        <tr>
+                            <th lay-data="{field:'userID', width:80, sort: true}">ID</th>
+                            <th lay-data="{field:'userName', width:150, sort: true}">用户名</th>
+                            <th lay-data="{field:'name', width:150, sort: true}">姓名</th>
+                            {#                            <th lay-data="{field:'sex', width:80, sort: true}">性别</th>#}
+                            <th lay-data="{field:'email', sort: true}">邮箱</th>
+                            <th lay-data="{field:'grade', sort: true}">课程分数</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            // 使第一个班级的标签页显示
+
+            // 获取所有的 .layui-tab-title li 元素
+            const $tabs = $('.layui-tab-title li');
+
+            // 给第一个 li 元素添加 layui-this 类
+            $tabs.first().addClass('layui-this');
+
+            // 获取所有的 .layui-tab-item 元素
+            const $tabItems = $('.layui-tab-content .layui-tab-item');
+
+            // 给第一个 .layui-tab-item 元素添加 layui-show 类
+            $tabItems.first().addClass('layui-show');
+        });
+    </script>
+{% endblock %}

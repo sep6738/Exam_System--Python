@@ -9,8 +9,22 @@ from exam_sys_proj.dao.RegistrationCodeDAO import RegistrationCodeDAO, Registrat
 from exam_sys_proj.dao.UsersDAO import UsersDAO, Users
 from exam_sys_proj.util.teacherUtils import TeacherUtils
 from exam_sys_proj.dao.BroadcastShowDAO import BroadcastShowDAO
+from ..dao.TeacherCourseDAO import TeacherCourseDAO
 
 bp = Blueprint("teacher", __name__, url_prefix="/teacher")
+
+
+class MyEncoder(json.JSONEncoder):
+
+    def default(self, obj):
+        """
+        判断是否为bytes类型的数据是的话转换成str
+        :param obj:
+        :return:
+        """
+        if isinstance(obj, bytes):
+            return str(obj, encoding='utf-8')
+        return json.JSONEncoder.default(self, obj)
 
 
 # http://127.0.0.1:5000
@@ -23,6 +37,29 @@ def detail():
         broadcast.content['message'] = Markup(
             markdown.markdown(broadcast.content['message'], extensions=['extra', 'codehilite', 'nl2br']))
     return render_template("teacher_detail.html", broadcasts=broadcasts)
+
+
+@bp.route("/student_manage")
+def student_manage():
+    teacher_operator = TeacherCourseDAO(dbPool)
+    print(session.get("user_id"))
+    courses = teacher_operator.query(session.get("user_id"), "userID", True)
+    print(courses[0].courseID)
+    data = {'courses': courses}
+    # print(data)
+    return render_template("teacher_student_manage.html", data=data)
+
+
+@bp.route("/api/get_student/<courseID>")
+def get_student_api(courseID):
+    teacher_operator = TeacherCourseDAO(dbPool)
+    data = teacher_operator.getcourse_user(courseID)
+    print(data)
+    return json.dumps({
+        'code': 0,
+        'message': "成功！",
+        'data': data
+    }, cls=MyEncoder)
 
 
 @bp.route("/change_password", methods=["POST"])
@@ -39,6 +76,7 @@ def change_password():
         return '修改成功！'
     else:
         return '密码错误！'
+
 
 @bp.route("/question_import")
 def question_import():
@@ -189,8 +227,6 @@ def paper_create():
                     question_type + "_" + knowledge_point.kpName]
     print(paper)
     return jsonify({'message': 'Data received successfully'})
-
-
 
 # @bp.route("/qa/public", methods=['GET', 'POST'])
 # @login_required

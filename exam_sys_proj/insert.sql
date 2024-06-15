@@ -28,14 +28,34 @@ VALUES (6666, '梅林·安布罗修斯', '$2b$08$C2pRyZ4v8WHy1BYml6kw1enOkUMvjCb
 insert into users (userID, userName, passWord, name, roleID, email)
 VALUES (66666, '犹格·索托斯', '$2b$08$C2pRyZ4v8WHy1BYml6kw1enOkUMvjCbbdrULL6ZThC92ej4TttYzG', 'Yog-Sothoth', 3,
         'admin@test.com');
-insert into teacher_course (userID, semester, courseName, isActive, class_, subject)
-values (6666, '500', '数学', 1, '亚瑟王速成班', '数学');
-
+insert into teacher_course (courseID, userID, semester, courseName, class_, isActive, subject)
+values (6666, 6666, '500', '亚瑟王速成班', 12345, 1, '数学');
+insert into student_course (courseName, userID, semester, courseID, isDelete)
+values ('数学', 666, '500', 6666, 0);
 insert into broadcast (content, duringTime, courseID)
 values ('{
 "title": "Weekly announcement",
 "message": "Please be reminded of the upcoming exam schedule.",
 "color": "red"
 }', '2025-05-01 08:00:00', '数学');
+
 insert into broadcast_show (userID, broadcastID, isActive)
 values (6666, 1, 1);
+insert into users (userID, userName, passWord, name, roleID, email)
+VALUES (777, '亚瑟·潘德拉贡', '$2b$08$C2pRyZ4v8WHy1BYml6kw1enOkUMvjCbbdrULL6ZThC92ej4TttYzG', 'Arthur Pendragon', 1,
+        'arthur@camelot.com');
+
+insert into users (userID, userName, passWord, name, roleID, email)
+VALUES (778, '兰斯洛特·杜·拉克', '$2b$08$C2pRyZ4v8WHy1BYml6kw1enOkUMvjCbbdrULL6ZThC92ej4TttYzG', 'Lancelot du Lac', 1,
+        'lancelot@camelot.com');
+
+insert into users (userID, userName, passWord, name, roleID, email)
+VALUES (779, '高文·奥克尼', '$2b$08$C2pRyZ4v8WHy1BYml6kw1enOkUMvjCbbdrULL6ZThC92ej4TttYzG', 'Gawain of Orkney', 1,
+        'gawain@camelot.com');
+
+insert into student_course (courseName, userID, semester, courseID, isDelete)
+values ('亚瑟王速成班', 777, '500', 6666, 0);
+insert into student_course (courseName, userID, semester, courseID, isDelete)
+values ('亚瑟王速成班', 778, '500', 6666, 0);
+insert into student_course (courseName, userID, semester, courseID, isDelete)
+values ('亚瑟王速成班', 779, '500', 6666, 0);
