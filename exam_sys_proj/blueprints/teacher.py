@@ -9,6 +9,7 @@ from exam_sys_proj.dao.RegistrationCodeDAO import RegistrationCodeDAO, Registrat
 from exam_sys_proj.dao.UsersDAO import UsersDAO, Users
 from exam_sys_proj.util.teacherUtils import TeacherUtils
 from exam_sys_proj.dao.BroadcastShowDAO import BroadcastShowDAO
+from ..dao.TeacherCourseDAO import TeacherCourseDAO
 
 bp = Blueprint("teacher", __name__, url_prefix="/teacher")
 
@@ -23,6 +24,20 @@ def detail():
         broadcast.content['message'] = Markup(
             markdown.markdown(broadcast.content['message'], extensions=['extra', 'codehilite', 'nl2br']))
     return render_template("teacher_detail.html", broadcasts=broadcasts)
+
+
+@bp.route("/student_manage")
+def student_manage():
+    teacher_operator = TeacherCourseDAO(dbPool)
+    print(session.get("user_id"))
+    courses = teacher_operator.querySubjectViaTeacherID(int(session.get("user_id")))
+    print(courses[0].courseID)
+    # data = {'courses': courses, 'students': {}}
+    # for course in courses:
+    # data['students'][course.courseID] = teacher_operator.getcourse_user((course.courseID))
+    # print(data)
+    return render_template("teacher_student_manage.html", )
+
 
 
 @bp.route("/change_password", methods=["POST"])
