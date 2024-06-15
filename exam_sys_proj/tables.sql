@@ -143,10 +143,12 @@ create table homework_or_exam
 (
     heID               int auto_increment
         primary key,
-    courseID           int          null,
-    duringTime         varchar(255) null,
-    homeworkExamPoolID int          null,
-    result             json         null,
+    courseID           int      null,
+    homeworkExamPoolID int      null,
+    startTime          datetime null,
+    endTime            datetime null,
+    duringTime         int      null,
+    result             json     null,
     constraint homework_or_exam_homework_or_exam_pool_hepID_fk
         foreign key (homeworkExamPoolID) references homework_or_exam_pool (hepID)
             on update cascade on delete cascade,
