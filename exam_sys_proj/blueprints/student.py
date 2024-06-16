@@ -13,6 +13,7 @@ from ..dao.HepAndKpMediaterDAO import HepAndKpMediaterDAO
 from ..dao.HomeworkOrExamPoolDAO import HomeworkOrExamPoolDAO
 from ..dao.KnowledgePointsDAO import KnowledgePointsDAO
 from ..dao.StudentCourseDAO import StudentCourseDAO
+from ..dao.TeacherCourseDAO import TeacherCourseDAO
 
 # from ..dao.studentCourseDAO import studentCourseDAO
 
@@ -106,4 +107,9 @@ def select_subject():
         # 将学科参数传递到新页面
         return {'redirect_url': f'/student/paper_create/{subject}'}
     else:
-        return render_template('student_select_subject.html')
+        subject_getter = TeacherCourseDAO(dbPool)
+        subjects = subject_getter.getallsubject()
+        if subjects:
+            return render_template('student_select_subject.html', subjects=subjects)
+        else:
+            return "没有学科！"
