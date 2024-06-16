@@ -1,16 +1,15 @@
-{% extends "teacher_base.html" %}
+{% extends "student_base.html" %}
 
 {% block body %}
     <h1>选择学科</h1>
-    <form id="subject-form">
-        <label for="subject">学科:</label>
+    <form id="subject-form" class="layui-form layui-row layui-col-space16">
+        {#        <label for="subject">学科:</label>#}
         <select id="subject" name="subject">
-            <option value="">请选择</option>
-            <option value="math">数学</option>
-            <option value="english">英语</option>
-            <option value="physics">物理</option>
+            {% for i in subjects %}
+                <option value="{{ i }}">{{ i }}</option>
+            {% endfor %}
         </select>
-        <button type="submit">提交</button>
+        <button type="submit" class="layui-btn layui-btn-primary layui-border">提交</button>
     </form>
 
     <script>
@@ -20,7 +19,7 @@
                 var subject = $('#subject').val();
                 $.ajax({
                     type: 'POST',
-                    url: '/select-subject',
+                    url: '/student/select_subject',
                     data: {'subject': subject},
                     success: function (response) {
                         // 跳转到新页面

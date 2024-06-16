@@ -11,7 +11,9 @@ from exam_sys_proj.util.teacherUtils import TeacherUtils
 from exam_sys_proj.dao.BroadcastShowDAO import BroadcastShowDAO
 from ..dao.HepAndKpMediaterDAO import HepAndKpMediaterDAO
 from ..dao.HomeworkOrExamPoolDAO import HomeworkOrExamPoolDAO
+from ..dao.KnowledgePointsDAO import KnowledgePointsDAO
 from ..dao.StudentCourseDAO import StudentCourseDAO
+from ..dao.TeacherCourseDAO import TeacherCourseDAO
 
 # from ..dao.studentCourseDAO import studentCourseDAO
 
@@ -63,9 +65,11 @@ def change_password():
 @bp.route("/paper_create/<subject>", methods=["GET", "POST"])
 def paper_create(subject):
     question_types = ['选择题', '判断题', '填空题', '主观题']
-    knowledge_points = TeacherUtils.queryTeacherSubjectKP(dbPool, session.get("subject"))
+    knowledge_point_getter = KnowledgePointsDAO(dbPool)
+    knowledge_points = knowledge_point_getter.query(subject, 'subject', True)
     if request.method == 'GET':
-        return render_template("student_paper_create.html", question_types=question_types)
+        return render_template("student_paper_create.html", question_types=question_types,
+                               knowledge_points=knowledge_points)
     else:
         data = request.get_json()
         # print(data)
@@ -96,11 +100,16 @@ def paper_create(subject):
     return jsonify({'message': 'Data received successfully'})
 
 
-@bp.route('/select-subject', methods=['POST', 'GET'])
+@bp.route('/select_subject', methods=['POST', 'GET'])
 def select_subject():
     if request.method == 'POST':
         subject = request.form['subject']
         # 将学科参数传递到新页面
         return {'redirect_url': f'/student/paper_create/{subject}'}
     else:
-        return render_template('student_select_subject.html')
+        subject_getter = TeacherCourseDAO(dbPool)
+        subjects = subject_getter.getallsubject()
+        if subjects:
+            return render_template('student_select_subject.html', subjects=subjects)
+        else:
+            return "没有学科！"
