@@ -1,5 +1,7 @@
 class HomeworkOrExam:
-    def __init__(self, heID=None, courseID=None, duringTime=None, homeworkExamPoolID=None, result=None):
+    def __init__(self, heID=None, courseID=None, duringTime=None, homeworkExamPoolID=None, result=None,startTime=None, endTime=None):
+        self._endTime = endTime
+        self._startTime = startTime
         self.heID = heID
         self.courseID = courseID
         self.duringTime = duringTime
@@ -45,3 +47,19 @@ class HomeworkOrExam:
     @result.setter
     def result(self, value):
         self._result = value
+
+    @property
+    def startTime(self):
+        return self._startTime
+
+    @startTime.setter
+    def startTime(self, value):
+        self._startTime = value
+
+    @property
+    def endTime(self):
+        return self._endTime
+
+    @endTime.setter
+    def endTime(self, value):
+        self._endTime = value
