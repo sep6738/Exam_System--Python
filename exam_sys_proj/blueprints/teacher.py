@@ -9,6 +9,9 @@ from exam_sys_proj.dao.RegistrationCodeDAO import RegistrationCodeDAO, Registrat
 from exam_sys_proj.dao.UsersDAO import UsersDAO, Users
 from exam_sys_proj.util.teacherUtils import TeacherUtils
 from exam_sys_proj.dao.BroadcastShowDAO import BroadcastShowDAO
+from ..dao.HepAndKpMediaterDAO import HepAndKpMediaterDAO
+from ..dao.HomeworkOrExamPoolDAO import HomeworkOrExamPoolDAO
+from ..dao.StudentCourseDAO import StudentCourseDAO
 from ..dao.TeacherCourseDAO import TeacherCourseDAO
 
 bp = Blueprint("teacher", __name__, url_prefix="/teacher")
@@ -60,6 +63,19 @@ def get_student_api(courseID):
         'message': "成功！",
         'data': data
     }, cls=MyEncoder)
+
+
+@bp.route("/api/delete_student/<courseID>")
+def delete_student_api(courseID):
+    student_course_operator = StudentCourseDAO(dbPool)
+    data = request.get_json()
+    print(data)
+    for userID in data:
+        student_course_operator.delete(userID, "userID")
+    return json.dumps({
+        'code': 0,
+        'message': "成功！",
+        'data': {}})
 
 
 @bp.route("/change_password", methods=["POST"])
@@ -227,6 +243,88 @@ def paper_create():
                     question_type + "_" + knowledge_point.kpName]
     print(paper)
     return jsonify({'message': 'Data received successfully'})
+
+
+@bp.route("/question_manage")
+def question_manage():
+    teacher_operator = TeacherCourseDAO(dbPool)
+    courses = teacher_operator.query(session.get("user_id"), "userID", True)
+    subject = courses[0].subject
+    return render_template("teacher_question_manage.html", subject=subject)
+
+
+@bp.route("/api/get_question/<subject>")
+def get_question_api(subject):
+    question_operator = HomeworkOrExamPoolDAO(dbPool)
+    data = question_operator.query(subject, "courseName", True)
+    questions = []
+    if data:
+        for i in data:
+            singe_question = {}
+            singe_question['hepID'] = i.hepID
+            singe_question['type'] = i.type
+            question = json.loads(i.question)
+            singe_question['score'] = question['score']
+            singe_question['shuffle'] = question['shuffle']
+            singe_question['questions'] = question['questions']
+            singe_question['main_content'] = question['main_content']
+            singe_question['subject'] = i.courseName
+            singe_question['difficulty'] = i.difficultyLevel
+            questions.append(singe_question)
+    return json.dumps({
+        'code': 0,
+        'message': "成功！",
+        'data': questions
+    }, cls=MyEncoder)
+
+
+@bp.route("/api/delete_question/<hepID>")
+def delete_question_api(hepID):
+    question_operator = HomeworkOrExamPoolDAO(dbPool)
+    knowledge_point_mediator_operator = HepAndKpMediaterDAO(dbPool)
+    r1 = question_operator.delete(hepID)
+    r2 = knowledge_point_mediator_operator.delete(hepID, "hepID")
+
+    if r1 and r2:
+
+        return jsonify({
+            'code': 0,
+            'message': "成功！",
+            'data': {}})
+    else:
+        return jsonify({
+            'code': 1,
+            'message': "失败！",
+            'data': {}
+        })
+
+
+@bp.route("/api/get_question_detail/<hepID>", methods=["GET"])
+def get_question_detail(hepID):
+    question_operator = HomeworkOrExamPoolDAO(dbPool)
+    question = question_operator.query(hepID)
+    if question:
+        question_dict = {
+            "hepID": question.hepID,
+            "type": question.type,
+            "question": json.loads(question.question),
+            "answer": json.loads(question.answer),
+            "courseName": question.courseName,
+            "difficultyLevel": question.difficultyLevel,
+            "isActive": bool(question.isActive),
+        }
+        return json.dumps({
+            "code": 0,
+            "message": "成功",
+            "data": question_dict
+        })
+    else:
+        return json.dumps({
+            "code": 1,
+            "message": "试题不存在",
+            "data": {}
+        })
+
 
 # @bp.route("/qa/public", methods=['GET', 'POST'])
 # @login_required

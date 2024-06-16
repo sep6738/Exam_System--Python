@@ -49,19 +49,19 @@
                 <li class="layui-nav-item"><a href="{{ url_for('teacher.detail') }}">个人主页</a></li>
                 <li class="layui-nav-item"><a href="{{ url_for('teacher.student_manage') }}">学生管理</a></li>
                 <li class="layui-nav-item"><a href="javascript:;">成绩分析</a></li>
+                <li class="layui-nav-item"><a href="javascript:;">测试管理</a></li>
                 <li class="layui-nav-item layui-nav-itemed">
                     <a class="" href="javascript:;">试卷</a>
                     <dl class="layui-nav-child">
                         <dd><a href="javascript:;">试卷管理</a></dd>
                         <dd><a href="{{ url_for('teacher.paper_create') }}">试卷创建</a></dd>
                         <dd><a href="javascript:;">试卷发布</a></dd>
-                        <dd><a href="javascript:;">试卷批改</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item layui-nav-itemed">
                     <a class="" href="javascript:;">试题</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:;">试题管理</a></dd>
+                        <dd><a href="{{ url_for('teacher.question_manage') }}">试题管理</a></dd>
                         <dd><a href="{{ url_for('teacher.question_create') }}">试题创建</a></dd>
                         <dd><a href="{{ url_for('teacher.question_import') }}">试题导入</a></dd>
                         <dd><a href="javascript:;">试题导出</a></dd>
