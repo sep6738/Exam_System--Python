@@ -22,3 +22,15 @@ class TeacherCourseDAO(BaseDAO):
             setattr(entity, attr, i[0])
             result_list.append(entity)
         return result_list
+
+    def getallsubject(self):
+        """
+        查询所有学科，去除重复项，返回列表
+        :return:
+        """
+        query = f"SELECT DISTINCT subject FROM {self.table_name}"
+        result = self.execute_query(query)
+        result_list = []
+        for i in result:
+            result_list.append(i[0])
+        return result_list
