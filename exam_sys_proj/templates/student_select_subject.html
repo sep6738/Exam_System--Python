@@ -1,0 +1,36 @@
+{% extends "teacher_base.html" %}
+
+{% block body %}
+    <h1>选择学科</h1>
+    <form id="subject-form">
+        <label for="subject">学科:</label>
+        <select id="subject" name="subject">
+            <option value="">请选择</option>
+            <option value="math">数学</option>
+            <option value="english">英语</option>
+            <option value="physics">物理</option>
+        </select>
+        <button type="submit">提交</button>
+    </form>
+
+    <script>
+        $(document).ready(function () {
+            $('#subject-form').submit(function (event) {
+                event.preventDefault();
+                var subject = $('#subject').val();
+                $.ajax({
+                    type: 'POST',
+                    url: '/select-subject',
+                    data: {'subject': subject},
+                    success: function (response) {
+                        // 跳转到新页面
+                        window.location.href = response.redirect_url;
+                    },
+                    error: function () {
+                        alert('选择学科时出错,请重试。');
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}
