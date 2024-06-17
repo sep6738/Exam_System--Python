@@ -108,7 +108,6 @@ class TeacherUtils:
             print("batchInsertQuestions error!")
             return "error"
 
-
     @classmethod
     def random_paper(cls, input_dict: dict, db_util):
         random.seed(time.time())
@@ -130,7 +129,7 @@ class TeacherUtils:
                     del input_dict[_]["amount_per_knowledge_point"][__]
         if len(temp_list0) == 0:
             return {"status_code": 404, "message": "试卷里至少要有一道题",
-                        "content": None}
+                    "content": None}
 
         def get_diff(min_d, max_d):
             min_d = eval(min_d)
@@ -287,12 +286,15 @@ class TeacherUtils:
             temp_set = set()
             questionID_list = []
             # 数据检查
-            temp_key1, temp_key2 = questions_diff_count_dict[question_type].keys(), input_dict[question_type]["amount_per_knowledge_point"].keys()
-            if sum(questions_diff_count_dict[question_type].values()) - sum(input_dict[question_type]["amount_per_knowledge_point"].values()) == 1:
+            temp_key1, temp_key2 = questions_diff_count_dict[question_type].keys(), input_dict[question_type][
+                "amount_per_knowledge_point"].keys()
+            if sum(questions_diff_count_dict[question_type].values()) - sum(
+                    input_dict[question_type]["amount_per_knowledge_point"].values()) == 1:
                 questions_diff_count_dict[question_type][min(questions_diff_count_dict[question_type].keys())] -= 1
                 if questions_diff_count_dict[question_type][min(questions_diff_count_dict[question_type].keys())] == 0:
                     del questions_diff_count_dict[question_type][min(questions_diff_count_dict[question_type].keys())]
-            elif sum(questions_diff_count_dict[question_type].values()) - sum(input_dict[question_type]["amount_per_knowledge_point"].values()) == 2:
+            elif sum(questions_diff_count_dict[question_type].values()) - sum(
+                    input_dict[question_type]["amount_per_knowledge_point"].values()) == 2:
                 questions_diff_count_dict[question_type][min(questions_diff_count_dict[question_type].keys())] -= 1
                 if questions_diff_count_dict[question_type][min(questions_diff_count_dict[question_type].keys())] == 0:
                     del questions_diff_count_dict[question_type][min(questions_diff_count_dict[question_type].keys())]
@@ -337,17 +339,20 @@ class TeacherUtils:
             stored_paper_dict["score"] = result[0]["score"]
 
         #     可能后续会有功能拓展
-
         except Exception as e:
             print(e)
             return {"status_code": 404,
                     "message": "组卷失败，发生未知错误",
                     "content": None}
 
+        # 分析试卷
+
+        # 输出
+
+        print(result[0])
         return {"status_code": 200,
                 "message": "组卷成功",
                 "content": [result[0], stored_paper_dict, None, None]}
-
 
     @classmethod
     def querySubjectQuestionsViaUID(cls, db_util, userID, entity: HomeworkOrExamPool):
@@ -371,18 +376,15 @@ class TeacherUtils:
         result_list = homeworkOrExamPoolDAO.columnsQuery(entity, is_all=True)
         return result_list
 
-
     @classmethod
     def insertOnePaper(cls):
         pass
-
 
     @staticmethod
     def _readOurJson(json_path: str):
         with open(json_path, "r", encoding="utf-8") as f:
             t = json.load(f)
         return t
-
 
     @staticmethod
     def _query_diff_to_kp(type: str, diff_level: list, db_util):
@@ -487,3 +489,23 @@ class TeacherUtils:
                         kp_name_index = random.choice(list(range(len(kp_list))))
 
         return result_list
+
+    @staticmethod
+    def _analysis_paper(paper, diff_list, type_list, source_dict):
+        sum_score = sum(paper["score"])
+        type_score_dict = dict()
+        type_score_ratio_dict = dict()
+        n = 0
+        for type in type_list:
+            type_score_dict[type] = paper["score"][n]
+            type_score_ratio_dict[type] = paper["score"][n]/sum_score
+            n += 1
+        ave_diff = sum(diff_list)/len(diff_list)
+        diff_coe_dict = dict()
+        
+        for _ in set(diff_list):
+            diff_coe_dict[_] = 0
+        for diff in diff_list:
+            diff_coe_dict[diff] += 1
+
+

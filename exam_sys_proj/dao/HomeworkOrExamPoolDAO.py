@@ -13,7 +13,9 @@ class HomeworkOrExamPoolDAO(BaseDAO):
         questions_list = []
         answer_list = []
         diff_list = []
+        question_type_list = []
         for question_type in store_paper["questions"]:
+            question_type_list.append(question_type)
             if len(tuple(store_paper["questions"][question_type][1:])) > 1:
                 pl = str(tuple(store_paper["questions"][question_type][1:]))
                 # 建立sql并查询
@@ -50,6 +52,6 @@ class HomeworkOrExamPoolDAO(BaseDAO):
         result_dict["shuffle"] = store_paper["shuffle"]
         result_dict["question"] = questions_list
         result_dict["main_content"] = f"# <center>{store_paper['main_content']}</center>\n"
-        return [result_dict, answer_list, diff_list]
+        return [result_dict, answer_list, diff_list, questions_list]
 
 
