@@ -246,7 +246,7 @@ class TeacherUtils:
             # 得到难度数量字典
             questions_diff_count_dict[i] = temp_dict
             # 得到查询知识点字典
-            query_kp_dict = cls._query_diff_to_kp(i, temp_diff_list)
+            query_kp_dict = cls._query_diff_to_kp(i, temp_diff_list, db_util)
             # 检查是否存在某个难度的题目数量为0
 
             if isinstance(query_kp_dict, dict):

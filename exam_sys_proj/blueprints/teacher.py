@@ -264,8 +264,9 @@ def paper_create():
             for knowledge_point in knowledge_points:
                 paper[question_type]["amount_per_knowledge_point"][knowledge_point.kpName] = data[
                     question_type + "_" + knowledge_point.kpName]
-    print(paper)
-    return jsonify({'message': 'Data received successfully'})
+    # print(paper)
+    result = TeacherUtils.random_paper(paper, dbPool)
+    return jsonify({'message': result})
 
 
 @bp.route("/paper_publish", methods=["GET", "POST"])
