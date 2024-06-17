@@ -178,6 +178,12 @@ class TeacherUtils:
         result_list = homeworkOrExamPoolDAO.columnsQuery(entity, is_all=True)
         return result_list
 
+
+    @classmethod
+    def insertOnePaper(cls):
+        pass
+
+
     @staticmethod
     def _readOurJson(json_path: str):
         with open(json_path, "r", encoding="utf-8") as f:

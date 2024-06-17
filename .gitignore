@@ -7,4 +7,6 @@ exam_sys_proj/testRegistrationCode.py
 exam_sys_proj/testTeacherUtils.py
 exam_sys_proj/test_sep.py
 exam_sys_proj/test_questions.json
+./paper_json_input.json
+exam_sys_proj/test_diff.py
 flask_markdown_example
