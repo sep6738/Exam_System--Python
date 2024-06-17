@@ -138,8 +138,6 @@ class BaseDAO:
         columns = [attr for attr in dir(self.entity_class) if
                    not callable(getattr(self.entity_class, attr)) and not attr.startswith("_")]
         query = f"SELECT {', '.join(columns)} FROM {self.table_name} WHERE {placeholders}"
-        print(query)
-        print(values)
         result = self.execute_query(query, values)
         if result:
             if is_all:
