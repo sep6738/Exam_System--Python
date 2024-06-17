@@ -14,8 +14,9 @@ from exam_sys_proj.src.extensions import mail, dbPool
 from exam_sys_proj.blueprints.auth import bp as auth_bp
 from exam_sys_proj.blueprints.teacher import bp as teacher_bp
 from exam_sys_proj.blueprints.student import bp as student_bp
+from exam_sys_proj.blueprints.admin import bp as admin_bp
 
-# todo:修改密码
+
 # todo:导航条，创建实体，用户名显示，登出，未登录时跳转登陆界面
 
 app = Flask(__name__)
@@ -31,6 +32,7 @@ mail.init_app(app)
 app.register_blueprint(teacher_bp)
 app.register_blueprint(auth_bp)
 app.register_blueprint(student_bp)
+app.register_blueprint(admin_bp)
 
 
 # blueprint：用来做模块化的
