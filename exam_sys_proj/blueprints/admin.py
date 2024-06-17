@@ -16,7 +16,7 @@ from ..dao.TeacherCourseDAO import TeacherCourseDAO
 from ..util.studentcourseUtils import StudentCourseUtils
 from ..util.teachercourseUtils import TeacherCourseUtils
 
-bp = Blueprint("teacher", __name__, url_prefix="/teacher")
+bp = Blueprint("admin", __name__, url_prefix="/admin")
 
 
 class MyEncoder(json.JSONEncoder):
@@ -42,7 +42,7 @@ def detail():
             broadcast.content = json.loads(broadcast.content)
             broadcast.content['message'] = Markup(
                 markdown.markdown(broadcast.content['message'], extensions=['extra', 'codehilite', 'nl2br']))
-    return render_template("teacher_detail.html", broadcasts=broadcasts)
+    return render_template("admin_detail.html", broadcasts=broadcasts)
 
 
 @bp.route("/student_manage")

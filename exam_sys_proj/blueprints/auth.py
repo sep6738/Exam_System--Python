@@ -38,6 +38,8 @@ def login():
                     return redirect("/student/detail")
                 if user.roleID == 2:
                     return redirect("/teacher/detail")
+                if user.roleID == 3:
+                    return redirect("/admin/detail")
             else:
                 flash(f"密码错误！", 'danger')
                 return redirect(url_for("auth.login"))
