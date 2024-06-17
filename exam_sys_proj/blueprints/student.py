@@ -80,6 +80,7 @@ def paper_create(subject):
         paper['overall_difficulty_easy'] = data['overall_difficulty_easy']
         paper['overall_difficulty_normal'] = data['overall_difficulty_normal']
         paper['overall_difficulty_hard'] = data['overall_difficulty_hard']
+        paper['get_answer'] = False
         if 'shuffle' in data:
             paper['shuffle'] = False
         else:

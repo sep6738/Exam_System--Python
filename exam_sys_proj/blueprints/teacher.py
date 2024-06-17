@@ -59,6 +59,11 @@ def student_manage():
 @bp.route("/api/get_student/<courseID>")
 def get_student_api(courseID):
     data = TeacherCourseUtils.getcourse_user(dbPool, courseID)
+    for i in data:
+        if i['createAt']:
+            i['createAt'] = i['createAt'].strftime("%Y-%m-%d %H:%M:%S")
+        if i['updateAt']:
+            i['updateAt'] = i['updateAt'].strftime("%Y-%m-%d %H:%M:%S")
     # print(data)
     return json.dumps({
         'code': 0,
@@ -242,6 +247,7 @@ def paper_create():
         paper['overall_difficulty_easy'] = data['overall_difficulty_easy']
         paper['overall_difficulty_normal'] = data['overall_difficulty_normal']
         paper['overall_difficulty_hard'] = data['overall_difficulty_hard']
+        paper['get_answer'] = True
         if 'shuffle' in data:
             paper['shuffle'] = False
         else:

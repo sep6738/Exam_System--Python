@@ -1,124 +1,102 @@
-{% extends "teacher_base.html" %}
+{% extends "admin_base.html" %}
 
 {% block body %}
-    <div class="layui-card">
-        <div class="layui-card-header">试题管理</div>
-        <div class="layui-card-body">
-            <div class="layui-tab layui-tab-brief">
-                <ul class="layui-tab-title">
-                    <li class="layui-this">{{ subject }}</li>
-                </ul>
-                <div class="layui-tab-content">
-                    <div class="layui-tab-item layui-show">
-                        <table class="layui-table" id="question-table-{{ subject }}"
-                               lay-filter="question-table">
-                            {#                                <thead>#}
-                            {#                                    <tr>#}
-                            {#                                        <th>主要内容</th>#}
-                            {#                                        <th>类型</th>#}
-                            {#                                        <th>随机顺序</th>#}
-                            {#                                        <th>科目</th>#}
-                            {#                                        <th>难度</th>#}
-                            {#                                        <th>分数</th>#}
-                            {#                                        <th>知识点</th>#}
-                            {#                                        <th>操作</th>#}
-                            {#                                    </tr>#}
-                            {#                                </thead>#}
-                            {#                                <tbody>#}
-                            {# 在这里循环显示试题数据 #}
-                            {#                                </tbody>#}
-                        </table>
+
+    <div class="layui-fluid">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-header">用户管理</div>
+                    <div class="layui-card-body">
+                        <table class="layui-table" id="user-table" lay-filter="user-table"></table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+    {#    <script type="text/html" id="toolbar">#}
+    {#        <div class="layui-btn-container">#}
+    {#            <button class="layui-btn layui-btn-sm" lay-event="add">添加用户</button>#}
+    {#        </div>#}
+    {#    </script>#}
+
+    <script type="text/html" id="action">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+    </script>
+
+
     <script>
-        layui.use(['table', 'jquery'], function () {
+        layui.use(['table', 'layer', 'form'], function () {
             var table = layui.table;
-            var $ = layui.jquery;
+            var layer = layui.layer;
+            var form = layui.form;
 
             table.render({
-                elem: '#question-table-{{ subject }}',
-                url: '/teacher/api/get_question/{{ subject }}',
+                elem: '#user-table',
+                url: '/admin/users',
+                toolbar: '#toolbar',
                 cols: [[
-                    {field: 'hepID', title: 'ID', sort: true},
-                    {field: 'type', title: '类型', sort: true},
-                    {field: 'main_content', title: '题目', sort: true},
-                    {field: 'subject', title: '科目', sort: true},
-                    {field: 'difficulty', title: '难度', sort: true},
-                    {field: 'score', title: '分数', sort: true},
-                    {#{ field: 'knowledge_point', title: '知识点' , sort: true},#}
-                    {field: 'shuffle', title: '选项是否打乱', sort: true},
-                    {fixed: 'right', width: 150, align: 'center', toolbar: '#question-table-op'}
+                    {field: 'userID', title: 'ID', width: 80, sort: true},
+                    {field: 'userName', title: '用户名', width: 150, sort: true},
+                    {field: 'name', title: '姓名', width: 150, sort: true},
+                    {field: 'email', title: '邮箱', width: 200, sort: true},
+                    {field: 'roleID', title: '角色ID', width: 100, sort: true},
+                    {field: 'createAt', title: '创建时间', width: 180, sort: true},
+                    {field: 'updateAt', title: '更新时间', width: 180, sort: true},
+                    {title: '操作', width: 150, align: 'center', toolbar: '#action'}
                 ]],
-                {#page: true#}
+                page: true
             });
 
-            // 定义操作列的按钮模板
-            var questionTableOp = '<div class="layui-btn-group">' +
-                '<button class="layui-btn layui-btn-xs" lay-event="view">查看</button>' +
-                '<button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</button>' +
-                '</div>';
-
-            // 定义表格工具条事件
-            table.on('tool(question-table)', function (obj) {
+            table.on('tool(user-table)', function (obj) {
                 var data = obj.data;
-                var layEvent = obj.event;
-
-                if (layEvent === 'view') {
-                    // 查看试题
-                    $.ajax({
-                        url: '/teacher/api/get_question_detail/' + data.hepID,
-                        type: 'GET',
-                        success: function (response) {
-                            if (response.code === 0) {
-                                // 显示试题详情
-                                console.log('试题详情:', response.data);
-                            } else {
-                                // 显示错误信息
-                                console.error('获取试题详情失败:', response.message);
-                            }
-                        },
-                        error: function () {
-                            // 显示错误信息
-                            console.error('获取试题详情失败');
+                if (obj.event === 'edit') {
+                    layer.open({
+                        type: 2,
+                        title: '编辑用户',
+                        shadeClose: true,
+                        shade: 0.8,
+                        area: ['50%', '70%'],
+                        content: '/admin/users/edit/' + data.userID,
+                        btn: ['提交', '取消'],
+                        yes: function (index, layero) {
+                            var body = layer.getChildFrame('body', index);
+                            var formData = body.find('form').serialize();
+                            $.ajax({
+                                url: '/admin/users/update',
+                                type: 'POST',
+                                data: formData,
+                                success: function (result) {
+                                    if (result.success) {
+                                        layer.msg('更新成功');
+                                        layer.close(index);
+                                        table.reload('user-table');
+                                    } else {
+                                        layer.msg('更新失败');
+                                    }
+                                }
+                            });
                         }
                     });
-                } else if (layEvent === 'delete') {
-                    // 删除试题
-                    layer.confirm('确定要删除此试题吗?', {
-                        btn: ['确定', '取消']
-                    }, function () {
-                        // 执行删除操作
+                } else if (obj.event === 'delete') {
+                    layer.confirm('确定要删除该用户吗?', function (index) {
                         $.ajax({
-                            url: '/teacher/api/delete_question/' + data.hepID,
-                            type: 'GET',
-                            success: function (response) {
-                                if (response.code === 0) {
-                                    // 刷新表格
-                                    table.reload('question-table-{{ subject }}');
-                                    layer.msg('删除成功!');
+                            url: '/admin/user/delete/' + data.userID,
+                            type: 'POST',
+                            success: function (result) {
+                                if (result.success) {
+                                    obj.del();
+                                    layer.close(index);
                                 } else {
-                                    layer.msg('删除失败: ' + response.message);
+                                    layer.msg('删除失败');
                                 }
-                            },
-                            error: function () {
-                                layer.msg('删除失败');
                             }
                         });
                     });
                 }
             });
         });
-    </script>
-
-    {# 定义操作列的按钮模板 #}
-    <script type="text/html" id="question-table-op">
-        <div class="layui-btn-group">
-            <button class="layui-btn layui-btn-xs" lay-event="view">查看</button>
-            <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</button>
-        </div>
     </script>
 {% endblock %}

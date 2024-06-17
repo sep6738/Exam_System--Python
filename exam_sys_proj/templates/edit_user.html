@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>编辑信息</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='layui/css/layui.css') }}">
+    <script type="text/javascript" src="{{ url_for('static', filename='layui/layui.js') }}" charset="utf-8"></script>
+    <link id="layui_theme_css" rel="stylesheet" href="{{ url_for('static', filename='css/layui-theme-dark.css') }}">
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                {#                <div class="layui-card-header">编辑用户</div>#}
+                <div class="layui-card-body">
+                    <form class="layui-form" action="/admin/users/update" method="post">
+                        <input type="hidden" name="userID" value="{{ user.userID }}">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">用户名</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="userName" value="{{ user.userName }}" required
+                                       lay-verify="required" placeholder="请输入用户名" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">姓名</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="name" value="{{ user.name }}" required lay-verify="required"
+                                       placeholder="请输入姓名" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">邮箱</label>
+                            <div class="layui-input-block">
+                                <input type="email" name="email" value="{{ user.email }}" required
+                                       lay-verify="required|email" placeholder="请输入邮箱" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">角色ID</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="roleID" value="{{ user.roleID }}" required
+                                       lay-verify="required" placeholder="请输入角色ID" class="layui-input">
+                            </div>
+                        </div>
+                        {#                        <div class="layui-form-item">#}
+                        {#                            <div class="layui-input-block">#}
+                        {#                                <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>#}
+                        {#                                <button type="reset" class="layui-btn layui-btn-primary">重置</button>#}
+                        {#                            </div>#}
+                        {#                        </div>#}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
