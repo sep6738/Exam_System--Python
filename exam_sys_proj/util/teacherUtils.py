@@ -112,6 +112,25 @@ class TeacherUtils:
     @classmethod
     def random_paper(cls, input_dict: dict, db_util):
         random.seed(time.time())
+        # 处理输入数据，删除题目数量为0的大题, 和数量为0的知识点
+        temp_list0 = []
+        for _ in ['选择题', '判断题', '填空题', '主观题']:
+            temp_sum0 = 0
+            for __ in input_dict[_]["amount_per_knowledge_point"]:
+                temp_sum0 += eval(input_dict[_]["amount_per_knowledge_point"][__])
+            if temp_sum0 == 0:
+                del input_dict[_]
+            else:
+                temp_list0.append(_)
+                del_kp_list = []
+                for __ in input_dict[_]["amount_per_knowledge_point"]:
+                    if input_dict[_]["amount_per_knowledge_point"][__] == "0":
+                        del_kp_list.append(__)
+                for __ in del_kp_list:
+                    del input_dict[_]["amount_per_knowledge_point"][__]
+        if len(temp_list0) == 0:
+            return {"status_code": 404, "message": "试卷里至少要有一道题",
+                        "content": None}
 
         def get_diff(min_d, max_d):
             min_d = eval(min_d)
@@ -140,6 +159,7 @@ class TeacherUtils:
             return list(set1 & set(range(eval(min_d), eval(max_d) + 1)))
 
         questions_dict = dict()
+        score_dict = dict()
         score_ratio = [
             eval(input_dict['overall_difficulty_easy']) / (
                     eval(input_dict['overall_difficulty_easy']) + eval(input_dict['overall_difficulty_normal']) + eval(
@@ -151,11 +171,11 @@ class TeacherUtils:
                     eval(input_dict['overall_difficulty_easy']) + eval(input_dict['overall_difficulty_normal']) + eval(
                 input_dict['overall_difficulty_hard']))
         ]
-        questions_dict["选择题"] = input_dict["选择题"].copy()
-        questions_dict["判断题"] = input_dict["判断题"].copy()
-        questions_dict["填空题"] = input_dict["填空题"].copy()
-        questions_dict["主观题"] = input_dict["主观题"].copy()
-        score_dict = {"选择题": 0, "判断题": 0, "填空题": 0, "主观题": 0}
+
+        for _ in temp_list0:
+            questions_dict[_] = input_dict[_].copy()
+            score_dict[_] = 0
+        del temp_list0
         all_sum_score = 0
         for i in questions_dict:
             sum_score = 0
@@ -199,7 +219,7 @@ class TeacherUtils:
                 print("error")
                 return {"status_code": 404, "message": "所设定困难题数量过多，请调高大题的难度范围，或调高困难题所占比例",
                         "content": None}
-        del temp_sum, temp_rite
+        # del temp_sum, temp_rite
         all_query_kp_dict = dict()
         for i in questions_diff_count_dict:
             final_dict = defaultdict(int)
@@ -266,10 +286,30 @@ class TeacherUtils:
             # 使用analysis_diff_to_kp时允许3次失误
             temp_set = set()
             questionID_list = []
+            # 数据检查
+            temp_key1, temp_key2 = questions_diff_count_dict[question_type].keys(), input_dict[question_type]["amount_per_knowledge_point"].keys()
+            if sum(questions_diff_count_dict[question_type].values()) - sum(input_dict[question_type]["amount_per_knowledge_point"].values()) == 1:
+                questions_diff_count_dict[question_type][min(questions_diff_count_dict[question_type].keys())] -= 1
+                if questions_diff_count_dict[question_type][min(questions_diff_count_dict[question_type].keys())] == 0:
+                    del questions_diff_count_dict[question_type][min(questions_diff_count_dict[question_type].keys())]
+            elif sum(questions_diff_count_dict[question_type].values()) - sum(input_dict[question_type]["amount_per_knowledge_point"].values()) == 2:
+                questions_diff_count_dict[question_type][min(questions_diff_count_dict[question_type].keys())] -= 1
+                if questions_diff_count_dict[question_type][min(questions_diff_count_dict[question_type].keys())] == 0:
+                    del questions_diff_count_dict[question_type][min(questions_diff_count_dict[question_type].keys())]
+                questions_diff_count_dict[question_type][max(questions_diff_count_dict[question_type].keys())] -= 1
+                if questions_diff_count_dict[question_type][max(questions_diff_count_dict[question_type].keys())] == 0:
+                    del questions_diff_count_dict[question_type][max(questions_diff_count_dict[question_type].keys())]
             for _ in range(3):
-                questionID_list = cls._analysis_diff_to_kp(questions_diff_count_dict[question_type],
-                                                           input_dict[question_type]["amount_per_knowledge_point"],
-                                                           all_query_kp_dict[question_type])
+                try:
+                    questionID_list = cls._analysis_diff_to_kp(questions_diff_count_dict[question_type],
+                                                               input_dict[question_type]["amount_per_knowledge_point"],
+                                                               all_query_kp_dict[question_type])
+                except Exception as e:
+                    print(e)
+                    return {"status_code": 404,
+                            "message": "组卷失败，发生未知错误",
+                            "content": None}
+
                 if isinstance(questionID_list, list):
                     break
                 else:
@@ -384,7 +424,7 @@ class TeacherUtils:
 
     @staticmethod
     def _analysis_diff_to_kp(diff_dict: dict, kp_dict: dict, query_dict: dict):
-        random.seed(1234)
+        random.seed(time.time())
         result_list = list()
         executing_flag = 0
 
@@ -410,18 +450,18 @@ class TeacherUtils:
                         diff_dict[diff] -= 1
                         del_index.append(query_index)
                         result_list.append(query_dict[diff][query_index][0])
-                        if kp_dict[kp_list[kp_name_index]] == 0 and diff_dict[diff] == 0:
+                        if kp_dict[kp_list[kp_name_index]] <= 0 and diff_dict[diff] <= 0:
                             del kp_dict[kp_list[kp_name_index]]
                             break_flag = 1  # 循环可以停止了
                             break
-                        elif kp_dict[kp_list[kp_name_index]] == 0 and diff_dict[diff] > 0:
+                        elif kp_dict[kp_list[kp_name_index]] <= 0 and diff_dict[diff] > 0:
                             temp_kp_name_index.append(kp_list[kp_name_index])
                             del kp_dict[kp_list[kp_name_index]]  # 此时应该轮换到下一个知识点
                             del kp_list[kp_name_index]
                             if len(kp_list) > 0:
                                 kp_name_index = random.choice(list(range(len(kp_list))))
                             break
-                        elif kp_dict[kp_list[kp_name_index]] > 0 and diff_dict[diff] == 0:
+                        elif kp_dict[kp_list[kp_name_index]] > 0 and diff_dict[diff] <= 0:
                             break_flag = 1  # 循环可以停止了
                             break
                         find_flag += 1

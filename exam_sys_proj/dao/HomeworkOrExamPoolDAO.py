@@ -14,9 +14,13 @@ class HomeworkOrExamPoolDAO(BaseDAO):
         answer_list = []
         diff_list = []
         for question_type in store_paper["questions"]:
-            pl = str(tuple(store_paper["questions"][question_type][1:]))
-            # 建立sql并查询
-            query = f"select question, difficultyLevel, answer from homework_or_exam_pool where hepID in {pl} ORDER BY FIELD({'hepID, ' + pl[1:-1]})"
+            if len(tuple(store_paper["questions"][question_type][1:])) > 1:
+                pl = str(tuple(store_paper["questions"][question_type][1:]))
+                # 建立sql并查询
+                query = f"select question, difficultyLevel, answer from homework_or_exam_pool where hepID in {pl} ORDER BY FIELD({'hepID, ' + pl[1:-1]})"
+            else:
+                pl = str(tuple(store_paper["questions"][question_type][1:])[0])
+                query = f"select question, difficultyLevel, answer from homework_or_exam_pool where hepID = {pl} ORDER BY FIELD({'hepID, ' + pl})"
             result = self.execute_query(query)
             # 处理结果
             if store_paper["questions"][question_type][0] > 0:
