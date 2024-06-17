@@ -308,56 +308,6 @@ class TeacherUtils:
                 "message": "组卷成功",
                 "content": [result[0], stored_paper_dict, None, None]}
 
-    # @classmethod
-    # def batchInsertQuestionsTest(cls, db_util, json_path: str):
-    #     """
-    #     这是批量插入题目的丐版；并没有保证插入的原子性，无法保证数据的完整性
-    #     :param db_util:
-    #     :param json_path: json的文件路径
-    #     :return:
-    #     """
-    #
-    #     question_list = cls._readOurJson(json_path=json_path)
-    #     homeworkOrExamPoolDao = HomeworkOrExamPoolDAO(db_util)
-    #     hepAndKpMediaterDAO = HepAndKpMediaterDAO(db_util)
-    #     homeworkOrExamPool_list = []
-    #     kp_list_all = []
-    #     print(question_list, -1)
-    #     for question_dict in question_list:
-    #         homeworkOrExamPool = HomeworkOrExamPool(
-    #             type=question_dict["type"],
-    #             answer=json.dumps(question_dict["answer"]),
-    #             courseName=question_dict['subject'],
-    #             difficultyLevel=question_dict['difficulty'],
-    #             isActive=True
-    #         )
-    #         kp_list = []
-    #         for i in question_dict['knowledge_point']:
-    #             kp_list.append(int(i))
-    #         del question_dict["answer"]
-    #         del question_dict['knowledge_point']
-    #         del question_dict['difficulty']
-    #         del question_dict['subject']
-    #         homeworkOrExamPool.question = json.dumps(question_dict)
-    #         homeworkOrExamPool_list.append(homeworkOrExamPool)
-    #         kp_list_all.append(kp_list)
-    #         print(vars(homeworkOrExamPool), 000)
-    #     print(homeworkOrExamPool_list, 111)
-    #     pk_list = homeworkOrExamPoolDao.batchInsert(homeworkOrExamPool_list)
-    #     print(pk_list, 222)
-    #     hepAndKpMediater_list = []
-    #     for i in range(len(kp_list_all)):
-    #         if len(kp_list_all[i]) > 0:
-    #             for j in kp_list_all[i]:
-    #                 hepAndKpMediater = HepAndKpMediater(hepID=pk_list[i], kpName=j)
-    #                 hepAndKpMediater_list.append(hepAndKpMediater)
-    #     print(hepAndKpMediater_list, 333)
-    #     hepAndKpMediaterDAO.batchInsert(hepAndKpMediater_list)
-    #     print(666)
-    #     # except Exception as e:
-    #     #     print(e)
-    #     #     print("batchInsertQuestions error!")
-    #     #     return "error"
 
     @classmethod
     def querySubjectQuestionsViaUID(cls, db_util, userID, entity: HomeworkOrExamPool):
