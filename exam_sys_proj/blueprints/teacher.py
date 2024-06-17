@@ -266,7 +266,11 @@ def paper_create():
                     question_type + "_" + knowledge_point.kpName]
     # print(paper)
     result = TeacherUtils.random_paper(paper, dbPool)
-    return jsonify({'message': result})
+    print(result)
+    if result['status_code'] == 404:
+        return result['message']
+    else:
+        return "创建成功！"
 
 
 @bp.route("/paper_publish", methods=["GET", "POST"])
