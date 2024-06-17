@@ -12,9 +12,10 @@
                 <div class="layui-tab-item">
                     {#                        为每个课程的"删除选中列"和"添加学生"按钮以及输入框添加了唯一的ID#}
                     <div class="layui-inline layui-input-wrap">
-                        <button class="layui-btn layui-bg-red" id="delete-selected-{{ course.courseID }}">删除选中列
+                        <button class="layui-btn layui-bg-red delete-student"
+                                id="delete-selected-{{ course.courseID }}">删除选中列
                         </button>
-                        <button class="layui-btn" id="add-student-{{ course.courseID }}">添加学生</button>
+                        <button class="layui-btn add-student" id="add-student-{{ course.courseID }}">添加学生</button>
                         <div class="layui-input-inline layui-input-wrap">
                             <input class="layui-input" type="text" id="student-uid-{{ course.courseID }}"
                                    placeholder="请输入要添加的学生的userID" style="width: 250px;">
@@ -48,40 +49,53 @@
             $tabItems.first().addClass('layui-show');
 
             // 删除选中列
-            $('.layui-btn#delete-selected-').click(function () {
+            $('.delete-student').click(function () {
                 const table = layui.table;
                 const checkStatus = table.checkStatus($(this).attr('id').replace('delete-selected-', 'ID-table-demo-init-'));
                 const data = checkStatus.data;
                 const userIds = data.map(item => item.userID);
-
+                const subject = $(this).attr('id').replace('delete-selected-', '');
                 {#通过读取按钮和输入框的ID来获取对应的课程ID,然后在AJAX请求中使用该ID#}
                 $.ajax({
-                    url: '/teacher/api/get_student/' + $(this).attr('id').replace('delete-selected-', ''),
+                    url: '/teacher/api/delete_student/' + subject,
                     type: 'POST',
                     data: JSON.stringify(userIds),
                     contentType: 'application/json',
                     success: function (response) {
-                        console.log(response);
+                        {#console.log(response);#}
+                        response = JSON.parse(response);
+                        layer.msg(response['message']);
+                        table.reload('ID-table-demo-init-' + subject)
                     },
                     error: function (xhr, status, error) {
                         console.error(error);
+                        layer.msg('出错了！');
+                        table.reload('ID-table-demo-init-' + subject)
                     }
                 });
             });
 
             // 添加学生
-            $('.layui-btn#add-student-').click(function () {
-                const userId = $('#student-uid-' + $(this).attr('id').replace('add-student-', '')).val();
+            $('.add-student').click(function () {
+                const table = layui.table;
+                const subject = $(this).attr('id').replace('add-student-', '');
+                {#console.log('#student-uid-' + $(this).attr('id').replace('add-student-', ''))#}
+                const userId = $('#student-uid-' + subject).val();
+                {#console.log(userId)#}
                 $.ajax({
-                    url: '/teacher/api/get_student/' + $(this).attr('id').replace('add-student-', ''),
+                    url: '/teacher/api/add_student/' + subject,
                     type: 'POST',
                     data: JSON.stringify([userId]),
                     contentType: 'application/json',
                     success: function (response) {
-                        console.log(response);
+                        response = JSON.parse(response);
+                        layer.msg(response['message']);
+                        table.reload('ID-table-demo-init-' + subject)
                     },
                     error: function (xhr, status, error) {
                         console.error(error);
+                        layer.msg('出错了！');
+                        table.reload('ID-table-demo-init-' + subject)
                     }
                 });
             });
