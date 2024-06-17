@@ -13,6 +13,8 @@ from ..dao.HepAndKpMediaterDAO import HepAndKpMediaterDAO
 from ..dao.HomeworkOrExamPoolDAO import HomeworkOrExamPoolDAO
 from ..dao.StudentCourseDAO import StudentCourseDAO
 from ..dao.TeacherCourseDAO import TeacherCourseDAO
+from ..util.studentcourseUtils import StudentCourseUtils
+from ..util.teachercourseUtils import TeacherCourseUtils
 
 bp = Blueprint("teacher", __name__, url_prefix="/teacher")
 
@@ -46,9 +48,9 @@ def detail():
 @bp.route("/student_manage")
 def student_manage():
     teacher_operator = TeacherCourseDAO(dbPool)
-    print(session.get("user_id"))
+    # print(session.get("user_id"))
     courses = teacher_operator.query(session.get("user_id"), "userID", True)
-    print(courses[0].courseID)
+    # print(courses[0].courseID)
     data = {'courses': courses}
     # print(data)
     return render_template("teacher_student_manage.html", data=data)
@@ -56,9 +58,8 @@ def student_manage():
 
 @bp.route("/api/get_student/<courseID>")
 def get_student_api(courseID):
-    teacher_operator = TeacherCourseDAO(dbPool)
-    data = teacher_operator.getcourse_user(courseID)
-    print(data)
+    data = TeacherCourseUtils.getcourse_user(dbPool, courseID)
+    # print(data)
     return json.dumps({
         'code': 0,
         'message': "成功！",
@@ -66,17 +67,32 @@ def get_student_api(courseID):
     }, cls=MyEncoder)
 
 
-@bp.route("/api/delete_student/<courseID>")
-def delete_student_api(courseID):
-    student_course_operator = StudentCourseDAO(dbPool)
+@bp.route("/api/add_student/<courseID>", methods=["POST"])
+def add_student_api(courseID):
     data = request.get_json()
-    print(data)
-    for userID in data:
-        student_course_operator.delete(userID, "userID")
+    # print(data)
+    result = "请输入学生ID！"
+    if data:
+        for userID in data:
+            result = StudentCourseUtils.insert_course_student(dbPool, courseID, userID)
     return json.dumps({
         'code': 0,
-        'message': "成功！",
-        'data': {}})
+        'message': result,
+        'data': result}, ensure_ascii=False)
+
+
+@bp.route("/api/delete_student/<courseID>", methods=["POST"])
+def delete_student_api(courseID):
+    data = request.get_json()
+    # print(data)
+    result = "请选择学生！"
+    if data:
+        for userID in data:
+            result = StudentCourseUtils.delete_course_student(dbPool, courseID, userID)
+    return json.dumps({
+        'code': 0,
+        'message': result,
+        'data': result}, ensure_ascii=False)
 
 
 @bp.route("/change_password", methods=["POST"])

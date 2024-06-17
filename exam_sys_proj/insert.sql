@@ -30,6 +30,8 @@ VALUES (66666, '犹格·索托斯', '$2b$08$C2pRyZ4v8WHy1BYml6kw1enOkUMvjCbbdrUL
         'admin@test.com');
 insert into teacher_course (courseID, userID, semester, courseName, class_, isActive, subject)
 values (6666, 6666, '500', '亚瑟王速成班', 12345, 1, '数学');
+insert into teacher_course (courseID, userID, semester, courseName, class_, isActive, subject)
+values (6667, 6666, '500', '魔法少女速成班', 23456, 1, '数学');
 insert into student_course (courseName, userID, semester, courseID, isDelete)
 values ('数学', 666, '500', 6666, 0);
 insert into broadcast (content, duringTime, courseID)
