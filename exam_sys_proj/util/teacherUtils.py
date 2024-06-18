@@ -421,6 +421,39 @@ class TeacherUtils:
                 md += "\n"
         cls._markdown_to_word(md, path)
 
+    @classmethod
+    def export_questions(cls, db_util, subject: str, path: str):
+        homeworkOrExamPoolDAO = HomeworkOrExamPoolDAO(db_util)
+        entity_list = homeworkOrExamPoolDAO.query(subject, "courseName", is_all=True)
+        result_list = []
+        hepID_list = []
+        if entity_list != "error":
+            for i in entity_list:
+                hepID_list.append(i.hepID)
+            kp_results: tuple = homeworkOrExamPoolDAO.query_kp_by_hepIDs(hepID_list)
+            if len(kp_results) == 0:
+                return False
+            n = 0
+            for i in entity_list:
+                result: dict = json.loads(i.question)
+                result["answer"] = json.loads(i.answer)
+                result["subject"] = subject
+                result["difficulty"] = i.difficultyLevel
+                result["knowledge_point"] = []
+                while n < len(kp_results):
+                    if kp_results[n][0] == i.hepID:
+                        result["knowledge_point"].append(kp_results[n][1])
+                        n += 1
+                    else:
+                        break
+                result_list.append(result)
+            with open(path, "w", encoding="utf-8") as f:
+                f.write(json.dumps(result_list, ensure_ascii=False))
+            return True
+        else:
+            return False
+
+
     @staticmethod
     def _readOurJson(json_path: str):
         with open(json_path, "r", encoding="utf-8") as f:
