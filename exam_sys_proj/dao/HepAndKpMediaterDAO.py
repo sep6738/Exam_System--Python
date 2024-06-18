@@ -30,7 +30,6 @@ class HepAndKpMediaterDAO(BaseDAO):
                     bg_color="#F0F0F0"
                 )
             )
-
             # 设置全局选项
             wc.set_global_opts(
                 title_opts=TitleOpts(
@@ -43,8 +42,7 @@ class HepAndKpMediaterDAO(BaseDAO):
             )
             # 添加数据并渲染
             wc.add("", result_list, word_size_range=[20, 100])
-
-            string_html = wc.render_embed();
+            string_html = wc.render_embed()
             return string_html
         except Exception as e:
             print(e)
