@@ -235,8 +235,11 @@ def paper_create():
     question_types = ['选择题', '判断题', '填空题', '主观题']
     knowledge_points = TeacherUtils.queryTeacherSubjectKP(dbPool, session.get("user_id"))
     if request.method == 'GET':
-        return render_template("teacher_paper_create.html", question_types=question_types,
-                               knowledge_points=knowledge_points)
+        if knowledge_points:
+            return render_template("teacher_paper_create.html", question_types=question_types,
+                                   knowledge_points=knowledge_points)
+        else:
+            return '您没有教授的课程，请联系管理员'
     else:
         data = request.get_json()
         # print(data)

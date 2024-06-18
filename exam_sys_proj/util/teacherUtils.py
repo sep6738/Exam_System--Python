@@ -404,12 +404,11 @@ class TeacherUtils:
     def export_paper_as_docx(cls, db_util, hepID: int, path: str):
         homeworkOrExamPoolDAO = HomeworkOrExamPoolDAO(db_util)
         entity: HomeworkOrExamPool = homeworkOrExamPoolDAO.query(hepID)
-        whole_paper = homeworkOrExamPoolDAO.query_whole_paper(entity.question)
-        md: str = whole_paper["main_content"]
+        whole_paper = homeworkOrExamPoolDAO.query_whole_paper(json.loads(entity.question))
+        md: str = whole_paper[0]["main_content"]
         md.replace("<center>", "")
         md.replace("</center>", "")
-        md += "\n"
-        for i in whole_paper["questions"]:
+        for i in whole_paper[0]["questions"]:
             if isinstance(i, str):
                 md += i
                 md += "\n"
@@ -419,8 +418,8 @@ class TeacherUtils:
                 for j in i["questions"]:
                     md += j
                     md += "\n"
+                md += "\n"
         cls._markdown_to_word(md, path)
-
 
     @staticmethod
     def _readOurJson(json_path: str):
