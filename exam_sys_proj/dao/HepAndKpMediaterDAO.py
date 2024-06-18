@@ -13,6 +13,10 @@ class HepAndKpMediaterDAO(BaseDAO):
         super().__init__(db_util, HepAndKpMediater, "hep_and_kp_mediater", "mediaterID")
 
     def get_knowledgepoints_analysis(self):
+        '''
+        所有知识点的词云
+        :return:
+        '''
         try:
             query = f"SELECT kpName FROM {self.table_name}"
             result = self.execute_query(query)

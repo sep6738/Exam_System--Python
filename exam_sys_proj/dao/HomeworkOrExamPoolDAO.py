@@ -81,6 +81,10 @@ class HomeworkOrExamPoolDAO(BaseDAO):
             return tuple()
 
     def get_type_analysis(self):
+        '''
+        所有试题类型的扇形图
+        :return:
+        '''
         query = f"SELECT type FROM {self.table_name}"
         result = self.execute_query(query)
         type_list = []
@@ -109,6 +113,10 @@ class HomeworkOrExamPoolDAO(BaseDAO):
         # return "type_analysis.html"
 
     def get_diffi_analysis(self):
+        '''
+        所有试题难度的柱状图
+        :return:
+        '''
         try:
             query = f"SELECT difficultyLevel FROM {self.table_name}"
             result = self.execute_query(query)
