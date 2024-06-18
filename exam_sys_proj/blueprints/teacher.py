@@ -384,15 +384,15 @@ def get_question_detail(hepID):
 @bp.route("/export")
 def export():
     getter = HomeworkOrExamPoolDAO(dbPool)
-    data = getter.queryAll(count=0)
+    data = getter.query('考试', "type", True)
     papers = []
     paper = {}
     if data:
         for i in data:
-            if i.type in ['考试', '测试', '作业', '其它']:
-                paper['hepID'] = i.hepID
-                paper['title'] = i.question['main_content']
-                papers.append('')
+            # if i.type in ['考试', '测试', '作业', '其它']:
+            paper['hepID'] = i.hepID
+            paper['title'] = i.question['main_content']
+            papers.append('')
     subject_getter = TeacherCourseDAO(dbPool)
     subjects = subject_getter.getallsubject()
     return render_template("teacher_export.html", papers=papers, subjects=subjects)
