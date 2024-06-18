@@ -391,7 +391,7 @@ def export():
         for i in data:
             # if i.type in ['考试', '测试', '作业', '其它']:
             paper['hepID'] = i.hepID
-            paper['title'] = i.question['main_content']
+            paper['title'] = json.loads(i.question)['main_content']
             papers.append('')
     subject_getter = TeacherCourseDAO(dbPool)
     subjects = subject_getter.getallsubject()
