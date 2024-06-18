@@ -50,7 +50,7 @@ class HomeworkOrExamPoolDAO(BaseDAO):
         result_dict["type"] = store_paper["type"]
         result_dict["score"] = store_paper["score"]
         result_dict["shuffle"] = store_paper["shuffle"]
-        result_dict["question"] = questions_list
+        result_dict["questions"] = questions_list
         result_dict["main_content"] = f"# <center>{store_paper['main_content']}</center>\n"
         return [result_dict, answer_list, diff_list, questions_list]
 
