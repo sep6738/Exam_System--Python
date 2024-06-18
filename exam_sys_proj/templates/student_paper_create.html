@@ -12,9 +12,13 @@
         <div class="layui-form-item">
             <label class="layui-form-label">试卷类型</label>
             <div class="layui-input-block">
-                <input type="text" name="type" autocomplete="off" value="考试" class="layui-input">
+                <select name="type" lay-filter="type">
+                    <option value="考试" selected>考试</option>
+                    <option value="测试">测试</option>
+                    <option value="作业">作业</option>
+                    <option value="其它">其它</option>
+                </select>
             </div>
-        </div>
 
         <div class="layui-form-item">
             <label class="layui-form-label">学科</label>

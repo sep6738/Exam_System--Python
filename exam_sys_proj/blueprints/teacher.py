@@ -267,10 +267,10 @@ def paper_create():
     # print(paper)
     result = TeacherUtils.random_paper(paper, dbPool)
     print(result)
-    TeacherUtils.insertOneQuestion(dbPool, result['content'][1])
     if result['status_code'] == 404:
         return result['message']
     else:
+        TeacherUtils.insertOneQuestion(dbPool, result['content'][1])
         return "创建成功！"
 
 
