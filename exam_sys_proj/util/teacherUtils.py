@@ -421,7 +421,6 @@ class TeacherUtils:
                 md += "\n"
         cls._markdown_to_word(md, path)
 
-
     @staticmethod
     def _readOurJson(json_path: str):
         with open(json_path, "r", encoding="utf-8") as f:
