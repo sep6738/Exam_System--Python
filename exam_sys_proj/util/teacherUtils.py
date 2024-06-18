@@ -31,9 +31,6 @@ class TeacherUtils:
             difficultyLevel=question_dict['difficulty'],
             isActive=True
         )
-        # knowledgePoints = KnowledgePoints(
-        #     subject=question_dict['subject']
-        # )
         kp_list = []
         for i in question_dict['knowledge_point']:
             kp_list.append(i)
@@ -276,7 +273,10 @@ class TeacherUtils:
                         "content": None}
             all_query_kp_dict[i] = query_kp_dict
             del temp_dict, temp_diff_list
+
         questionID_dict = dict()
+        kp_list_dict = dict()
+
         for question_type in questions_diff_count_dict:
             # 初始化input_dict
             for _ in input_dict[question_type]["amount_per_knowledge_point"]:
@@ -285,6 +285,7 @@ class TeacherUtils:
             # 使用analysis_diff_to_kp时允许3次失误
             temp_set = set()
             questionID_list = []
+            kp_list = []
             # 数据检查
             temp_key1, temp_key2 = questions_diff_count_dict[question_type].keys(), input_dict[question_type][
                 "amount_per_knowledge_point"].keys()
@@ -303,7 +304,7 @@ class TeacherUtils:
                     del questions_diff_count_dict[question_type][max(questions_diff_count_dict[question_type].keys())]
             for _ in range(3):
                 try:
-                    questionID_list = cls._analysis_diff_to_kp(questions_diff_count_dict[question_type],
+                    questionID_list, kp_list = cls._analysis_diff_to_kp(questions_diff_count_dict[question_type],
                                                                input_dict[question_type]["amount_per_knowledge_point"],
                                                                all_query_kp_dict[question_type])
                 except Exception as e:
@@ -327,6 +328,7 @@ class TeacherUtils:
                                 "content": None}
             questionID_list.insert(0, eval(questions_dict[question_type]['score_per_question']))
             questionID_dict[question_type] = questionID_list
+            kp_list_dict[question_type] = kp_list
         stored_paper_dict = dict()
         stored_paper_dict["type"] = input_dict["type"]
         stored_paper_dict["score"] = []
@@ -337,7 +339,16 @@ class TeacherUtils:
             homeworkOrExamPoolDAO = HomeworkOrExamPoolDAO(db_util)
             result = homeworkOrExamPoolDAO.query_whole_paper(stored_paper_dict)
             stored_paper_dict["score"] = result[0]["score"]
-
+            stored_paper_dict["answer"] = result[1]
+            stored_paper_dict["subject"] = input_dict["subject"]
+            stored_paper_dict["difficulty"] = int(sum(result[2])/len(result[2]))
+            kp_set = set()
+            for _ in kp_list_dict:
+                for __ in kp_list_dict[_]:
+                    for ___ in __:
+                        kp_set.add(___)
+            kp_set = list(kp_set)
+            stored_paper_dict["knowledge_point"] = kp_set
         #     可能后续会有功能拓展
         except Exception as e:
             print(e)
@@ -349,7 +360,6 @@ class TeacherUtils:
 
         # 输出
 
-        print(result[0])
         return {"status_code": 200,
                 "message": "组卷成功",
                 "content": [result[0], stored_paper_dict, None, None]}
@@ -428,6 +438,7 @@ class TeacherUtils:
     def _analysis_diff_to_kp(diff_dict: dict, kp_dict: dict, query_dict: dict):
         random.seed(time.time())
         result_list = list()
+        kp_list = list()
         executing_flag = 0
 
         for diff in diff_dict:
@@ -445,9 +456,10 @@ class TeacherUtils:
                 for query_index in range(len(query_dict[diff])):
                     # 还需处理最后一次出现的异常
                     if len(kp_list) == 0:
-                        return kp_dict.keys()
+                        return [kp_dict.keys(), None]
                     # 开始寻找
-                    if kp_list[kp_name_index] in query_dict[diff][query_index][0:]:
+                    if kp_list[kp_name_index] in query_dict[diff][query_index][1:]:
+                        kp_list.append(query_dict[diff][query_index][1:])
                         kp_dict[kp_list[kp_name_index]] -= 1
                         diff_dict[diff] -= 1
                         del_index.append(query_index)
@@ -488,7 +500,7 @@ class TeacherUtils:
                     if len(kp_list) > 0:
                         kp_name_index = random.choice(list(range(len(kp_list))))
 
-        return result_list
+        return [result_list, kp_list]
 
     @staticmethod
     def _analysis_paper(paper, diff_list, type_list, source_dict):
