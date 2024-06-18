@@ -9,6 +9,11 @@ class HomeworkOrExamPoolDAO(BaseDAO):
 
 
     def query_whole_paper(self, store_paper: dict):
+        """
+        输入存储类型的试卷（dict类型）输出一个列表，列表的0号元素是完整的卷子（dict类型）1号元素是每一道题组成的答案列表，2号元素是每一道题对应的难度组成的列表，3号元素是每一道题组成的列表
+        :param store_paper:
+        :return:
+        """
         # 解析字典
         questions_list = []
         answer_list = []
