@@ -63,10 +63,10 @@
                     <dl class="layui-nav-child">
                         <dd><a href="{{ url_for('teacher.question_manage') }}">试题管理</a></dd>
                         <dd><a href="{{ url_for('teacher.question_create') }}">试题创建</a></dd>
-                        <dd><a href="{{ url_for('teacher.question_import') }}">试题导入</a></dd>
-                        <dd><a href="javascript:;">试题导出</a></dd>
                     </dl>
                 </li>
+                <li class="layui-nav-item"><a href="{{ url_for('teacher.question_import') }}">导入</a></li>
+                <li class="layui-nav-item"><a href="{{ url_for('teacher.export') }}">导出</a></li>
             </ul>
         </div>
     </div>

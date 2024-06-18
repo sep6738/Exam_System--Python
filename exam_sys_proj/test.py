@@ -6,8 +6,7 @@
 # @app.route('/')
 # def index():
 #     return render_template('teacher_base.html')
-d = {}
-d[1] = 2
-l = []
-l.append(d)
-print(d.keys())
+l1 = [1, 2]
+l2 = [3, 4]
+l3 = None
+print(l1.extend(l3))

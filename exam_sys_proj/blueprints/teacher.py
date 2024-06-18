@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, jsonify, redirect, url_for, session, flash
+from flask import Blueprint, render_template, jsonify, redirect, url_for, session, flash, send_file
 from exam_sys_proj.src.extensions import mail, dbPool
 from flask_mail import Message
 from flask import request
@@ -291,7 +291,21 @@ def question_manage():
     teacher_operator = TeacherCourseDAO(dbPool)
     courses = teacher_operator.query(session.get("user_id"), "userID", True)
     subject = courses[0].subject
-    return render_template("teacher_question_manage.html", subject=subject)
+    chart_getter = HomeworkOrExamPoolDAO(dbPool)
+    chart = chart_getter.get_type_analysis()
+    #  截取图标html代码的body部分
+    start_tag = "<body >"
+    end_tag = "</body>"
+    start_index = chart.find(start_tag)
+    end_index = chart.find(end_tag) + len(end_tag)
+    chart = chart[start_index:end_index]
+    chart = chart.strip('<body >')
+    chart = chart.strip('</body >')
+    chart = chart.replace('"backgroundColor": "transparent",', '"backgroundColor": "#e8e8e8",')
+    chart = chart.replace('"borderColor": "#ccc",', '"borderColor": "#e8e8e8",')
+    chart = Markup(chart)
+    print(chart)
+    return render_template("teacher_question_manage.html", subject=subject, chart=chart)
 
 
 @bp.route("/api/get_question/<subject>")
@@ -365,3 +379,40 @@ def get_question_detail(hepID):
             "message": "试题不存在",
             "data": {}
         })
+
+
+@bp.route("/export")
+def export():
+    getter = HomeworkOrExamPoolDAO(dbPool)
+    data = getter.query('考试', "type", True)
+    papers = []
+    paper = {}
+    if data:
+        for i in data:
+            # if i.type in ['考试', '测试', '作业', '其它']:
+            paper['hepID'] = i.hepID
+            paper['title'] = json.loads(i.question)['main_content']
+            papers.append(paper)
+    subject_getter = TeacherCourseDAO(dbPool)
+    subjects = subject_getter.getallsubject()
+    return render_template("teacher_export.html", papers=papers, subjects=subjects)
+
+
+@bp.route('/download_questions', methods=['POST'])
+def download_questions():
+    path = 'temp\\' + request.form['subject'] + '.json'
+    if TeacherUtils.export_questions(dbPool, request.form['subject'], 'exam_sys_proj\\' + path):
+        return {'redirect_url': f'/teacher/download/' + request.form['subject'] + '.json'}
+        # return send_file(path, as_attachment=True)
+
+
+@bp.route("/download/<path>")
+def download(path):
+    return send_file('temp\\' + path, as_attachment=True)
+
+
+@bp.route('/download_paper', methods=['POST'])
+def download_paper():
+    path = 'temp\\' + request.form['hepID'] + '.docx'
+    TeacherUtils.export_paper_as_docx(dbPool, int(request.form['hepID']), 'exam_sys_proj\\' + path)
+    return {'redirect_url': f'/teacher/download/' + request.form['hepID'] + '.docx'}

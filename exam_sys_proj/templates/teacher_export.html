@@ -1,0 +1,63 @@
+{% extends "teacher_base.html" %}
+
+{% block body %}
+    <fieldset class="layui-elem-field">
+        <legend>试题导出</legend>
+        <div class="layui-field-box">
+            <form id="subject-form" class="layui-form layui-row layui-col-space16">
+                <label for="subject">请选择要导出的学科:</label>
+                <select id="subject" name="subject">
+                    {% for i in subjects %}
+                        <option value="{{ i }}">{{ i }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="layui-btn layui-btn-primary layui-border">提交</button>
+            </form>
+        </div>
+    </fieldset>
+    <fieldset class="layui-elem-field">
+        <legend>试卷导出</legend>
+        <div class="layui-field-box">
+            <form id="paper-form" class="layui-form layui-row layui-col-space16">
+                <label for="paper">请选择要导出的试卷:</label>
+                <select id="paper" name="paper">
+                    {% for paper in papers %}
+                        <option value="{{ paper['hepID'] }}">{{ paper['title'] }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="layui-btn layui-btn-primary layui-border">提交</button>
+            </form>
+        </div>
+    </fieldset>
+    <script>
+        $(document).ready(function () {
+            $('#subject-form').submit(function (event) {
+                event.preventDefault();
+                var subject = $('#subject').val();
+                $.ajax({
+                    type: 'POST',
+                    url: '/teacher/download_questions',
+                    data: {'subject': subject},
+                    success: function (response) {
+                        // 跳转到新页面
+                        window.location.href = response.redirect_url;
+                    },
+                });
+            });
+            $('#paper-form').submit(function (event) {
+                event.preventDefault();
+                var hepID = $('#paper').val();
+                $.ajax({
+                    type: 'POST',
+                    url: '/teacher/download_paper',
+                    data: {'hepID': hepID},
+                    success: function (response) {
+                        // 跳转到新页面
+                        window.location.href = response.redirect_url;
+                    },
+                });
+            });
+        });
+    </script>
+
+{% endblock %}

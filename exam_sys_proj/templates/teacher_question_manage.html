@@ -1,6 +1,10 @@
 {% extends "teacher_base.html" %}
 
 {% block body %}
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.1/dist/echarts.min.js"></script>
+    {#    <div style="transform: scale(0.5)">#}
+
+    {#</div>#}
     <div class="layui-card">
         <div class="layui-card-header">试题管理</div>
         <div class="layui-card-body">
@@ -35,6 +39,8 @@
     </div>
 
     <script>
+
+
         layui.use(['table', 'jquery'], function () {
             var table = layui.table;
             var $ = layui.jquery;
@@ -42,6 +48,7 @@
             table.render({
                 elem: '#question-table-{{ subject }}',
                 url: '/teacher/api/get_question/{{ subject }}',
+                toolbar: '#toolbar',
                 cols: [[
                     {field: 'hepID', title: 'ID', sort: true},
                     {field: 'type', title: '类型', sort: true},
