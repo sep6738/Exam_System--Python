@@ -392,7 +392,7 @@ def export():
             # if i.type in ['考试', '测试', '作业', '其它']:
             paper['hepID'] = i.hepID
             paper['title'] = json.loads(i.question)['main_content']
-            papers.append('')
+            papers.append(paper)
     subject_getter = TeacherCourseDAO(dbPool)
     subjects = subject_getter.getallsubject()
     return render_template("teacher_export.html", papers=papers, subjects=subjects)
@@ -414,5 +414,5 @@ def download(path):
 @bp.route('/download_paper', methods=['POST'])
 def download_paper():
     path = 'temp\\' + request.form['hepID'] + '.docx'
-    if TeacherUtils.export_paper_as_docx(dbPool, int(request.form['hepID']), 'exam_sys_proj\\' + path):
-        return {'redirect_url': f'/teacher/download/' + request.form['hepID'] + '.json'}
+    TeacherUtils.export_paper_as_docx(dbPool, int(request.form['hepID']), 'exam_sys_proj\\' + path)
+    return {'redirect_url': f'/teacher/download/' + request.form['hepID'] + '.docx'}
