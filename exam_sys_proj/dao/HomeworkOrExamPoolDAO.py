@@ -92,6 +92,8 @@ class HomeworkOrExamPoolDAO(BaseDAO):
             type_list.append(q[0])
         type_counts = {}
         for type in type_list:
+            if type == "考试":
+                continue
             type_counts[type] = type_counts.get(type,0)+1
         result_list = list(type_counts.items())
         pie = Pie(init_opts=opts.InitOpts(theme=ThemeType.DARK))
@@ -108,8 +110,8 @@ class HomeworkOrExamPoolDAO(BaseDAO):
             tooltip_opts=opts.TooltipOpts(trigger='item', formatter='{a} <br/>{b}: {c}题 ({d}%)')
         )
         html_string = pie.render_embed()
-        return html_string
         # pie.render("type_analysis.html")
+        return html_string
         # return "type_analysis.html"
 
     def get_diffi_analysis(self):
