@@ -1,6 +1,9 @@
 {% extends "teacher_base.html" %}
 
 {% block body %}
+    <script type="text/javascript" src="https://assets.pyecharts.org/assets/v5/echarts.min.js"></script>
+
+    <h2>试题导入</h2>
     <div class="layui-upload-drag" style="display: block;" id="ID-upload-demo-drag">
         <i class="layui-icon layui-icon-upload"></i>
         <div>点击上传，或将文件拖拽到此处</div>
@@ -18,7 +21,7 @@
                 acceptMime: 'application/json',
                 exts: 'json',
                 elem: '#ID-upload-demo-drag',
-                url: '/teacher/api/question_import', // 实际使用时改成您自己的上传接口即可。
+                url: '/teacher/api/question_import',
                 done: function (res) {
                     layer.msg('上传成功');
                     $('#ID-upload-demo-preview').removeClass('layui-hide')
