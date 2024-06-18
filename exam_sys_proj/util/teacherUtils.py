@@ -32,18 +32,26 @@ class TeacherUtils:
             isActive=True
         )
         kp_list = []
-        for i in question_dict['knowledge_point']:
-            kp_list.append(i)
-        del question_dict["answer"]
-        del question_dict['knowledge_point']
-        del question_dict['difficulty']
-        del question_dict['subject']
-        homeworkOrExamPool.question = question_dict
-        hepID = homeworkOrExamPoolDao.insert(homeworkOrExamPool)
-        if len(kp_list) > 0:
-            for i in kp_list:
-                hepAndKpMediater = HepAndKpMediater(hepID=hepID, kpName=i)
-                hepAndKpMediaterDAO.insert(hepAndKpMediater)
+        if question_dict['knowledge_point']:
+            for i in question_dict['knowledge_point']:
+                kp_list.append(i)
+            del question_dict["answer"]
+            del question_dict['knowledge_point']
+            del question_dict['difficulty']
+            del question_dict['subject']
+            homeworkOrExamPool.question = question_dict
+            hepID = homeworkOrExamPoolDao.insert(homeworkOrExamPool)
+            if len(kp_list) > 0:
+                for i in kp_list:
+                    hepAndKpMediater = HepAndKpMediater(hepID=hepID, kpName=i)
+                    hepAndKpMediaterDAO.insert(hepAndKpMediater)
+        else:
+            del question_dict["answer"]
+            del question_dict['knowledge_point']
+            del question_dict['difficulty']
+            del question_dict['subject']
+            homeworkOrExamPool.question = question_dict
+            homeworkOrExamPoolDao.insert(homeworkOrExamPool)
 
     @classmethod
     def queryTeacherSubjectKP(cls, db_util, userID: int):
@@ -342,13 +350,13 @@ class TeacherUtils:
             stored_paper_dict["answer"] = result[1]
             stored_paper_dict["subject"] = input_dict["subject"]
             stored_paper_dict["difficulty"] = int(sum(result[2])/len(result[2]))
-            kp_set = set()
-            for _ in kp_list_dict:
-                for __ in kp_list_dict[_]:
-                    for ___ in __:
-                        kp_set.add(___)
-            kp_set = list(kp_set)
-            stored_paper_dict["knowledge_point"] = kp_set
+            # kp_set = set()
+            # for _ in kp_list_dict:
+            #     for __ in kp_list_dict[_]:
+            #         for ___ in __:
+            #             kp_set.add(___)
+            # kp_set = list(kp_set)
+            stored_paper_dict["knowledge_point"] = None
         #     可能后续会有功能拓展
         except Exception as e:
             print(e)
