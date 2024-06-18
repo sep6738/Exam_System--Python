@@ -59,4 +59,17 @@ class HomeworkOrExamPoolDAO(BaseDAO):
         result_dict["main_content"] = f"# <center>{store_paper['main_content']}</center>\n"
         return [result_dict, answer_list, diff_list, questions_list]
 
-
+    def query_kp_by_hepIDs(self, hepID_list: list):
+        hepID_list = tuple(hepID_list)
+        if len(hepID_list) > 1:
+            pl = str(hepID_list)
+            # 建立sql并查询
+            query = f"select hepID, kpName from hep_and_kp_mediater where hepID in {pl} ORDER BY FIELD({'hepID, ' + pl[1:-1]})"
+        else:
+            pl = str(hepID_list[0])
+            query = f"select hepID, kpName from hep_and_kp_mediater where hepID = {pl} ORDER BY FIELD({'hepID, ' + pl})"
+        result = self.execute_query(query)
+        if result:
+            return result
+        else:
+            return tuple()
