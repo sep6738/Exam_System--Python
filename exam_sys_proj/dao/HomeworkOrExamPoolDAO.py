@@ -64,6 +64,7 @@ class HomeworkOrExamPoolDAO(BaseDAO):
         return [result_dict, answer_list, diff_list, questions_list]
 
     def query_kp_by_hepIDs(self, hepID_list: list):
+
         hepID_list = tuple(hepID_list)
         if len(hepID_list) > 1:
             pl = str(hepID_list)
