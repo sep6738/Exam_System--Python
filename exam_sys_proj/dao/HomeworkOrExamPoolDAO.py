@@ -1,3 +1,7 @@
+from pyecharts.charts import Pie
+from pyecharts import options as opts
+from pyecharts.globals import ThemeType
+
 from ..orm.HomeworkOrExamPool import HomeworkOrExamPool
 from .base_dao import BaseDAO
 import json
@@ -73,3 +77,31 @@ class HomeworkOrExamPoolDAO(BaseDAO):
             return result
         else:
             return tuple()
+
+    def get_type_analysis(self):
+        query = f"SELECT type FROM {self.table_name}"
+        result = self.execute_query(query)
+        type_list = []
+        for q in result:
+            type_list.append(q[0])
+        type_counts = {}
+        for type in type_list:
+            type_counts[type] = type_counts.get(type,0)+1
+        result_list = list(type_counts.items())
+        pie = Pie(init_opts=opts.InitOpts(theme=ThemeType.DARK))
+        pie.add(
+            series_name='题目类型',
+            data_pair=result_list,
+            rosetype='radius',
+            radius='70%',
+        )
+        pie.set_global_opts(
+            title_opts=opts.TitleOpts(title="题库中题目类型分布")
+        )
+        pie.set_series_opts(
+            tooltip_opts=opts.TooltipOpts(trigger='item', formatter='{a} <br/>{b}: {c}题 ({d}%)')
+        )
+        html_string = pie.render_embed()
+        return html_string
+        # pie.render("type_analysis.html")
+        # return "type_analysis.html"
