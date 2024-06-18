@@ -113,6 +113,35 @@ class BaseDAO:
             print(e)
             return "error"
 
+    def queryAll(self, count=100):
+        """
+        count:查询的条目上限，
+        若为0则表示上限为正无穷
+        :param count:
+        :return:
+        """
+        try:
+            columns = [attr for attr in dir(self.entity_class) if
+                       not callable(getattr(self.entity_class, attr)) and not attr.startswith("_")]
+            if count == 0:
+                query = f"SELECT {', '.join(columns)} FROM {self.table_name}"
+                value = count,
+                result = self.execute_query(query)
+            else:
+                query = f"SELECT {', '.join(columns)} FROM {self.table_name} LIMIT %s"
+                value = count,
+                result = self.execute_query(query, value)
+            if result:
+                result_list = []
+                for i in result:
+                    result_list.append(self._create_entity_from_row(i))
+                    return result_list
+            else:
+                return None
+        except Exception as e:
+            print(e)
+            return "error"
+
     def columnsQuery(self, entity, mod="AND", is_all=False):
         entity_dict = vars(entity)
         temp_dict = entity_dict.copy()
