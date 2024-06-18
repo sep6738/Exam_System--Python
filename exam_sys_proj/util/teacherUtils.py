@@ -3,6 +3,12 @@ from ..dao.KnowledgePointsDAO import KnowledgePointsDAO, KnowledgePoints
 from ..dao.HepAndKpMediaterDAO import HepAndKpMediater, HepAndKpMediaterDAO
 from ..dao.TeacherCourseDAO import TeacherCourse, TeacherCourseDAO
 from collections import defaultdict
+import markdown2
+from bs4 import BeautifulSoup
+from docx import Document
+from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
+from docx.shared import Pt
+from docx.oxml.ns import qn
 import json
 import random
 import time
@@ -395,8 +401,26 @@ class TeacherUtils:
         return result_list
 
     @classmethod
-    def insertOnePaper(cls):
-        pass
+    def export_paper_as_docx(cls, db_util, hepID: int, path: str):
+        homeworkOrExamPoolDAO = HomeworkOrExamPoolDAO(db_util)
+        entity: HomeworkOrExamPool = homeworkOrExamPoolDAO.query(hepID)
+        whole_paper = homeworkOrExamPoolDAO.query_whole_paper(entity.question)
+        md: str = whole_paper["main_content"]
+        md.replace("<center>", "")
+        md.replace("</center>", "")
+        md += "\n"
+        for i in whole_paper["questions"]:
+            if isinstance(i, str):
+                md += i
+                md += "\n"
+            elif isinstance(i, dict):
+                md += i["main_content"]
+                md += "\n"
+                for j in i["questions"]:
+                    md += j
+                    md += "\n"
+        cls._markdown_to_word(md, path)
+
 
     @staticmethod
     def _readOurJson(json_path: str):
@@ -528,4 +552,52 @@ class TeacherUtils:
         for diff in diff_list:
             diff_coe_dict[diff] += 1
 
+    @staticmethod
+    def _markdown_to_word(md_text, output_path):
+        def add_text_to_paragraph(paragraph, element):
+            for sub_element in element.children:
+                run = paragraph.add_run(sub_element.get_text())
+                if sub_element.name == 'strong':
+                    run.bold = True
+                if sub_element.name == 'em':
+                    run.italic = True
+                # 设置字体为宋体
+                run.font.name = '宋体'
+                r = run._element
+                r.rPr.rFonts.set(qn('w:eastAsia'), '宋体')
 
+        def add_html_to_docx(html_content, doc):
+            soup = BeautifulSoup(html_content, "html.parser")
+
+            for element in soup.descendants:
+                if element.name == 'h1':
+                    paragraph = doc.add_heading(level=1)
+                    run = paragraph.add_run(element.get_text())
+                    paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
+                    run.font.size = Pt(24)
+                elif element.name == 'h2':
+                    doc.add_heading(element.get_text(), level=2)
+                elif element.name == 'h3':
+                    doc.add_heading(element.get_text(), level=3)
+                elif element.name == 'p':
+                    paragraph = doc.add_paragraph()
+                    add_text_to_paragraph(paragraph, element)
+                elif element.name == 'li':
+                    paragraph = doc.add_paragraph(style='ListBullet')
+                    add_text_to_paragraph(paragraph, element)
+                elif element.name == 'ul':
+                    for li in element.find_all('li'):
+                        paragraph = doc.add_paragraph(style='ListBullet')
+                        add_text_to_paragraph(paragraph, li)
+
+        html_content = markdown2.markdown(md_text, extras=["tables", "fenced-code-blocks"])
+
+        doc = Document()
+
+        style = doc.styles['Normal']
+        style.font.name = '宋体'
+        style._element.rPr.rFonts.set(qn('w:eastAsia'), '宋体')
+
+        add_html_to_docx(html_content, doc)
+
+        doc.save(output_path)
