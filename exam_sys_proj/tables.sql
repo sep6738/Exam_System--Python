@@ -178,12 +178,14 @@ create table student_course
 
 create table student_hand_in
 (
-    studentHandInID int auto_increment
+    studentHandInID bigint auto_increment
         primary key,
     userID          int           null,
     homeworkExamID  int           null,
+    testPaper       json          null,
+    createTime      datetime      null,
     content         json          null,
-    upTime          varchar(255)  null,
+    upTime          datetime      null,
     score           decimal(5, 2) null,
     teacherComment  varchar(255)  null,
     resultDetails   json          null,
