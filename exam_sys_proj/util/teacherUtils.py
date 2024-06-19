@@ -490,6 +490,15 @@ class TeacherUtils:
                         temp_n -= 1
                         break
                 temp_n2 += 1
+        # 单独处理results的最后一个元素
+        end_element = results[-1]
+        if len(results_dict[end_element[0]]) > 0:
+            results_dict[end_element[0]][-1].append(end_element[2])
+        else:
+            results_dict[end_element[0]].append(list())
+            results_dict[end_element[0]][-1].append(end_element[1])
+            results_dict[end_element[0]][-1].append(end_element[2])
+        del end_element
         # 检查是否存在某个难度的题目数量为0
         for i in results_dict:
             if len(results_dict[i]) == 0:
