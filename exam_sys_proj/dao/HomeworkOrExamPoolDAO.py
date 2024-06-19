@@ -1,4 +1,5 @@
-from pyecharts.charts import Pie
+import pyecharts
+from pyecharts.charts import Pie, Bar
 from pyecharts import options as opts
 from pyecharts.globals import ThemeType
 
@@ -80,6 +81,10 @@ class HomeworkOrExamPoolDAO(BaseDAO):
             return tuple()
 
     def get_type_analysis(self):
+        '''
+        所有试题类型的扇形图
+        :return:
+        '''
         query = f"SELECT type FROM {self.table_name}"
         result = self.execute_query(query)
         type_list = []
@@ -87,6 +92,8 @@ class HomeworkOrExamPoolDAO(BaseDAO):
             type_list.append(q[0])
         type_counts = {}
         for type in type_list:
+            if type == "考试":
+                continue
             type_counts[type] = type_counts.get(type,0)+1
         result_list = list(type_counts.items())
         pie = Pie(init_opts=opts.InitOpts(theme=ThemeType.DARK))
@@ -103,6 +110,49 @@ class HomeworkOrExamPoolDAO(BaseDAO):
             tooltip_opts=opts.TooltipOpts(trigger='item', formatter='{a} <br/>{b}: {c}题 ({d}%)')
         )
         html_string = pie.render_embed()
-        return html_string
         # pie.render("type_analysis.html")
+        return html_string
         # return "type_analysis.html"
+
+    def get_diffi_analysis(self):
+        '''
+        所有试题难度的柱状图
+        :return:
+        '''
+        try:
+            query = f"SELECT difficultyLevel FROM {self.table_name}"
+            result = self.execute_query(query)
+            lis = []
+            for q in result:
+                lis.append(q[0])
+            counts = {}
+            for t in lis:
+                counts[t] = counts.get(t, 0) + 1
+            data = sorted(counts.items(), key=lambda d: d[0], reverse=False)
+            data1 = []
+            data2 = []
+            for d in data:
+                data1.append(d[0])
+                data2.append(d[1])
+            # return data
+            bar = Bar()
+
+            # 添加数据
+            bar.add_xaxis(data1)
+            bar.add_yaxis("题目数量", data2)
+
+            # 设置全局配置
+            bar.set_global_opts(
+                title_opts=pyecharts.options.TitleOpts(title="难度级别-题目数量", pos_left="center", pos_top="20",
+                                                       title_textstyle_opts={"color": "#333", "font_weight": "bold",
+                                                                             "font_size": 18}),
+                toolbox_opts=pyecharts.options.ToolboxOpts(),
+            )
+            # 渲染图表并保存为 HTML 文件
+            # bar.render("difficulty_level_bar.html")
+            # print("柱状图已保存至: difficulty_level_bar.html")
+            string_html = bar.render_embed()
+            return string_html
+        except Exception as e:
+            print(e)
+            return 'error'
