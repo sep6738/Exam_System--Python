@@ -476,6 +476,7 @@ class TeacherUtils:
         query = f"select difficultyLevel, hep_and_kp_mediater.hepID, kpName from homework_or_exam_pool, hep_and_kp_mediater where type = %s and homework_or_exam_pool.hepID = hep_and_kp_mediater.hepID and ({placeholders}) order by difficultyLevel"
         results = homeworkOrExamPoolDAO.execute_query(query, values)
         temp_n = 0
+        # 这个循环里最后一个元素会丢失
         while temp_n < len(results) - 1:
             temp_n2 = 0
             n2 = results[temp_n][0]
