@@ -130,10 +130,10 @@
             var layer = layui.layer;
             // 提交事件
             form.on('submit(paper)', function (data) {
+                var loadIndex = layer.load(0);
                 var field = data.field; // 获取表单字段值
-                // 显示填写结果，仅作演示用
                 var xhr = new XMLHttpRequest();
-                xhr.open('POST', '/teacher/paper_create', true);
+                xhr.open('POST', '/student/paper_create/{{ knowledge_points[0].subject }}', true);
                 xhr.setRequestHeader('Content-Type', 'application/json');
                 xhr.send(JSON.stringify(field));
                 xhr.onreadystatechange = function () {

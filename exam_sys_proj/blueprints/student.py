@@ -98,7 +98,7 @@ def paper_create(subject):
                 paper[question_type]["amount_per_knowledge_point"][knowledge_point.kpName] = data[
                     question_type + "_" + knowledge_point.kpName]
     print(paper)
-    return jsonify({'message': 'Data received successfully'})
+    return 'Data received successfully'
 
 
 @bp.route('/select_subject', methods=['POST', 'GET'])
