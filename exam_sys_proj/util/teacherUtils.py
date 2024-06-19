@@ -12,6 +12,7 @@ from docx.oxml.ns import qn
 import json
 import random
 import time
+import copy
 
 
 class TeacherUtils:
@@ -316,29 +317,46 @@ class TeacherUtils:
                 questions_diff_count_dict[question_type][max(questions_diff_count_dict[question_type].keys())] -= 1
                 if questions_diff_count_dict[question_type][max(questions_diff_count_dict[question_type].keys())] == 0:
                     del questions_diff_count_dict[question_type][max(questions_diff_count_dict[question_type].keys())]
+
+            # 判断是否有足够的查询数据能支撑难度的数量
+            # 比如难度为1的题我们需要3条但是我们查寻出的难度为1的题目只有两道就不满足
+            for d_l in questions_diff_count_dict[question_type]:
+                if questions_diff_count_dict[question_type][d_l] > len(all_query_kp_dict[question_type][d_l]):
+                    return {"status_code": 404,
+                            "message": f"组卷失败，试题库中难度为{d_l}的{question_type}数量不足，若您是老师或管理员请在试题库中添加题目后再重试",
+                            "content": None}
+
             for _ in range(3):
                 try:
+
                     questionID_list, kp_list = cls._analysis_diff_to_kp(questions_diff_count_dict[question_type],
-                                                               input_dict[question_type]["amount_per_knowledge_point"],
-                                                               all_query_kp_dict[question_type])
+                                                                        input_dict[question_type][
+                                                                            "amount_per_knowledge_point"],
+                                                                        all_query_kp_dict[question_type])
                 except Exception as e:
+                    print("break1")
                     print(e)
                     return {"status_code": 404,
                             "message": "组卷失败，发生未知错误",
                             "content": None}
+
+                # questionID_list, kp_list = cls._analysis_diff_to_kp(questions_diff_count_dict[question_type],
+                #                                                input_dict[question_type]["amount_per_knowledge_point"],
+                #                                                all_query_kp_dict[question_type])
 
                 if isinstance(questionID_list, list):
                     break
                 else:
                     temp_set = temp_set | questionID_list
                 if _ == 2:
+                    print(temp_set)
                     if len(temp_set) > 1:
                         return {"status_code": 404,
                                 "message": f"组卷失败，试题库中知识点为{'、'.join(list(temp_set))}的{question_type}数量不足，若您是老师或管理员请在试题库中添加题目后再重试",
                                 "content": None}
                     else:
                         return {"status_code": 404,
-                                "message": f"组卷失败，试题库中知识点为{temp_set[0]}的{question_type}数量不足，若您是老师或管理员请在试题库中添加题目后再重试",
+                                "message": f"组卷失败，试题库中知识点为{list(temp_set)[0]}的{question_type}数量不足，若您是老师或管理员请在试题库中添加题目后再重试",
                                 "content": None}
             questionID_list.insert(0, eval(questions_dict[question_type]['score_per_question']))
             questionID_dict[question_type] = questionID_list
@@ -355,7 +373,7 @@ class TeacherUtils:
             stored_paper_dict["score"] = result[0]["score"]
             stored_paper_dict["answer"] = result[1]
             stored_paper_dict["subject"] = input_dict["subject"]
-            stored_paper_dict["difficulty"] = int(sum(result[2])/len(result[2]))
+            stored_paper_dict["difficulty"] = int(sum(result[2]) / len(result[2]))
             # kp_set = set()
             # for _ in kp_list_dict:
             #     for __ in kp_list_dict[_]:
@@ -453,7 +471,6 @@ class TeacherUtils:
         else:
             return False
 
-
     @staticmethod
     def _readOurJson(json_path: str):
         with open(json_path, "r", encoding="utf-8") as f:
@@ -492,14 +509,15 @@ class TeacherUtils:
                         break
                 temp_n2 += 1
         # 单独处理results的最后一个元素
-        end_element = results[-1]
-        if len(results_dict[end_element[0]]) > 0:
-            results_dict[end_element[0]][-1].append(end_element[2])
-        else:
-            results_dict[end_element[0]].append(list())
-            results_dict[end_element[0]][-1].append(end_element[1])
-            results_dict[end_element[0]][-1].append(end_element[2])
-        del end_element
+        if len(results) > 0:
+            end_element = results[-1]
+            if len(results_dict[end_element[0]]) > 0:
+                results_dict[end_element[0]][-1].append(end_element[2])
+            else:
+                results_dict[end_element[0]].append(list())
+                results_dict[end_element[0]][-1].append(end_element[1])
+                results_dict[end_element[0]][-1].append(end_element[2])
+            del end_element
         # 检查是否存在某个难度的题目数量为0
         for i in results_dict:
             if len(results_dict[i]) == 0:
@@ -509,10 +527,12 @@ class TeacherUtils:
         return results_dict
 
     @staticmethod
-    def _analysis_diff_to_kp(diff_dict: dict, kp_dict: dict, query_dict: dict):
-        random.seed(time.time())
+    def _analysis_diff_to_kp(diff_dict0: dict, kp_dict0: dict, query_dict0: dict):
+        diff_dict = copy.deepcopy(diff_dict0)
+        kp_dict = copy.deepcopy(kp_dict0)
+        query_dict = copy.deepcopy(query_dict0)
         result_list = list()
-        kp_list = list()
+        kp_list_result = list()
         executing_flag = 0
 
         for diff in diff_dict:
@@ -533,7 +553,7 @@ class TeacherUtils:
                         return [kp_dict.keys(), None]
                     # 开始寻找
                     if kp_list[kp_name_index] in query_dict[diff][query_index][1:]:
-                        kp_list.append(query_dict[diff][query_index][1:])
+                        kp_list_result.append(query_dict[diff][query_index][1:])
                         kp_dict[kp_list[kp_name_index]] -= 1
                         diff_dict[diff] -= 1
                         del_index.append(query_index)
@@ -574,7 +594,8 @@ class TeacherUtils:
                     if len(kp_list) > 0:
                         kp_name_index = random.choice(list(range(len(kp_list))))
 
-        return [result_list, kp_list]
+        print(result_list, kp_list_result)
+        return [result_list, kp_list_result]
 
     @staticmethod
     def _analysis_paper(paper, diff_list, type_list, source_dict):
@@ -584,11 +605,11 @@ class TeacherUtils:
         n = 0
         for type in type_list:
             type_score_dict[type] = paper["score"][n]
-            type_score_ratio_dict[type] = paper["score"][n]/sum_score
+            type_score_ratio_dict[type] = paper["score"][n] / sum_score
             n += 1
-        ave_diff = sum(diff_list)/len(diff_list)
+        ave_diff = sum(diff_list) / len(diff_list)
         diff_coe_dict = dict()
-        
+
         for _ in set(diff_list):
             diff_coe_dict[_] = 0
         for diff in diff_list:
