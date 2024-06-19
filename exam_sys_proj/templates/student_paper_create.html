@@ -136,9 +136,13 @@
                 xhr.open('POST', '/teacher/paper_create', true);
                 xhr.setRequestHeader('Content-Type', 'application/json');
                 xhr.send(JSON.stringify(field));
-                layer.alert(JSON.stringify(field), {
-                    title: '当前填写的字段值'
-                });
+                xhr.onreadystatechange = function () {
+                    //若响应完成且请求成功
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        layer.alert(xhr.responseText);
+                    }
+                };
+                layer.close(loadIndex)
                 return false; // 阻止默认 form 跳转
             });
         });
