@@ -3,7 +3,7 @@
 {% block body %}
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.1/dist/echarts.min.js"></script>
     {#    <div style="transform: scale(0.5)">#}
-
+    {{ chart }}
     {#</div>#}
     <div class="layui-card">
         <div class="layui-card-header">试题管理</div>
@@ -16,21 +16,6 @@
                     <div class="layui-tab-item layui-show">
                         <table class="layui-table" id="question-table-{{ subject }}"
                                lay-filter="question-table">
-                            {#                                <thead>#}
-                            {#                                    <tr>#}
-                            {#                                        <th>主要内容</th>#}
-                            {#                                        <th>类型</th>#}
-                            {#                                        <th>随机顺序</th>#}
-                            {#                                        <th>科目</th>#}
-                            {#                                        <th>难度</th>#}
-                            {#                                        <th>分数</th>#}
-                            {#                                        <th>知识点</th>#}
-                            {#                                        <th>操作</th>#}
-                            {#                                    </tr>#}
-                            {#                                </thead>#}
-                            {#                                <tbody>#}
-                            {# 在这里循环显示试题数据 #}
-                            {#                                </tbody>#}
                         </table>
                     </div>
                 </div>
