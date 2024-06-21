@@ -157,6 +157,10 @@ def question_create_api():
     # print(data)
     question = {}
     if data['question_type'] == '选择题':
+        if data['analyze']:
+            question['answer'].append(data['analyze'])
+        else:
+            question['answer'].append('')
         question['main_content'] = data['main_content']
         question['type'] = '选择题'
         question['questions'] = [data['selection1'], data['selection2'], data['selection3'], data['selection4']]
@@ -175,6 +179,10 @@ def question_create_api():
             if i.startswith('knowledge_point'):
                 question['knowledge_point'].append(i[16:])
     elif data['question_type'] == '判断题':
+        if data['analyze']:
+            question['answer'].append(data['analyze'])
+        else:
+            question['answer'].append('')
         question['main_content'] = data['main_content']
         question['type'] = '判断题'
         question['questions'] = ["√", "X"]
@@ -224,7 +232,6 @@ def question_create_api():
             question['shuffle'] = False
         question['subject'] = data['subject']
         question['difficulty'] = int(data['difficulty'])
-
     print(question)
     TeacherUtils.insertOneQuestion(dbPool, question)
     return jsonify({'message': 'Data received successfully'})
