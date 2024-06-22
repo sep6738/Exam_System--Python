@@ -53,6 +53,13 @@
                         <input type="radio" name="answer" value="3" title="3">
                         <input type="radio" name="answer" value="4" title="4">
                     </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">解析：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="analyze" placeholder="请输入解析" autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
 
                     <div class="layui-form-item">
                         <label class="layui-form-label">学科</label>
@@ -68,7 +75,6 @@
                                 <input type="checkbox" name="knowledge_point:{{ knowledge_point.kpName }}"
                                        title="{{ knowledge_point.kpName }}">
                             {% endfor %}
-                            <input type="checkbox" checked name="knowledge_point:其它" title="其它">
                         </div>
                     </div>
                     <div class="layui-form-item">
@@ -116,6 +122,13 @@
                         <input type="radio" name="answer" value="1" title="√" checked>
                         <input type="radio" name="answer" value="2" title="×">
                     </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">解析：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="analyze" placeholder="请输入解析" autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
                     <div class="layui-input-block">
                         <input type="text" name="subject" readonly autocomplete="off"
                                value="{{ knowledge_points[0].subject }}" class="layui-input">
@@ -127,7 +140,6 @@
                                 <input type="checkbox" name="knowledge_point:{{ knowledge_point.kpName }}"
                                        title="{{ knowledge_point.kpName }}">
                             {% endfor %}
-                            <input type="checkbox" checked name="knowledge_point:其它" title="其它">
                         </div>
                     </div>
                     <div class="layui-form-item">
@@ -190,7 +202,6 @@
                                 <input type="checkbox" name="knowledge_point:{{ knowledge_point.kpName }}"
                                        title="{{ knowledge_point.kpName }}">
                             {% endfor %}
-                            <input type="checkbox" checked name="knowledge_point:其它" title="其它">
                         </div>
                     </div>
                     <div class="layui-form-item">
@@ -248,9 +259,9 @@
                             </div>
                         </div>
                         <div class="layui-form-item">
-                            <label class="layui-form-label">答案：</label>
+                            <label class="layui-form-label">答案及解析：</label>
                             <div class="layui-input-block">
-                                <input type="text" name="answer:1" placeholder="请输入答案1" autocomplete="off"
+                                <input type="text" name="answer:1" placeholder="请输入答案及解析1" autocomplete="off"
                                        class="layui-input">
                             </div>
                         </div>
@@ -277,7 +288,6 @@
                                 <input type="checkbox" name="knowledge_point:{{ knowledge_point.kpName }}"
                                        title="{{ knowledge_point.kpName }}">
                             {% endfor %}
-                            <input type="checkbox" checked name="knowledge_point:其它" title="其它">
                         </div>
                     </div>
 
@@ -358,9 +368,9 @@
                     '</div>' +
                     '</div>' +
                     '<div class="layui-form-item">' +
-                    '<label class="layui-form-label">答案：</label>' +
+                    '<label class="layui-form-label">答案及解析：</label>' +
                     '<div class="layui-input-block">' +
-                    '<input type="text" name="answer:' + x + '" placeholder="请输入答案' + x + '" autocomplete="off"' +
+                    '<input type="text" name="answer:' + x + '" placeholder="请输入答案及解析' + x + '" autocomplete="off"' +
                     'class="layui-input">' +
                     '</div>' +
                     '</div>' +

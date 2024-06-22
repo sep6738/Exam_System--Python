@@ -157,11 +157,15 @@ def question_create_api():
     # print(data)
     question = {}
     if data['question_type'] == '选择题':
+        question['answer'] = []
         question['main_content'] = data['main_content']
         question['type'] = '选择题'
         question['questions'] = [data['selection1'], data['selection2'], data['selection3'], data['selection4']]
-        question['answer'] = []
         question['answer'].append(data['answer'])
+        if data['analyze']:
+            question['answer'].append(data['analyze'])
+        else:
+            question['answer'].append('')
         if 'shuffle' in data:
             question['shuffle'] = True
         else:
@@ -175,11 +179,15 @@ def question_create_api():
             if i.startswith('knowledge_point'):
                 question['knowledge_point'].append(i[16:])
     elif data['question_type'] == '判断题':
+        question['answer'] = []
         question['main_content'] = data['main_content']
         question['type'] = '判断题'
         question['questions'] = ["√", "X"]
-        question['answer'] = []
         question['answer'].append(data['answer'])
+        if data['analyze']:
+            question['answer'].append(data['analyze'])
+        else:
+            question['answer'].append('')
         question['shuffle'] = True
         question['subject'] = data['subject']
         question['difficulty'] = int(data['difficulty'])
@@ -224,7 +232,6 @@ def question_create_api():
             question['shuffle'] = False
         question['subject'] = data['subject']
         question['difficulty'] = int(data['difficulty'])
-
     print(question)
     TeacherUtils.insertOneQuestion(dbPool, question)
     return jsonify({'message': 'Data received successfully'})

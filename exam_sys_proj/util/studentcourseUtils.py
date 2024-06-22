@@ -62,3 +62,34 @@ class StudentCourseUtils:
         except Exception as e:
             print(e)
             return 'error'
+
+    @classmethod
+    def get_student_grade(cls, db_util,userID: int,semester):
+        '''
+        获得学生在某个学期的学科与成绩
+        :param db_util:
+        :param userID:
+        :param semester:
+        :return:
+        '''
+        try:
+            query = f"SELECT student_course.userID,subject,grade FROM student_course,teacher_course WHERE student_course.courseID=teacher_course.courseID and student_course.semester=%s AND student_course.userID={userID}"
+            conn = db_util.get_connection()
+            params = semester
+            try:
+                with conn.cursor() as cursor:
+                    cursor.execute(query, params)
+                    result = cursor.fetchall()
+            finally:
+                conn.close()
+            data = []
+            for item in result:
+                now = {}
+                now['userID'] = item[0]
+                now['subject'] = item[1]
+                now['grade'] = float(item[2])
+                data.append(now)
+            return data
+        except Exception as e:
+            print(e)
+            return 'error'
