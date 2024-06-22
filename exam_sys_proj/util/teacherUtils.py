@@ -394,7 +394,7 @@ class TeacherUtils:
 
         return {"status_code": 200,
                 "message": "组卷成功",
-                "content": [result[0], stored_paper_dict, None, None]}
+                "content": [result[0], stored_paper_dict, None, result[1]]}
 
     @classmethod
     def querySubjectQuestionsViaUID(cls, db_util, userID, entity: HomeworkOrExamPool):
