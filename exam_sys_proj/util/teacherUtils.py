@@ -186,6 +186,7 @@ class TeacherUtils:
         for _ in temp_list0:
             questions_dict[_] = input_dict[_].copy()
             score_dict[_] = 0
+        questions_type_list = temp_list0.copy()
         del temp_list0
         all_sum_score = 0
         for i in questions_dict:
@@ -620,8 +621,26 @@ class TeacherUtils:
             score_text += f"{type_list[i]}一共{paper['score'][i]}分,"
             score_dict[type_list[i]].append(paper["score"][i]/sum_score)
             score_text += f'占比{round(paper["score"][i]/sum_score*100, 2)}%;'
+        score_text += "\n"
 
+        # 获取平均难度
+        ave_diff = sum(diff_list)/len(diff_list)
+        # 分析难度占比
+        diff_text = f"该试卷平均难度为{ave_diff},"
+        if 4 < ave_diff < 6:
+            diff_text += "难度适中"
+        elif 2 < ave_diff <= 4:
+            diff_text += "难度偏易"
+        elif 0 < ave_diff <= 2:
+            diff_text += "难度简单"
+        elif 6 <= ave_diff < 8:
+            diff_text += "难度偏难"
+        else:
+            diff_text += "难度困难"
+        diff_text += "\n"
 
+        # 分析知识点情况
+        
 
 
 

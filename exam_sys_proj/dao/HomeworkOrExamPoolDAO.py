@@ -41,7 +41,8 @@ class HomeworkOrExamPoolDAO(BaseDAO):
                     questions_list.append(
                         "## " + question_type + f"  (一共{len(store_paper['questions'][question_type]) - 1}小题，每题{store_paper['questions'][question_type][0]}分，共{store_paper['questions'][question_type][0] * (len(store_paper['questions'][question_type]) - 1)}分)")
                     if len(store_paper["score"]) < len(store_paper["questions"].keys()):
-                        store_paper["score"].append(store_paper['questions'][question_type][0] * (
+                        s = [store_paper['questions'][question_type][0]]
+                        store_paper["score"].append(s * (
                                     len(store_paper['questions'][question_type]) - 1))
                     for q_json in result:
                         answer_list.append(json.loads(q_json[2]))
@@ -49,14 +50,14 @@ class HomeworkOrExamPoolDAO(BaseDAO):
                         questions_list.append(json.loads(q_json[0]))
                 else:
                     insert_index = len(questions_list)
-                    s = 0
+                    s = []
                     for q_json in result:
                         q_dict = json.loads(q_json[0])
                         q_dict["main_content"] += f"  ({sum(q_dict['score'])}分)"
                         questions_list.append(q_dict)
                         answer_list.append(json.loads(q_json[2]))
                         diff_list.append(q_json[1])
-                        s += sum(q_dict["score"])
+                        s.append(q_dict["score"])
                     questions_list.insert(insert_index, "## " + question_type + f"  (一共{len(result)}小题，共{s}分)")
                     if len(store_paper["score"]) < len(store_paper["questions"].keys()):
                         store_paper["score"].append(s)
