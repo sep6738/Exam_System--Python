@@ -1,5 +1,6 @@
 import json
 import random
+import time
 
 
 def panduan():
@@ -12,8 +13,6 @@ def panduan():
     subject = random.choice(SUBJECTS)
     knowledge_point_count = random.randint(1, 2)
     knowledge_points = random.sample(KNOWLEDGE_POINTS, knowledge_point_count)
-    seed = random.randint(1, 1000000000)
-    random.seed(seed)
     difficulty = random.randint(1, 10)
     score = random.choice(SCORES)
     shuffle = True
@@ -44,8 +43,6 @@ def xuanze():
     question_type = random.choice(QUESTION_TYPES)
     subject = random.choice(SUBJECTS)
     knowledge_points = random.sample(KNOWLEDGE_POINTS, random.choice([1, 2]))
-    seed = random.randint(1,1000000000)
-    random.seed(seed)
     difficulty = random.randint(1, 10)
     score = random.choice(SCORES)
     shuffle = random.choice([True, False])
@@ -76,8 +73,6 @@ def tiankong():
     subject = random.choice(SUBJECTS)
     knowledge_point_count = random.randint(1, 2)
     knowledge_points = random.sample(KNOWLEDGE_POINTS, knowledge_point_count)
-    seed = random.randint(1, 1000000000)
-    random.seed(seed)
     difficulty = random.randint(1, 10)
     score = random.choice(SCORES)
     shuffle = False
@@ -137,8 +132,6 @@ def zhuguan():
     question_type = random.choice(QUESTION_TYPES)
     subject = random.choice(SUBJECTS)
     knowledge_points = random.sample(KNOWLEDGE_POINTS, random.choice([1, 2, 3, 4]))
-    seed = random.randint(1, 1000000000)
-    random.seed(seed)
     difficulty = random.randint(1, 10)
     score = random.choice(SCORES)
     main_content = random.choice(MAIN_CONTENT)
@@ -164,6 +157,7 @@ a = int(input("选择题个数:\n"))
 b = int(input("判断题个数:\n"))
 c = int(input("填空题个数:\n"))
 d = int(input("主观题个数:\n"))
+random.seed(None)
 result = []
 for i in range(a):
     result.append(xuanze())
