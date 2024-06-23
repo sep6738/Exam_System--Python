@@ -1,6 +1,6 @@
 class StudentHandIn:
     def __init__(self, studentHandInID=None, userID=None, homeworkExamID=None, content=None, upTime=None, score=None,
-                 teacherComment=None, resultDetails=None):
+                 teacherComment=None, resultDetails=None ,testPaper=None, createTime=None):
         self.studentHandInID = studentHandInID
         self.userID = userID
         self.homeworkExamID = homeworkExamID
@@ -9,6 +9,8 @@ class StudentHandIn:
         self.score = score
         self.teacherComment = teacherComment
         self.resultDetails = resultDetails
+        self.testPaper = testPaper
+        self.createTime = createTime
 
     @property
     def studentHandInID(self):
@@ -73,3 +75,19 @@ class StudentHandIn:
     @resultDetails.setter
     def resultDetails(self, value):
         self._resultDetails = value
+
+    @property
+    def testPaper(self):
+        return self._testPaper
+
+    @testPaper.setter
+    def testPaper(self, value):
+        self._testPaper = value
+
+    @property
+    def createTime(self):
+        return self._createTime
+
+    @createTime.setter
+    def createTime(self, value):
+        self._createTime = value

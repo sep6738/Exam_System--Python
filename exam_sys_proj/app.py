@@ -34,6 +34,8 @@ app.register_blueprint(auth_bp)
 app.register_blueprint(student_bp)
 app.register_blueprint(admin_bp)
 
+# 创建temp文件夹
+os.makedirs('./exam_sys_proj/temp', exist_ok=True)
 
 # blueprint：用来做模块化的
 # print(os.path.abspath('.'))
