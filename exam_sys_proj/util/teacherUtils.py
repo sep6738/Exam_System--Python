@@ -436,8 +436,9 @@ class TeacherUtils:
                 md += i["main_content"]
                 md += "\n"
                 for j in i["questions"]:
-                    md += j
-                    md += "\n"
+                    if isinstance(j, str):
+                        md += j
+                        md += "\n"
                 md += "\n"
         cls._markdown_to_word(md, path)
 

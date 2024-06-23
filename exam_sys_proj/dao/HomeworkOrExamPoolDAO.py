@@ -58,7 +58,7 @@ class HomeworkOrExamPoolDAO(BaseDAO):
                         answer_list.append(json.loads(q_json[2]))
                         diff_list.append(q_json[1])
                         s.append(q_dict["score"])
-                    questions_list.insert(insert_index, "## " + question_type + f"  (一共{len(result)}小题，共{s}分)")
+                    questions_list.insert(insert_index, "## " + question_type + f"  (一共{len(result)}小题，共{sum(sum(inner_list) for inner_list in s)}分)")
                     if len(store_paper["score"]) < len(store_paper["questions"].keys()):
                         store_paper["score"].append(s)
             else:
