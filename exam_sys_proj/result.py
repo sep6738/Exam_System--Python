@@ -6,14 +6,15 @@ def panduan():
     QUESTION_TYPES = ["判断题"]
     SUBJECTS = ["数学"]
     KNOWLEDGE_POINTS = ["四则运算", "三角函数", "线性代数", "微积分"]
-    DIFFICULTIES = [1, 2, 3, 4]
-    SCORES = [1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0, 9.5, 10.0]
+    SCORES = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0, 9.5, 10.0]
     QUESTIONS = ["√", "X"]
     question_type = random.choice(QUESTION_TYPES)
     subject = random.choice(SUBJECTS)
     knowledge_point_count = random.randint(1, 2)
     knowledge_points = random.sample(KNOWLEDGE_POINTS, knowledge_point_count)
-    difficulty = random.choice(DIFFICULTIES)
+    seed = random.randint(1, 1000000000)
+    random.seed(seed)
+    difficulty = random.randint(1, 10)
     score = random.choice(SCORES)
     shuffle = True
     questions = random.sample(QUESTIONS, 2)
@@ -37,14 +38,15 @@ def xuanze():
     QUESTION_TYPES = ["选择题"]
     SUBJECTS = ["数学"]
     KNOWLEDGE_POINTS = ["四则运算", "三角函数", "线性代数", "微积分"]
-    DIFFICULTIES = [1, 2, 3, 4, 5]
-    SCORES = [1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0, 9.5, 10.0]
+    SCORES = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0, 9.5, 10.0]
     QUESTIONS = ["洞拐洞拐，这里是凌凌漆", "33", "122", "46", "15", "89", "241", "72", "987654321", "987654322", "0",
                  "-33", "-12", "-46", "-15"]
     question_type = random.choice(QUESTION_TYPES)
     subject = random.choice(SUBJECTS)
     knowledge_points = random.sample(KNOWLEDGE_POINTS, random.choice([1, 2]))
-    difficulty = random.choice(DIFFICULTIES)
+    seed = random.randint(1,1000000000)
+    random.seed(seed)
+    difficulty = random.randint(1, 10)
     score = random.choice(SCORES)
     shuffle = random.choice([True, False])
     questions = random.sample(QUESTIONS, 4)
@@ -68,14 +70,15 @@ def tiankong():
     QUESTION_TYPES = ["填空题"]
     SUBJECTS = ["数学"]
     KNOWLEDGE_POINTS = ["四则运算", "三角函数", "线性代数", "微积分"]
-    DIFFICULTIES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    SCORES = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0]
+    SCORES = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0, 9.5, 10.0]
     QUESTIONS = [None]
     question_type = random.choice(QUESTION_TYPES)
     subject = random.choice(SUBJECTS)
     knowledge_point_count = random.randint(1, 2)
     knowledge_points = random.sample(KNOWLEDGE_POINTS, knowledge_point_count)
-    difficulty = random.choice(DIFFICULTIES)
+    seed = random.randint(1, 1000000000)
+    random.seed(seed)
+    difficulty = random.randint(1, 10)
     score = random.choice(SCORES)
     shuffle = False
     questions = random.sample(QUESTIONS, 1)
@@ -106,8 +109,7 @@ def zhuguan():
     SUBJECTS = ["数学"]
     KNOWLEDGE_POINTS = ["四则运算", "三角函数", "线性代数", "微积分"]
 
-    DIFFICULTIES = [1, 2, 3, 4, 5]
-    SCORES = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
+    SCORES = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0, 9.5, 10.0]
     MAIN_CONTENT = [
         "哥德巴赫猜想是一个著名的数学猜想,至今没有人去证明。你想试试吗?",
         "线性代数是数学的一个重要分支,涉及到向量、矩阵等概念。你对这方面有什么了解吗?",
@@ -135,7 +137,9 @@ def zhuguan():
     question_type = random.choice(QUESTION_TYPES)
     subject = random.choice(SUBJECTS)
     knowledge_points = random.sample(KNOWLEDGE_POINTS, random.choice([1, 2, 3, 4]))
-    difficulty = random.choice(DIFFICULTIES)
+    seed = random.randint(1, 1000000000)
+    random.seed(seed)
+    difficulty = random.randint(1, 10)
     score = random.choice(SCORES)
     main_content = random.choice(MAIN_CONTENT)
     question = random.choice(QUESTIONS)
@@ -169,5 +173,13 @@ for i in range(c):
     result.append(tiankong())
 for i in range(d):
     result.append(zhuguan())
-with open("result.json", "w",encoding='utf-8') as f:
+with open("result.json", "w", encoding='utf-8') as f:
     json.dump(result, f, ensure_ascii=False, indent=4)
+# dic = {}
+# for i in result:
+#     data = i['difficulty']
+#     if data in dic:
+#         dic[data] += 1
+#     else:
+#         dic[data] = 1
+# print(dic)
