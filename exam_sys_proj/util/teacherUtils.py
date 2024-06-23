@@ -391,6 +391,7 @@ class TeacherUtils:
         # 分析试卷
 
         # 输出
+        print(questions_dict)
 
         return {"status_code": 200,
                 "message": "组卷成功",
@@ -598,22 +599,31 @@ class TeacherUtils:
         return [result_list, kp_list_result]
 
     @staticmethod
-    def _analysis_paper(paper, diff_list, type_list, source_dict):
+    def _analysis_paper(paper, diff_list, type_list, kp_list):
+        """
+        输入存储的试卷dict，难度组成的列表，类型组成的列表，知识点组成的列表\n
+        输出文本分析和提取后的详细数据
+        :param paper:
+        :param diff_list:
+        :param type_list:
+        :param kp_list:
+        :return:
+        """
+        # 获取总分
         sum_score = sum(paper["score"])
-        type_score_dict = dict()
-        type_score_ratio_dict = dict()
-        n = 0
-        for type in type_list:
-            type_score_dict[type] = paper["score"][n]
-            type_score_ratio_dict[type] = paper["score"][n] / sum_score
-            n += 1
-        ave_diff = sum(diff_list) / len(diff_list)
-        diff_coe_dict = dict()
+        # 构建每道大题分数的字典，并分析分数占比
+        score_dict = dict()
+        score_text = f"本试卷总分：{sum_score}分,其中"
+        for i in range(len(type_list)):
+            score_dict[type_list[i]] = list()
+            score_dict[type_list[i]].append(paper["score"][i])
+            score_text += f"{type_list[i]}一共{paper['score'][i]}分,"
+            score_dict[type_list[i]].append(paper["score"][i]/sum_score)
+            score_text += f'占比{round(paper["score"][i]/sum_score*100, 2)}%;'
 
-        for _ in set(diff_list):
-            diff_coe_dict[_] = 0
-        for diff in diff_list:
-            diff_coe_dict[diff] += 1
+
+
+
 
     @staticmethod
     def _markdown_to_word(md_text, output_path):
