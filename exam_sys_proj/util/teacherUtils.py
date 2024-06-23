@@ -390,13 +390,13 @@ class TeacherUtils:
                     "content": None}
 
         # 分析试卷
-
+        analysis_text = cls._analysis_paper(stored_paper_dict, result[2], questions_type_list, None)
         # 输出
-        print(questions_dict)
+        # print(questions_dict)
 
         return {"status_code": 200,
                 "message": "组卷成功",
-                "content": [result[0], stored_paper_dict, None, result[1]]}
+                "content": [result[0], stored_paper_dict, analysis_text, result[1]]}
 
     @classmethod
     def querySubjectQuestionsViaUID(cls, db_util, userID, entity: HomeworkOrExamPool):
@@ -611,20 +611,28 @@ class TeacherUtils:
         :return:
         """
         # 获取总分
-        sum_score = sum(paper["score"])
+        sum_score = 0
+        for _ in paper["score"]:
+            for __ in _:
+                for ___ in __:
+                    sum_score += ___
         # 构建每道大题分数的字典，并分析分数占比
         score_dict = dict()
         score_text = f"本试卷总分：{sum_score}分,其中"
         for i in range(len(type_list)):
+            s = 0
             score_dict[type_list[i]] = list()
-            score_dict[type_list[i]].append(paper["score"][i])
-            score_text += f"{type_list[i]}一共{paper['score'][i]}分,"
-            score_dict[type_list[i]].append(paper["score"][i]/sum_score)
-            score_text += f'占比{round(paper["score"][i]/sum_score*100, 2)}%;'
+            for j in paper["score"][i]:
+                for k in j:
+                    s += k
+            score_dict[type_list[i]].append(s)
+            score_text += f"{type_list[i]}一共{s}分,"
+            score_dict[type_list[i]].append(s/sum_score)
+            score_text += f'占比{round(s/sum_score*100, 2)}%;'
         score_text += "\n"
 
         # 获取平均难度
-        ave_diff = sum(diff_list)/len(diff_list)
+        ave_diff = round(sum(diff_list)/len(diff_list), 2)
         # 分析难度占比
         diff_text = f"该试卷平均难度为{ave_diff},"
         if 4 < ave_diff < 6:
@@ -640,8 +648,8 @@ class TeacherUtils:
         diff_text += "\n"
 
         # 分析知识点情况
-        
 
+        return score_text + diff_text
 
 
     @staticmethod
