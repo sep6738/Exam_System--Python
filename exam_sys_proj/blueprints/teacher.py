@@ -232,6 +232,8 @@ def question_create_api():
             question['shuffle'] = False
         question['subject'] = data['subject']
         question['difficulty'] = int(data['difficulty'])
+    if not question['knowledge_point']:
+        question['knowledge_point'].append('其它')
     print(question)
     TeacherUtils.insertOneQuestion(dbPool, question)
     return jsonify({'message': 'Data received successfully'})
