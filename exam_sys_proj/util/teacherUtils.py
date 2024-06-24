@@ -457,7 +457,6 @@ class TeacherUtils:
             return "error"
 
 
-
     @classmethod
     def querySubjectQuestionsViaUID(cls, db_util, userID, entity: HomeworkOrExamPool):
         """
