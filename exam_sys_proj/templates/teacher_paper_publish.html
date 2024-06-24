@@ -1,142 +1,70 @@
 {% extends "teacher_base.html" %}
 
 {% block body %}
-    <form class="layui-form layui-form-pane" action="">
-        <div class="layui-form-item">
-            <label class="layui-form-label">试卷标题</label>
-            <div class="layui-input-block">
-                <input type="text" name="title" autocomplete="off" value="{{ knowledge_points[0].subject }}试卷"
-                       class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">试卷类型</label>
-            <div class="layui-input-block">
-                <input type="text" name="type" autocomplete="off" value="考试" class="layui-input">
-            </div>
-        </div>
-
-        <div class="layui-form-item">
-            <label class="layui-form-label">学科</label>
-            <div class="layui-input-block">
-                <input type="text" name="subject" readonly autocomplete="off" value="{{ knowledge_points[0].subject }}"
-                       class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <h4>难度比例</h4>
-            <div class="layui-input-inline" style="width: 150px;">
-                <label class="layui-form-label">简单(1~3)</label>
-                <div class="layui-col-xs6">
-                    <input type="number" lay-affix="number" lay-precision=0 value="5" step="1" max="10" min="1"
-                           class="layui-input" name="overall_difficulty_easy">
-                </div>
-            </div>
-            <div class="layui-input-inline" style="width: 150px;">
-                <label class="layui-form-label">普通(4~7)</label>
-                <div class="layui-col-xs6">
-                    <input type="number" lay-affix="number" lay-precision=0 value="5" step="1" max="10" min="1"
-                           class="layui-input" name="overall_difficulty_normal">
-                </div>
-            </div>
-            <div class="layui-input-inline" style="width: 150px;">
-                <label class="layui-form-label">困难(8~10)</label>
-                <div class="layui-col-xs6">
-                    <input type="number" lay-affix="number" lay-precision=0 value="5" step="1" max="10" min="1"
-                           class="layui-input" name="overall_difficulty_hard">
-                </div>
-            </div>
-        </div>
-
-        <div class="layui-collapse">
-            <p>试题设置</p>
-
-
-
-            {% for question_type in question_types %}
-                <div class="layui-colla-item">
-                    <div class="layui-colla-title">{{ question_type }}</div>
-                    <div class="layui-colla-content">
-                        {% if question_type!="主观题" %}
-                            <p>设置为0表示使用题目在题库中设置的分数</p>
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">每题分数</label>
-                                <div class="layui-col-xs6">
-                                    <input type="number" lay-affix="number" value="0" step="0.5" max="10" min="0"
-                                           class="layui-input" name="{{ question_type }}_score_per_question"
-                                           lay-precision=1>
-                                </div>
-                            </div>
-
-                        {% endif %}
-                        <div class="layui-form-item">
-                            <div class="layui-inline">
-                                <label class="layui-form-label">难度范围</label>
-                                <div class="layui-input-inline" style="width: 100px;">
-                                    <input type="number" lay-affix="number" lay-precision=0 step="1" max="10" min="1"
-                                           name="{{ question_type }}_difficulty_min" value="1" autocomplete="off"
-                                           class="layui-input">
-                                </div>
-                                <div class="layui-form-mid">-</div>
-                                <div class="layui-input-inline" style="width: 100px;">
-                                    <input type="number" lay-affix="number" lay-precision=0 step="1" max="10" min="1"
-                                           name="{{ question_type }}_difficulty_max" value="10" autocomplete="off"
-                                           class="layui-input">
-                                </div>
-                            </div>
-                        </div>
-                        <h5>题目数量</h5>
-                        {% for knowledge_point in knowledge_points %}
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">{{ knowledge_point.kpName }}</label>
-                                <div class="layui-input-block">
-                                    <div class="layui-input-inline" style="width: 100px;">
-                                        <input type="number" lay-affix="number" lay-precision=0 step="1" max="10"
-                                               min="0"
-                                               name="{{ question_type }}_{{ knowledge_point.kpName }}" value="0"
-                                               autocomplete="off"
-                                               class="layui-input">
-                                    </div>
-                                </div>
-                            </div>
+    <div class="layui-container">
+        <form class="layui-form" action="/teacher/paper_publish" method="post">
+            <div class="layui-form-item">
+                <label class="layui-form-label">选择试卷</label>
+                <div class="layui-input-block">
+                    <select name="examID" required lay-verify="required">
+                        <option value=""></option>
+                        {% for paper in papers %}
+                            <option value="{{ paper.hepID }}">{{ paper.title }}</option>
                         {% endfor %}
-                    </div>
-
+                    </select>
                 </div>
-            {% endfor %}
-        </div>
-
-        <div class="layui-form-item">
-            <h4>是否按照从易到难顺序排序</h4>
-            <div class="layui-input-block" style="margin-left: 0px">
-                <input type="checkbox" checked name="shuffle" lay-skin="switch" lay-filter="switchTest"
-                       title="打乱|不打乱">
             </div>
-        </div>
-        <div class="layui-form-item">
-            <button class="layui-btn" lay-submit lay-filter="paper">确认</button>
-            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-        </div>
-    </form>
-
+            <div class="layui-form-item">
+                <label class="layui-form-label">选择班级</label>
+                <div class="layui-input-block">
+                    <select name="courseID" required lay-verify="required">
+                        <option value=""></option>
+                        {% for course in courses %}
+                            <option value="{{ course.courseID }}">{{ course.courseName }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">发布时间</label>
+                <div class="layui-input-block">
+                    <input type="datetime-local" name="publishTime" required lay-verify="required"
+                           placeholder="请输入发布时间" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">截止时间</label>
+                <div class="layui-input-block">
+                    <input type="datetime-local" name="deadline" required lay-verify="required"
+                           placeholder="请输入截止时间" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">考试时长(分钟)</label>
+                <div class="layui-input-block">
+                    <input type="number" name="duration" required lay-verify="required" placeholder="请输入考试时长"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="formDemo" onclick="success()">发布</button>
+                </div>
+            </div>
+        </form>
+    </div>
 
     <script>
-        layui.use(['form'], function () {
+        layui.use('form', function () {
             var form = layui.form;
-            var layer = layui.layer;
-            // 提交事件
-            form.on('submit(paper)', function (data) {
-                var field = data.field; // 获取表单字段值
-                // 显示填写结果，仅作演示用
-                var xhr = new XMLHttpRequest();
-                xhr.open('POST', '/teacher/paper_create', true);
-                xhr.setRequestHeader('Content-Type', 'application/json');
-                xhr.send(JSON.stringify(field));
-                layer.alert(JSON.stringify(field), {
-                    title: '当前填写的字段值'
+            form.on('submit(formDemo)', function (data) {
+                layer.msg('发布成功', {
+                    icon: 1,
+                    time: 2000,
                 });
-                return false; // 阻止默认 form 跳转
+                return false;
             });
         });
+
     </script>
 {% endblock %}

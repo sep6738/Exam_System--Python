@@ -16,6 +16,7 @@ from ..dao.StudentCourseDAO import StudentCourseDAO
 from ..dao.StudentHandInDAO import StudentHandInDAO
 from ..dao.TeacherCourseDAO import TeacherCourseDAO
 from ..orm.StudentHandIn import StudentHandIn
+from ..util.StudentHandinUtils import StudentHandinUtils
 
 # from ..dao.studentCourseDAO import studentCourseDAO
 
@@ -99,6 +100,7 @@ def paper_create(subject):
             for knowledge_point in knowledge_points:
                 paper[question_type]["amount_per_knowledge_point"][knowledge_point.kpName] = data[
                     question_type + "_" + knowledge_point.kpName]
+    # TODO:传入Content
     print(paper)
     return 'Data received successfully'
 
@@ -118,24 +120,29 @@ def select_subject():
             return "没有学科！"
 
 
+@bp.route('/exam_list')
+def exam_list():
+    return render_template('student_exam.html')
+
+
 @bp.route('/get_papers')
-def get_paper_details():
-    student_hand_in_dao = StudentHandInDAO(dbPool)
+def get_papers():
     student_id = session.get("user_id")
-    papers: list[StudentHandIn] = student_hand_in_dao.query(student_id, 'userID', True)
+    # papers: list[StudentHandIn] = student_hand_in_dao.query(student_id, 'userID', True)
+    papers = StudentHandinUtils.get_user_test(dbPool, student_id)
+    print(papers)
+    # paper_details = []
+    # for paper in papers:
+    #     paper_detail = {
+    #         'paperID': paper.studentHandInID,
+    #         'title': paper.content,
+    #         'subject': paper,
+    #         'score': paper.score
+    #         # 'completed': paper.completed
+    #     }
+    #     paper_details.append(paper_detail)
 
-    paper_details = []
-    for paper in papers:
-        paper_detail = {
-            'paperID': paper.studentHandInID,
-            'title': paper.content,
-            'subject': paper,
-            'score': paper.score
-            # 'completed': paper.completed
-        }
-        paper_details.append(paper_detail)
-
-    return jsonify({'code': 0, 'data': paper_details})
+    return jsonify({'code': 0, 'data': papers})
 
 
 @bp.route('/view_paper', methods=['POST'])
