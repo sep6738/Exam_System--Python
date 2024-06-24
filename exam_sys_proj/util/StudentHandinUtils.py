@@ -195,7 +195,7 @@ class StudentHandinUtils:
     @classmethod
     def get_course_test(cls, db_util, courseID: int):
         '''
-        班级发布所有试卷的情况，返回userID,studentHandInID,score(控制返回None),content(0/1)
+        班级发布所有试卷的情况，返回userID,studentHandInID,score(空则返回None),content(0/1)
         {'userID': 778, 'studentHandInID': 2, 'score': None, 'content': 1}
         :param db_util:
         :param courseID:

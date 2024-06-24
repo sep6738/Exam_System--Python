@@ -14,6 +14,7 @@ from ..dao.HomeworkOrExamPoolDAO import HomeworkOrExamPoolDAO
 from ..dao.StudentCourseDAO import StudentCourseDAO
 from ..dao.TeacherCourseDAO import TeacherCourseDAO
 from ..util.HomeworkOrExamUtils import HomeworkOrExamUtils
+from ..util.StudentHandinUtils import StudentHandinUtils
 from ..util.studentcourseUtils import StudentCourseUtils
 from ..util.teachercourseUtils import TeacherCourseUtils
 
@@ -46,14 +47,28 @@ def detail():
     return render_template("teacher_detail.html", broadcasts=broadcasts)
 
 
+@bp.route("/exam_manage")
+def exam_manage():
+    teacher_operator = TeacherCourseDAO(dbPool)
+    courses = teacher_operator.query(session.get("user_id"), "userID", True)
+    courses_data = []
+    for course in courses:
+        temp = {}
+        temp['courseName'] = course.courseName
+        exams = StudentHandinUtils.get_course_test(dbPool, course.courseID)
+        temp['exams'] = json.loads(exams)
+        courses_data.append(temp)
+
+    data = {'courses': courses_data}
+    return render_template("teacher_exam_manage.html", data=data)
+
+
+
 @bp.route("/student_manage")
 def student_manage():
     teacher_operator = TeacherCourseDAO(dbPool)
-    # print(session.get("user_id"))
     courses = teacher_operator.query(session.get("user_id"), "userID", True)
-    # print(courses[0].courseID)
     data = {'courses': courses}
-    # print(data)
     return render_template("teacher_student_manage.html", data=data)
 
 
