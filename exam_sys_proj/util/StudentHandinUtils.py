@@ -195,14 +195,14 @@ class StudentHandinUtils:
     @classmethod
     def get_course_test(cls, db_util, courseID: int):
         '''
-        班级发布所有试卷的情况，返回userID,studentHandInID,score(空则返回None),content(0/1)
-        {'userID': 778, 'studentHandInID': 2, 'score': None, 'content': 1}
+        班级发布所有试卷的情况，返回userID,studentHandInID,score(控制返回None),content(0/1),userName
+        {'userID': 778, 'studentHandInID': 2, 'score': 93.0, 'content': 1, 'userName': '兰斯洛特·杜·拉克'}
         :param db_util:
         :param courseID:
         :return:
         '''
         try:
-            query = f"SELECT shi.userID,shi.studentHandInID,shi.score,shi.content FROM student_hand_in shi,homework_or_exam hp WHERE shi.homeworkExamID=hp.heID and hp.courseID=%s"
+            query = f"SELECT shi.userID,shi.studentHandInID,shi.score,shi.content,user.userName FROM student_hand_in shi,homework_or_exam hp,users user WHERE shi.homeworkExamID=hp.heID and hp.courseID=%s and user.userID = shi.userID"
             conn = db_util.get_connection()
             try:
                 with conn.cursor() as cursor:
@@ -216,11 +216,12 @@ class StudentHandinUtils:
                     dic = dict()
                     dic['userID'] = item[0]
                     dic['studentHandInID'] = item[1]
-                    dic['score'] = item[2]
+                    dic['score'] = float(item[2])
                     if item[3] is not None:
                         dic['content'] = 1
                     else:
                         dic['content'] = 0
+                    dic['userName'] = item[4]
                     result.append(dic)
             return json.dumps(result, ensure_ascii=False)
         except Exception as e:
