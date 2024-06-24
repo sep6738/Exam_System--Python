@@ -135,3 +135,46 @@ class StudentHandinUtils:
         except Exception as e:
             print(e)
             return 'error'
+
+    @classmethod
+    def get_user_test(cls, db_util, userID: int):
+        '''
+        试卷返回title,score,type,paperID,subject
+        自测返回title,score,type,paper
+        :param db_util:
+        :param userID:
+        :return:
+        '''
+        try:
+            query = f"SELECT hp.homeworkExamPoolID,hep.question,hep.courseName,shi.score,hep.type FROM student_hand_in shi,homework_or_exam hp,homework_or_exam_pool hep WHERE shi.homeworkExamID=hp.heID and hp.homeworkExamPoolID=hep.hepID and shi.userID=%s and shi.homeworkExamID != -1"
+            conn = db_util.get_connection()
+            try:
+                with conn.cursor() as cursor:
+                    cursor.execute(query, (userID,))
+                    resultset = cursor.fetchall()
+            finally:
+                conn.close()
+            result = []
+            for item in resultset:
+                dic = dict()
+                dic['paperID'] = item[0]
+                question = json.loads(item[1])
+                dic['title'] = question['main_content']
+                dic['subject'] = item[2]
+                dic['score'] = item[3]
+                dic['type'] = item[4]
+                result.append(dic)
+            studenthandindao = StudentHandInDAO(db_util)
+            query_list = studenthandindao.query(-1, 'homeworkExamID', '1')
+            for item in query_list:
+                dic = dict()
+                dic['type'] = '自测'
+                question = json.loads(getattr(item, 'testPaper'))
+                dic['title'] = question['main_content']
+                dic['score'] = getattr(item, 'score')
+                dic['paper'] = json.dumps(question, ensure_ascii=False)
+                result.append(dic)
+            return json.dumps(result, ensure_ascii=False)
+        except Exception as e:
+            print(e)
+            return 'error'
