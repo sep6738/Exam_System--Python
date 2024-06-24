@@ -142,14 +142,14 @@ class StudentHandinUtils:
     @classmethod
     def get_user_test(cls, db_util, userID: int):
         '''
-        试卷返回title,score,type,paperID,subject,homeworkOrExamID,studentHandIn=-1
-        自测返回title,score,type,paperID=-1,subject=None,paper,homeworkOrExamID,studentHandIn=-1
+        试卷返回title,score,type,paperID,subject,homeworkOrExamID,studentHandIn
+        自测返回title,score,type,paperID=-1,subject=None,paper,homeworkOrExamID=-1,studentHandIn
         :param db_util:
         :param userID:
         :return:
         '''
         try:
-            query = f"SELECT hp.homeworkExamPoolID,hep.question,hep.courseName,shi.score,hep.type,hp.heID FROM student_hand_in shi,homework_or_exam hp,homework_or_exam_pool hep WHERE shi.homeworkExamID=hp.heID and hp.homeworkExamPoolID=hep.hepID and shi.userID=%s and shi.homeworkExamID != -1"
+            query = f"SELECT hp.homeworkExamPoolID,hep.question,hep.courseName,shi.score,hep.type,hp.heID,shi.studentHandInID FROM student_hand_in shi,homework_or_exam hp,homework_or_exam_pool hep WHERE shi.homeworkExamID=hp.heID and hp.homeworkExamPoolID=hep.hepID and shi.userID=%s and shi.homeworkExamID != -1"
             conn = db_util.get_connection()
             try:
                 with conn.cursor() as cursor:
@@ -167,7 +167,7 @@ class StudentHandinUtils:
                 dic['score'] = item[3]
                 dic['type'] = item[4]
                 dic['homeworkOrExamID'] = item[5]
-                dic['studentHandIn'] = -1
+                dic['studentHandIn'] = item[6]
                 result.append(dic)
             studenthandindao = StudentHandInDAO(db_util)
             query_list = studenthandindao.query(-1, 'homeworkExamID', '1')
