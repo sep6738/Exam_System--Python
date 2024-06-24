@@ -404,6 +404,13 @@ class TeacherUtils:
 
     @classmethod
     def getPaperForShow(cls, studentHandInID: int, db_util):
+        """
+        传入studentHandInID
+        返回一个存有完整试卷数据的dict
+        :param studentHandInID:
+        :param db_util:
+        :return:
+        """
         try:
             homeworkOrExamPoolDAO = HomeworkOrExamPoolDAO(db_util)
             sql = f'select question,courseName,difficultyLevel,duringTime from homework_or_exam_pool,homework_or_exam,student_hand_in where homework_or_exam.homeworkExamPoolID = homework_or_exam_pool.hepID and homework_or_exam.heID = student_hand_in.homeworkExamID and studentHandInID = {studentHandInID}'
