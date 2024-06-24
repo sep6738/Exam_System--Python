@@ -142,8 +142,8 @@ class StudentHandinUtils:
     @classmethod
     def get_user_test(cls, db_util, userID: int):
         '''
-        试卷返回title,score,type,paperID,subject,homeworkOrExamID,studentHandIn
-        自测返回title,score,type,paperID=-1,subject=None,paper,homeworkOrExamID=-1,studentHandIn
+        试卷返回title,score,type,paperID,subject,homeworkOrExamID,studentHandInID
+        自测返回title,score,type,paperID=-1,subject=None,paper,homeworkOrExamID=-1,studentHandInID
         :param db_util:
         :param userID:
         :return:
@@ -167,7 +167,7 @@ class StudentHandinUtils:
                 dic['score'] = item[3]
                 dic['type'] = item[4]
                 dic['homeworkOrExamID'] = item[5]
-                dic['studentHandIn'] = item[6]
+                dic['studentHandInID'] = item[6]
                 result.append(dic)
             studenthandindao = StudentHandInDAO(db_util)
             query_list = studenthandindao.query(-1, 'homeworkExamID', '1')
@@ -182,7 +182,7 @@ class StudentHandinUtils:
                     dic['paper'] = json.dumps(question, ensure_ascii=False)
                     dic['paperID'] = -1
                     dic['subject'] = None
-                    dic['studentHandIn'] = item.studentHandInID
+                    dic['studentHandInID'] = item.studentHandInID
                     dic['homeworkOrExamID'] = -1
                     result.append(dic)
             return json.dumps(result, ensure_ascii=False)
