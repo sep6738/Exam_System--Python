@@ -69,9 +69,10 @@ class StudentHandinUtils:
 
     # 以下为自测试卷
     @classmethod
-    def insert_self_exam(cls, db_util, test_paper: dict, answer_list: list, userid: int):
+    def insert_self_exam(cls, db_util, test: list, userid: int):
         '''
         传入试卷的内容和答案，以及用户id，往student_hand_in表里面创建试卷，返回主键值
+        :param test:
         :param db_util:
         :param test_paper:
         :param answer_list:
@@ -79,6 +80,8 @@ class StudentHandinUtils:
         :return:
         '''
         try:
+            test_paper = json.loads(test[0])
+            answer_list = test[3]
             test_paper['answer'] = answer_list
             dao = StudentHandInDAO(db_util)
             entity = StudentHandIn()
@@ -140,7 +143,7 @@ class StudentHandinUtils:
     def get_user_test(cls, db_util, userID: int):
         '''
         试卷返回title,score,type,paperID,subject
-        自测返回title,score,type,paper
+        自测返回title,score,type,paperID=-1,subject=None,paper
         :param db_util:
         :param userID:
         :return:
@@ -166,14 +169,18 @@ class StudentHandinUtils:
                 result.append(dic)
             studenthandindao = StudentHandInDAO(db_util)
             query_list = studenthandindao.query(-1, 'homeworkExamID', '1')
-            for item in query_list:
-                dic = dict()
-                dic['type'] = '自测'
-                question = json.loads(getattr(item, 'testPaper'))
-                dic['title'] = question['main_content']
-                dic['score'] = getattr(item, 'score')
-                dic['paper'] = json.dumps(question, ensure_ascii=False)
-                result.append(dic)
+
+            if query_list is not None:
+                for item in query_list:
+                    dic = dict()
+                    dic['type'] = '自测'
+                    question = json.loads(getattr(item, 'testPaper'))
+                    dic['title'] = question['main_content']
+                    dic['score'] = getattr(item, 'score')
+                    dic['paper'] = json.dumps(question, ensure_ascii=False)
+                    dic['paperID'] = -1
+                    dic['subject'] = None
+                    result.append(dic)
             return json.dumps(result, ensure_ascii=False)
         except Exception as e:
             print(e)
