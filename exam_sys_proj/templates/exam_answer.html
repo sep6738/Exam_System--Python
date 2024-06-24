@@ -16,15 +16,66 @@
         .question-content {
             margin-bottom: 10px;
         }
+        .header {
+            width: 100%;
+            height: 3vw;
+            font-size: 1.2vw;
+            font-weight: bold;
+            color: white;
+
+            position: fixed;
+            left: 0;
+            top: 0;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #1e9efd;
+            flex-direction: row;
+
+            z-index: 99;
+        }
     </style>
 </head>
 <body>
 <div class="layui-container">
     <div class="layui-row">
         <div class="layui-col-md12">
+            <div class="header">
+                <div>剩余时间：</div>
+                <div id="timer">{{ paper["time"] }}</div>
+                <script>
+        const timerDiv = document.getElementById('timer');
+        let initialTime = parseInt(timerDiv.textContent, 10);
+        let duration = initialTime * 60;
+        function startTimer(duration, display) {
+            let timer = duration, minutes, seconds;
+            const interval = setInterval(function () {
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = minutes + ":" + seconds;
+
+                if (--timer < 0) {
+                    clearInterval(interval);
+                    submitAnswers();
+                }
+            }, 1000);
+        }
+        // Start the timer
+        window.onload = function () {
+            startTimer(duration, timerDiv);
+        };
+    </script>
+            </div>
+            <div style="height: 1px;width: 100%;margin-top: 3vw"></div>
             <h1 class="layui-text-center">{{ paper["main_content"] }}</h1>
             <div id="questions"></div>
-            <button class="layui-btn layui-btn-normal" onclick="submitAnswers()">提交答案</button>
+            <button class="layui-btn layui-btn-normal" onclick="submitAnswers()" style="transform: scale(1.5);margin-left: 1.5vw;margin-top: 1.2vw">提交答案</button>
+
         </div>
     </div>
 </div>
