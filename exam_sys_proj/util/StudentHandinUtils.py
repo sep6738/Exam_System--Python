@@ -185,3 +185,35 @@ class StudentHandinUtils:
         except Exception as e:
             print(e)
             return 'error'
+
+    @classmethod
+    def get_course_test(cls, db_util, courseID: int):
+        '''
+        班级历史试卷返回paperID,title,subject,type,result(json)
+        :param db_util:
+        :param courseID:
+        :return:
+        '''
+        try:
+            query = f"SELECT hp.homeworkExamPoolID,hep.question,hep.courseName,hep.type,hp.result FROM homework_or_exam hp,homework_or_exam_pool hep WHERE hp.homeworkExamPoolID=hep.hepID and hp.courseID=%s"
+            conn = db_util.get_connection()
+            try:
+                with conn.cursor() as cursor:
+                    cursor.execute(query, (courseID,))
+                    resultset = cursor.fetchall()
+            finally:
+                conn.close()
+            result = []
+            for item in resultset:
+                dic = dict()
+                dic['paperID'] = item[0]
+                question = json.loads(item[1])
+                dic['title'] = question['main_content']
+                dic['subject'] = item[2]
+                dic['type'] = item[3]
+                dic['result'] = item[4]
+                result.append(dic)
+            return json.dumps(result, ensure_ascii=False)
+        except Exception as e:
+            print(e)
+            return 'error'
