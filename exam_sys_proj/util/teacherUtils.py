@@ -413,7 +413,7 @@ class TeacherUtils:
         """
         try:
             homeworkOrExamPoolDAO = HomeworkOrExamPoolDAO(db_util)
-            sql = f'select question,courseName,difficultyLevel,duringTime from homework_or_exam_pool,homework_or_exam,student_hand_in where homework_or_exam.homeworkExamPoolID = homework_or_exam_pool.hepID and homework_or_exam.heID = student_hand_in.homeworkExamID and studentHandInID = {studentHandInID}'
+            sql = f'select question,courseName,difficultyLevel,duringTime,content from homework_or_exam_pool,homework_or_exam,student_hand_in where homework_or_exam.homeworkExamPoolID = homework_or_exam_pool.hepID and homework_or_exam.heID = student_hand_in.homeworkExamID and studentHandInID = {studentHandInID}'
 
             result = homeworkOrExamPoolDAO.execute_query(query=sql)
             if result:
@@ -422,6 +422,7 @@ class TeacherUtils:
                 result_list[0]["answer"] = result_list[1]
                 result_list[0]["diff"] = result[0][2]
                 result_list[0]["time"] = result[0][3]
+                result_list[0]["studentContent"] = result[0][4]
                 return result_list[0]
             else:
                 return None
