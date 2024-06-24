@@ -1,187 +1,120 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>考试答题界面</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>考试答题</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='layui/css/layui.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/teacher.css') }}">
+    <script type="text/javascript" src="{{ url_for('static', filename='jquery/jquery.js') }}" charset="utf-8"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='layui/layui.js') }}" charset="utf-8"></script>
     <style>
-        .remaining-time-primary {
-            color: var(--bs-primary);
+        .question-section {
+            margin-bottom: 20px;
         }
 
-        .remaining-time-danger {
-            color: var(--bs-danger);
+        .question-content {
+            margin-bottom: 10px;
         }
     </style>
 </head>
-
 <body>
-
-<div class="container-lg" id="app">
-    <header>
-        <div class="d-flex justify-content-between">
-            <p></p>
-            <h1>考试系统</h1>
-            <! --这里的时间最好需要和服务端的同步，剩余时间大于30分钟时显示为蓝色，小于30分钟时显示为红色 -->
-            <p :class="remainingTimeInSeconds > 30 * 60 ? 'remaining-time-primary' : 'remaining-time-danger'">
-                剩余时间：{{ remainingTime }}</p>
+<div class="layui-container">
+    <div class="layui-row">
+        <div class="layui-col-md12">
+            <h1 class="layui-text-center">{{ paper["main_content"] }}</h1>
+            <div id="questions"></div>
+            <button class="layui-btn layui-btn-normal" onclick="submitAnswers()">提交答案</button>
         </div>
-    </header>
-    <form @submit.prevent="submitAnswers">
-        <div v-for="(question, index) in questions" :key="index" class="card mb-4">
-            <div class="card-body">
-                <div class="mb-2">
-                    <label class="form-label"><strong>{{ index + 1 }}. {{ question.main_content }}</strong></label>
-                </div>
-                <div v-if="question.type === '选择题'">
-                    <div v-for="(option, idx) in question.questions" :key="idx" class="form-check">
-                        <input class="form-check-input" type="radio" :name="'question-' + index"
-                               :id="'option-' + index + '-' + idx" :value="idx" v-model="answers[index]">
-                        <label class="form-check-label" :for="'option-' + index + '-' + idx">
-                            {{ option }}
-                        </label>
-                    </div>
-                </div>
-                <div v-else-if="question.type === '判断题'">
-                    <div v-for="(option, idx) in question.questions" :key="idx" class="form-check">
-                        <input class="form-check-input" type="radio" :name="'question-' + index"
-                               :id="'option-' + index + '-' + idx" :value="idx" v-model="answers[index]">
-                        <label class="form-check-label" :for="'option-' + index + '-' + idx">
-                            {{ option }}
-                        </label>
-                    </div>
-                </div>
-                <div v-else-if="question.type === '填空题'">
-                    <input type="text" class="form-control" v-model="answers[index]" placeholder="请输入答案">
-                </div>
-                <div v-else-if="question.type === '主观题'">
-                    <div v-for="(q, idx) in question.questions" :key="idx" class="mb-3">
-                        <label class="form-label">{{ idx + 1 }}. {{ q }}</label>
-                        <textarea class="form-control" v-model="answers[index][idx]" rows="3"></textarea>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <button type="submit" class="btn btn-primary">提交答案</button>
-    </form>
+    </div>
 </div>
 
-<script type="importmap">
-    {
-      "imports": {
-        "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
-      }
-}
-</script>
-<script type="module">
-    import {createApp, ref, onMounted} from 'vue';
+<script src="https://cdn.jsdelivr.net/npm/layui@2.5.7/dist/layui.all.js"></script>
+<script>
+    var paper = {{ paper|safe }};
+    var answers = [];
 
-    async function getExamQuestions() {
-        // TODO: 需要替换为真实的试题数据逻辑
-        // sampleQuestions 真实情况下需要从服务器某个接口获取，可以通过 fetch 或 axios 等方式
-        // const response = await fetch('https://api.example.com/exam/questions');
-        // const sampleQuestions = await response.json();
-        // 模拟从服务器获取试题数据
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        const sampleQuestions = [
-            {
-                "main_content": "1+1=?",
-                "questions": [
-
-                    "等于1",
-                    "等于2",
-                    "等于3",
-                    "其他选项都不对"
-
-                ],
-                "type": "选择题",
-                "score": [5]
-            },
-            {
-                "main_content": "1+1=2",
-                "questions": [
-                    "√",
-                    "X"
-                ],
-                "type": "判断题",
-                "score": [3]
-            },
-            {
-                "main_content": "1+1=__",
-                "questions": "",
-                "type": "填空题",
-                "score": [10]
-            },
-            {
-                "main_content": "在数学中，通常情况下，1+1等于2。但在某些特定的情况下，比如在布尔代数或者某些计算机编程语言中，1+1可以等于1。这是因为在布尔代数中，1代表真（true），而当你有两个真值相加时，结果仍然是真。在这种情况下，加法类似于逻辑上的“或”操作。",
-                "questions": [
-                    "给出1+1等于1的具体例子",
-                    "在什么时候1+1等于2？"
-                ],
-                "type": "主观题",
-                "score": [5, 10]
+    // 渲染试题
+    function renderQuestions() {
+        var questionsDiv = document.getElementById('questions');
+        paper.questions.forEach((question, index) => {
+            if (typeof question === 'string') {
+                let section = document.createElement('div');
+                section.className = 'question-section';
+                section.innerHTML = `<h2>${question}</h2>`;
+                questionsDiv.appendChild(section);
+            } else {
+                let questionDiv = document.createElement('div');
+                questionDiv.className = 'question-content';
+                questionDiv.innerHTML = `
+                    <p>${question.main_content}</p>
+                    ${renderOptions(question, index)}
+                `;
+                questionsDiv.appendChild(questionDiv);
             }
-        ];
-        return sampleQuestions;
+        });
     }
 
-    function convertSecondsToHunmanReadableTime(seconds) {
-        const hours = Math.floor(seconds / 3600);
-        const minutes = Math.floor((seconds % 3600) / 60);
-        const remainingSeconds = seconds % 60;
-        return `${hours}小时${minutes}分钟${remainingSeconds}秒`;
-    }
-
-    createApp({
-        setup() {
-            const questions = ref([]);
-            const answers = ref([]);
-            const remainingTimeInSeconds = ref(60 * 60 * 2);
-            const remainingTime = ref('2小时0分钟0秒');
-            setInterval(() => {
-                remainingTimeInSeconds.value -= 1;
-                remainingTime.value = convertSecondsToHunmanReadableTime(remainingTimeInSeconds.value);
-            }, 1000);
-            onMounted(async () => {
-                const data = await getExamQuestions();
-                console.log(`getExamQuestions data: ${JSON.stringify(data)}`);
-                questions.value = data;
-                for (const question of data) {
-                    if (question.type === '选择题' || question.type === '判断题' || question.type === '填空题') {
-                        answers.value.push('');
-                    } else if (question.type === '主观题') {
-                        answers.value.push([]);
-                    }
-                }
-            })
-
-            const submitAnswers = async () => {
-                // TODO: 需要替换为真实的提交答案逻辑
-                // 模拟提交答案，实际情况下需要将 answers 通过 fetch 或 axios 发送到服务器
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                console.log(answers.value);
-                // const response = await fetch('https://api.example.com/exam/answers', {
-                //   method: 'POST',
-                //   headers: {
-                //     'Content-Type': 'application/json'
-                //   },
-                //   body: JSON.stringify(answers.value)
-                // });
-                // const result = await response.json();
-                alert('提交成功');
-            }
-            return {
-                questions,
-                answers,
-                submitAnswers,
-                remainingTimeInSeconds,
-                remainingTime
-            }
+    // 渲染选项
+    function renderOptions(question, index) {
+        let optionsHtml = '';
+        if (question.type === '选择题' || question.type === '判断题') {
+            question.questions.forEach((option, optionIndex) => {
+                optionsHtml += `
+                    <input type="radio" name="question_${index}" value="${option}">
+                    <label>${option}</label>
+                `;
+            });
+        } else if (question.type === '填空题') {
+            optionsHtml = `<input type="text" name="question_${index}" class="layui-input">`;
+        } else if (question.type === '主观题') {
+            optionsHtml = `<textarea name="question_${index}" class="layui-textarea"></textarea>`;
         }
-    }).mount('#app')
+        return optionsHtml;
+    }
+
+    // 提交答案
+    function submitAnswers() {
+        let formData = new FormData(document.forms[0]);
+        paper.questions.forEach((question, index) => {
+            if (typeof question !== 'string') {
+                let selectedOptionIndex;
+                if (question.type === '选择题' || question.type === '判断题') {
+                    const options = document.querySelectorAll(`input[name="question_${index}"]`);
+                    options.forEach((option, idx) => {
+                        if (option.checked) {
+                            selectedOptionIndex = idx + 1; // 索引加1，因为用户更习惯从1开始计数
+                        }
+                    });
+                    answers.push(selectedOptionIndex || ''); // 如果没有选择，则推入空字符串
+                } else { // 填空题或主观题
+                    let answerElement = document.querySelector(`[name="question_${index}"]`);
+                    let answer = answerElement ? answerElement.value : ''; // 获取答案或为空字符串
+                    answers.push(answer);
+            }
+            }
+        });
+        answers.push({{ paper_id }})
+        console.log(answers);
+        // 发送答案到后端
+        fetch('/student/submit_answers', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({answers: answers})
+        }).then(response => response.json())
+            .then(data => {
+                console.log(data);
+                alert('答案提交成功！');
+            }).catch(error => {
+            console.error('Error:', error);
+            alert('答案提交失败！');
+        });
+    }
+
+    // 初始化渲染
+    renderQuestions();
 </script>
 </body>
-
 </html>
