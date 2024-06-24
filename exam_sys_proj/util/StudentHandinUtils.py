@@ -1,6 +1,8 @@
 import json
 
+from exam_sys_proj.dao.HomeworkOrExamPoolDAO import HomeworkOrExamPoolDAO
 from exam_sys_proj.dao.StudentHandInDAO import StudentHandInDAO
+from exam_sys_proj.orm.HomeworkOrExamPool import HomeworkOrExamPool
 from exam_sys_proj.orm.StudentHandIn import StudentHandIn
 
 
@@ -193,13 +195,14 @@ class StudentHandinUtils:
     @classmethod
     def get_course_test(cls, db_util, courseID: int):
         '''
-        班级历史试卷返回paperID,title,subject,type,result(json)
+        班级发布所有试卷的情况，返回userID,studentHandInID,score(控制返回None),content(0/1)
+        {'userID': 778, 'studentHandInID': 2, 'score': None, 'content': 1}
         :param db_util:
         :param courseID:
         :return:
         '''
         try:
-            query = f"SELECT hp.homeworkExamPoolID,hep.question,hep.courseName,hep.type,hp.result FROM homework_or_exam hp,homework_or_exam_pool hep WHERE hp.homeworkExamPoolID=hep.hepID and hp.courseID=%s"
+            query = f"SELECT shi.userID,shi.studentHandInID,shi.score,shi.content FROM student_hand_in shi,homework_or_exam hp WHERE shi.homeworkExamID=hp.heID and hp.courseID=%s"
             conn = db_util.get_connection()
             try:
                 with conn.cursor() as cursor:
@@ -211,12 +214,13 @@ class StudentHandinUtils:
             if resultset is not None:
                 for item in resultset:
                     dic = dict()
-                    dic['paperID'] = item[0]
-                    question = json.loads(item[1])
-                    dic['title'] = question['main_content']
-                    dic['subject'] = item[2]
-                    dic['type'] = item[3]
-                    dic['result'] = item[4]
+                    dic['userID'] = item[0]
+                    dic['studentHandInID'] = item[1]
+                    dic['score'] = item[2]
+                    if item[3] is not None:
+                        dic['content'] = 1
+                    else:
+                        dic['content'] = 0
                     result.append(dic)
             return json.dumps(result, ensure_ascii=False)
         except Exception as e:
