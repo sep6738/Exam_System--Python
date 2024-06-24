@@ -2,6 +2,8 @@ from ..dao.HomeworkOrExamPoolDAO import HomeworkOrExamPool, HomeworkOrExamPoolDA
 from ..dao.KnowledgePointsDAO import KnowledgePointsDAO, KnowledgePoints
 from ..dao.HepAndKpMediaterDAO import HepAndKpMediater, HepAndKpMediaterDAO
 from ..dao.TeacherCourseDAO import TeacherCourse, TeacherCourseDAO
+from ..dao.StudentHandInDAO import StudentHandInDAO,StudentHandIn
+from ..dao.HomeworkOrExamDAO import HomeworkOrExam,HomeworkOrExamDAO
 from collections import defaultdict
 import markdown2
 from bs4 import BeautifulSoup
@@ -398,6 +400,28 @@ class TeacherUtils:
         return {"status_code": 200,
                 "message": "组卷成功",
                 "content": [result[0], stored_paper_dict, analysis_text, result[1]]}
+
+
+    @classmethod
+    def getPaperForShow(cls, studentHandInID: int, db_util):
+        try:
+            homeworkOrExamPoolDAO = HomeworkOrExamPoolDAO(db_util)
+            sql = f'select question,courseName,difficultyLevel,duringTime from homework_or_exam_pool,homework_or_exam,student_hand_in where homework_or_exam.homeworkExamPoolID = homework_or_exam_pool.hepID and homework_or_exam.heID = student_hand_in.homeworkExamID and studentHandInID = {studentHandInID}'
+
+            result = homeworkOrExamPoolDAO.execute_query(query=sql)
+            if result:
+                result_list = homeworkOrExamPoolDAO.query_whole_paper(json.loads(result[0][0]))
+                result_list[0]["subject"] = result[0][1]
+                result_list[0]["answer"] = result_list[1]
+                result_list[0]["diff"] = result[0][2]
+                result_list[0]["time"] = result[0][3]
+                return result_list[0]
+            else:
+                return None
+        except Exception as e:
+            print(e)
+            return "error"
+
 
 
 
