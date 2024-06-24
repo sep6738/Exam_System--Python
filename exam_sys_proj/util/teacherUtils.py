@@ -399,6 +399,8 @@ class TeacherUtils:
                 "message": "组卷成功",
                 "content": [result[0], stored_paper_dict, analysis_text, result[1]]}
 
+
+
     @classmethod
     def querySubjectQuestionsViaUID(cls, db_util, userID, entity: HomeworkOrExamPool):
         """
@@ -620,7 +622,7 @@ class TeacherUtils:
                     sum_score += ___
         # 构建每道大题分数的字典，并分析分数占比
         score_dict = dict()
-        score_text = f"本试卷总分：{sum_score}分,其中"
+        score_text = f"本试题总分：{sum_score}分,其中"
         for i in range(len(type_list)):
             s = 0
             score_dict[type_list[i]] = list()
@@ -636,7 +638,7 @@ class TeacherUtils:
         # 获取平均难度
         ave_diff = round(sum(diff_list)/len(diff_list), 2)
         # 分析难度占比
-        diff_text = f"该试卷平均难度为{ave_diff},"
+        diff_text = f"该试题平均难度为{ave_diff},"
         if 4 < ave_diff < 6:
             diff_text += "难度适中"
         elif 2 < ave_diff <= 4:

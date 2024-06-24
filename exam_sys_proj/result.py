@@ -48,7 +48,7 @@ def xuanze():
     shuffle = random.choice([True, False])
     questions = random.sample(QUESTIONS, 4)
     main_content = f"{random.randint(10, 50)}*{random.randint(2, 10)}="
-    answer = [str(random.randint(1, 10))]
+    answer = [str(random.randint(1, 4))]
 
     return {
         "type": question_type,
