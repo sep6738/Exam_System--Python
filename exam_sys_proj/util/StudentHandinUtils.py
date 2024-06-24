@@ -204,15 +204,16 @@ class StudentHandinUtils:
             finally:
                 conn.close()
             result = []
-            for item in resultset:
-                dic = dict()
-                dic['paperID'] = item[0]
-                question = json.loads(item[1])
-                dic['title'] = question['main_content']
-                dic['subject'] = item[2]
-                dic['type'] = item[3]
-                dic['result'] = item[4]
-                result.append(dic)
+            if resultset is not None:
+                for item in resultset:
+                    dic = dict()
+                    dic['paperID'] = item[0]
+                    question = json.loads(item[1])
+                    dic['title'] = question['main_content']
+                    dic['subject'] = item[2]
+                    dic['type'] = item[3]
+                    dic['result'] = item[4]
+                    result.append(dic)
             return json.dumps(result, ensure_ascii=False)
         except Exception as e:
             print(e)
