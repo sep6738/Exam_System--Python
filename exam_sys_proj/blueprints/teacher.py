@@ -283,7 +283,7 @@ def paper_create():
         return result['message']
     else:
         TeacherUtils.insertOneQuestion(dbPool, result['content'][1])
-        return "创建成功！"
+        return result['content'][2]
 
 
 @bp.route("/paper_publish", methods=["GET", "POST"])
@@ -310,8 +310,6 @@ def question_manage():
     chart = chart[start_index:end_index]
     chart = chart.strip('<body >')
     chart = chart.strip('</body >')
-    chart = chart.replace('"backgroundColor": "transparent",', '"backgroundColor": "#e8e8e8",')
-    chart = chart.replace('"borderColor": "#ccc",', '"borderColor": "#e8e8e8",')
     chart = Markup(chart)
     print(chart)
     return render_template("teacher_question_manage.html", subject=subject, chart=chart)
