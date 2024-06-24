@@ -382,6 +382,7 @@ class TeacherUtils:
             #             kp_set.add(___)
             # kp_set = list(kp_set)
             stored_paper_dict["knowledge_point"] = None
+
         #     可能后续会有功能拓展
         except Exception as e:
             print(e)

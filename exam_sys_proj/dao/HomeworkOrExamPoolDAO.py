@@ -103,7 +103,7 @@ class HomeworkOrExamPoolDAO(BaseDAO):
                 continue
             type_counts[type] = type_counts.get(type,0)+1
         result_list = list(type_counts.items())
-        pie = Pie(init_opts=opts.InitOpts(theme=ThemeType.DARK))
+        pie = Pie(init_opts=opts.InitOpts(theme=ThemeType.LIGHT))
         pie.add(
             series_name='题目类型',
             data_pair=result_list,
