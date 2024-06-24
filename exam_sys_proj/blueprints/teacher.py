@@ -13,6 +13,7 @@ from ..dao.HepAndKpMediaterDAO import HepAndKpMediaterDAO
 from ..dao.HomeworkOrExamPoolDAO import HomeworkOrExamPoolDAO
 from ..dao.StudentCourseDAO import StudentCourseDAO
 from ..dao.TeacherCourseDAO import TeacherCourseDAO
+from ..util.HomeworkOrExamUtils import HomeworkOrExamUtils
 from ..util.studentcourseUtils import StudentCourseUtils
 from ..util.teachercourseUtils import TeacherCourseUtils
 
@@ -286,13 +287,13 @@ def paper_create():
         return result['content'][2]
 
 
-@bp.route("/paper_publish", methods=["GET", "POST"])
-def paper_publish():
-    if request.method == 'GET':
-        papers_getter = HomeworkOrExamPoolDAO(dbPool)
-        subject = TeacherUtils.queryTeacherSubjectKP(dbPool, session.get("user_id"))
-        papers = papers_getter.query(subject, "courseName", True)  # TODO:获取试卷信息
-        return render_template("teacher_paper_publish.html", papers=papers)
+# @bp.route("/paper_publish", methods=["GET", "POST"])
+# def paper_publish():
+#     if request.method == 'GET':
+#         papers_getter = HomeworkOrExamPoolDAO(dbPool)
+#         subject = TeacherUtils.queryTeacherSubjectKP(dbPool, session.get("user_id"))
+#         papers = papers_getter.query(subject, "courseName", True)
+#         return render_template("teacher_paper_publish.html", papers=papers)
 
 
 @bp.route("/question_manage")
@@ -338,6 +339,39 @@ def get_question_api(subject):
         'message': "成功！",
         'data': questions
     }, cls=MyEncoder)
+
+
+@bp.route("/paper_publish", methods=["GET", "POST"])
+def paper_publish():
+    if request.method == 'GET':
+        getter = HomeworkOrExamPoolDAO(dbPool)
+        data = getter.query('考试', "type", True)
+        papers = []
+        if data:
+            for i in data:
+                paper = {
+                    'hepID': i.hepID,
+                    'title': json.loads(i.question)['main_content']
+                }
+                papers.append(paper)
+
+        teacher_operator = TeacherCourseDAO(dbPool)
+        courses = teacher_operator.query(session.get("user_id"), "userID", True)
+
+        return render_template("teacher_paper_publish.html", papers=papers, courses=courses)
+    else:
+        examID = request.form.get("examID")
+        courseID = request.form.get("courseID")
+        publishTime = request.form.get("publishTime")
+        deadline = request.form.get("deadline")
+        duration = request.form.get("duration")
+        result = HomeworkOrExamUtils.insert_homeworkOrexam(dbPool, examID, courseID, publishTime, deadline, duration)
+        if result:
+            flash("试卷发布成功！")
+        else:
+            flash("试卷发布失败，请重试！")
+
+        return redirect(url_for("teacher.paper_publish"))
 
 
 @bp.route("/api/delete_question/<hepID>")
@@ -392,10 +426,14 @@ def get_question_detail(hepID):
 def export():
     getter = HomeworkOrExamPoolDAO(dbPool)
     data = getter.query('考试', "type", True)
+    # data = getter.queryAll(count=0)
     papers = []
     paper = {}
+    # print(data)
     if data:
         for i in data:
+            # print(i)
+            # print(i.type)
             # if i.type in ['考试', '测试', '作业', '其它']:
             paper['hepID'] = i.hepID
             paper['title'] = json.loads(i.question)['main_content']
