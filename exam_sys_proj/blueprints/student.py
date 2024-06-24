@@ -130,7 +130,7 @@ def get_papers():
     student_id = session.get("user_id")
     # papers: list[StudentHandIn] = student_hand_in_dao.query(student_id, 'userID', True)
     papers = StudentHandinUtils.get_user_test(dbPool, student_id)
-    print(papers)
+    # print(papers)
     # paper_details = []
     # for paper in papers:
     #     paper_detail = {
@@ -141,21 +141,52 @@ def get_papers():
     #         # 'completed': paper.completed
     #     }
     #     paper_details.append(paper_detail)
-
-    return jsonify({'code': 0, 'data': papers})
-
-
-@bp.route('/view_paper', methods=['POST'])
-def view_paper():
-    data = request.get_json()
-    paper_id = data.get('paperID')
-    # 假设查看试卷的URL是/view_paper/<paper_id>
-    return jsonify({'redirect_url': url_for('student.view_paper', paper_id=paper_id)})
+    return json.dumps({
+        'code': 0,
+        'message': "成功！",
+        'data': json.loads(papers)
+    }, cls=MyEncoder)
+    # return jsonify({'code': 0, 'data': papers})
 
 
-@bp.route('/start_exam', methods=['POST'])
-def start_exam():
-    data = request.get_json()
-    paper_id = data.get('paperID')
-    # 假设进入考试的URL是/start_exam/<paper_id>
-    return jsonify({'redirect_url': url_for('student.start_exam', paper_id=paper_id)})
+# @bp.route('/view_paper', methods=['POST'])
+# def view_paper():
+#     data = request.get_json()
+#     studentHandInID = data.get('studentHandInID')
+#     return jsonify({'redirect_url': 'student.view_paper/'+studentHandInID})
+
+@bp.route('/view_paper/{paper_id}', methods=['GET'])
+def view_paper_detail(paper_id):
+    teacherUtils = TeacherUtils()
+    teacherUtils.getPaperForShow(paper_id, dbPool)
+
+
+@bp.route('/start_exam/<paper_id>')
+def start_exam(paper_id):
+    teacherUtils = TeacherUtils()
+    paper = teacherUtils.getPaperForShow(int(paper_id), dbPool)
+    paper = json.dumps(paper, ensure_ascii=False)
+    print(paper)
+    return render_template('exam_answer.html', paper=paper, paper_id=paper_id)
+
+
+@bp.route('/submit_answers', methods=['POST'])
+def submit_exam():
+    answers = request.get_json()
+    print(answers)
+    answers = answers['answers']
+    # 处理答案，保存到数据库或其他逻辑
+    # 示例：将答案打印到控制台
+    paper_id = int(answers.pop())
+    data = []
+    for i in answers:
+        temp = []
+        temp.append(str(i))
+        data.append(temp)
+    print(f"HandIn ID: {paper_id}, Answers: {data}")
+    studentHandInDAO = StudentHandInDAO(dbPool)
+    data = json.dumps(data)
+    entity = StudentHandIn(studentHandInID=paper_id, content=data)
+    studentHandInDAO.update(entity, paper_id)
+    StudentHandinUtils.auto_correct(dbPool, paper_id)
+    return jsonify({'message': '答案提交成功！'})

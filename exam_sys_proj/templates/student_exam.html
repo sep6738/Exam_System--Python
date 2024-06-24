@@ -6,63 +6,46 @@
         <table id="paper-table" lay-filter="paperTable"></table>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/layui/2.5.7/layui.all.js"></script>
     <script>
         layui.use(['table'], function () {
             var table = layui.table;
 
-            // 表格初始化
             table.render({
                 elem: '#paper-table',
-                url: '/student/get_papers',  // 获取试卷详情数据的URL
+                url: '/student/get_papers',
+
                 cols: [[
-                    {field: 'paperID', title: '试卷ID', width: 100, sort: true},
-                    {field: 'title', title: '试卷标题', width: 200},
-                    {field: 'subject', title: '科目', width: 150},
+                    {field: 'studentHandInID', title: '测试ID', width: 100, sort: true},
+                    {field: 'title', title: '试卷标题', width: 200, sort: true},
+                    {field: 'subject', title: '科目', width: 150, sort: true},
+                    {field: 'type', title: '类型', width: 100, sort: true},
                     {
-                        field: 'score', title: '分数', width: 100,
+                        field: 'score', title: '分数', width: 100, sort: true,
                         templet: function (d) {
                             return d.completed ? d.score : '';
                         }
                     },
                     {
-                        field: 'actions', title: '操作', width: 200,
+                        field: 'actions', title: '操作', width: 200, sort: true,
                         templet: function (d) {
                             if (d.completed) {
-                                return '<button class="layui-btn layui-btn-xs" onclick="viewPaper(' + d.paperID + ')">查看</button>';
+                                return '<button class="layui-btn layui-btn-xs" onclick="viewPaper(' + d.studentHandInID + ')">查看</button>';
                             } else {
-                                return '<button class="layui-btn layui-btn-xs layui-btn-normal" onclick="startExam(' + d.paperID + ')">进入考试</button>';
+                                return '<button class="layui-btn layui-btn-xs layui-btn-normal" onclick="startExam(' + d.studentHandInID + ')">进入考试</button>';
                             }
                         }
                     }
                 ]],
-                page: true
+                page: false
             });
         });
 
-        function viewPaper(paperID) {
-            $.ajax({
-                type: 'POST',
-                url: '/student/view_paper',
-                data: JSON.stringify({paperID: paperID}),
-                contentType: 'application/json',
-                success: function (response) {
-                    window.location.href = response.redirect_url;
-                }
-            });
+        function viewPaper(studentHandInID) {
+            window.location.href = 'view_paper/' + studentHandInID;
         }
 
-        function startExam(paperID) {
-            $.ajax({
-                type: 'POST',
-                url: '/student/start_exam',
-                data: JSON.stringify({paperID: paperID}),
-                contentType: 'application/json',
-                success: function (response) {
-                    window.location.href = response.redirect_url;
-                }
-            });
+        function startExam(studentHandInID) {
+            window.location.href = 'start_exam/' + studentHandInID;
         }
     </script>
 {% endblock %}
