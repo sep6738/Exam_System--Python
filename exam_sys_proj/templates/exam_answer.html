@@ -41,13 +41,13 @@
             if (typeof question === 'string') {
                 let section = document.createElement('div');
                 section.className = 'question-section';
-                section.innerHTML = `<h2>${question}</h2>`;
+                section.innerHTML = `<div style="display:flex;font-size:3vw;margin-left: 1vw;font-weight: bold">${question}</div>`;
                 questionsDiv.appendChild(section);
             } else {
                 let questionDiv = document.createElement('div');
                 questionDiv.className = 'question-content';
                 questionDiv.innerHTML = `
-                    <p>${question.main_content}</p>
+                    <p style="display:flex;font-size:2vw;margin-left: 1vw;margin-top: 0.5vw;">${question.main_content}</p>
                     ${renderOptions(question, index)}
                 `;
                 questionsDiv.appendChild(questionDiv);
@@ -61,8 +61,11 @@
         if (question.type === '选择题' || question.type === '判断题') {
             question.questions.forEach((option, optionIndex) => {
                 optionsHtml += `
-                    <input type="radio" name="question_${index}" value="${option}">
-                    <label>${option}</label>
+                    <div style="display: flex;flex-direction: row"">
+                        <input type="radio" name="question_${index}" value="${option}" style="margin-top: 0.5vw;height: 1.25vw;width: 1.25vw">
+                        <label style="display:flex;font-size:1.25vw;margin-left: 0.88vw;margin-top: 0.5vw;color: black">${option}</label>
+                    </div>
+
                 `;
             });
         } else if (question.type === '填空题') {
