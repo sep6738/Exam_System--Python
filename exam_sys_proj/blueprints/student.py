@@ -181,7 +181,9 @@ def submit_exam():
     data = []
     for i in answers:
         temp = []
-        temp.append(str(i))
+        if type(i) == int:
+            i = str(i)
+        temp.append(i)
         data.append(temp)
     print(f"HandIn ID: {paper_id}, Answers: {data}")
     studentHandInDAO = StudentHandInDAO(dbPool)

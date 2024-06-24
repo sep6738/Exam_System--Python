@@ -1,0 +1,85 @@
+{% extends "teacher_base.html" %}
+
+{% block body %}
+    <div class="layui-container">
+        <div class="layui-row">
+            <div class="layui-col-md12">
+                <div class="layui-tab" lay-filter="courseTab">
+                    <ul class="layui-tab-title">
+                        {% for course in data['courses'] %}
+                            <li {% if loop.first %}class="layui-this"{% endif %}>{{ course.courseName }}</li>
+                        {% endfor %}
+                    </ul>
+                    <div class="layui-tab-content">
+                        {% for course in data['courses'] %}
+                            <div class="layui-tab-item {% if loop.first %}layui-show{% endif %}">
+                                <table class="layui-table" lay-filter="examTable{{ loop.index }}">
+                                    <thead>
+                                    <tr>
+                                        <th lay-data="{field:'userID', sort: true}">学生ID</th>
+                                        <th lay-data="{field:'userName', sort: true}">学生姓名</th>
+                                        <th lay-data="{field:'score', sort: true}">分数</th>
+                                        <th lay-data="{field:'isCompleted', sort: true}">是否已完成答卷</th>
+                                        <th lay-data="{field:'actions', sort: false}">操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for exam in course['exams'] %}
+                                        <tr>
+                                            <td>{{ exam.userID }}</td>
+                                            <td>{{ exam.userName }}</td>
+                                            <td>{{ exam.score if exam.score is not none else '未评分' }}</td>
+                                            <td>{{ '是' if exam.content == 1 else '否' }}</td>
+                                            <td>
+                                                {% if exam.content == 1 %}
+                                                    {% if exam.score is none %}
+                                                        <button class="layui-btn layui-btn-normal"
+                                                                onclick="correctExam({{ exam.studentHandInID|safe }})">
+                                                            批改试卷
+                                                        </button>
+                                                    {% else %}
+                                                        <button class="layui-btn layui-btn-primary"
+                                                                onclick="viewExam({{ exam.studentHandInID|safe }})">查看试卷
+                                                        </button>
+                                                    {% endif %}
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        layui.use(['element', 'table'], function () {
+            var element = layui.element;
+            var table = layui.table;
+
+            {% for course in data['courses'] %}
+                table.init('examTable{{ loop.index }}', {
+                    page: true,
+                    limit: 10
+                });
+            {% endfor %}
+        });
+
+        function correctExam(studentHandInID) {
+            // Implement the function to correct the exam
+            console.log("Correct Exam: " + studentHandInID);
+            // Add your logic to open the correction page or modal
+        }
+
+        function viewExam(studentHandInID) {
+            // Implement the function to view the exam
+            console.log("View Exam: " + studentHandInID);
+            // Add your logic to open the exam details page or modal
+        }
+
+    </script>
+{% endblock %}

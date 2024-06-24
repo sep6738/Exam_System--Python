@@ -19,3 +19,4 @@ markdown2~=2.4.13
 beautifulsoup4~=4.12.3
 
 pyecharts~=2.0.5
+plotly~=5.22.0
