@@ -77,10 +77,10 @@ class TeacherCourseUtils:
             plt.pie(counts, autopct='%1.1f%%')  # autopct后面的值1.1表示保留2位小数
             plt.legend(labels=['0-59', '60-69', '70-79', '80-89', '90-100'], loc="best")
             plt.title("学生成绩区间分布图")
-            file_name = r".\img\{name}.png"
+            file_name = "./static/img/{name}.png"
             path = file_name.format(name=courseID)
             plt.savefig(path)
-            return path
+            return courseID
         except Exception as e:
             print(e)
             return 'error'
