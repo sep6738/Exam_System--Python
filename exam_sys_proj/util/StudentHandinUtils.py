@@ -251,13 +251,45 @@ class StudentHandinUtils:
                 conn.close()
             data = dict()
             result = TeacherUtils.getPaperForShowWithoutAnswer(studenthandinId, db_util)
-            for item in ans:
-                data['answer'] = item[1]
-                data['studentContent'] = item[2]
+            answer = json.loads(ans[0][1])
+            content = json.loads(ans[0][2])
+            data['answer'] = answer
+            data['content'] = content
             data['question'] = result['questions']
             data['subject'] = result['subject']
             data['main_content'] = result['main_content']
             return json.dumps(data, ensure_ascii=False)
+        except Exception as e:
+            print(e)
+            return 'error'
+
+    @classmethod
+    def change_score(cls, db_util, studenthandinId: int, scores: list):
+        try:
+            dao = StudentHandInDAO(db_util)
+            resultset = dao.query(studenthandinId)
+            total = 0
+            details = json.loads(getattr(resultset, 'resultDetails'))
+            total += details['判断题得分']
+            total += details['选择题得分']
+            cnt1 = 0
+            cnt21 = 0
+            cnt22 = 0
+            total1 = 0
+            total2 = 0
+            for score_list in scores:
+                print(score_list)
+                for score in score_list:
+                    if isinstance(score, float):
+                        cnt1 += 1
+                        total1 += score
+                    else:
+                        cnt21 += 1
+                        for xiao in score:
+                            cnt22 += 1
+                            total2 += xiao
+            return [cnt1, total1, cnt21, cnt22, total2]
+            return total
         except Exception as e:
             print(e)
             return 'error'
