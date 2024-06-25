@@ -101,7 +101,9 @@ class HomeworkOrExamPoolDAO(BaseDAO):
         for type in type_list:
             if type == "考试":
                 continue
-            type_counts[type] = type_counts.get(type,0)+1
+            if type == '自测':
+                continue
+            type_counts[type] = type_counts.get(type, 0)+1
         result_list = list(type_counts.items())
         pie = Pie(init_opts=opts.InitOpts(theme=ThemeType.LIGHT, page_title="题库中题目类型分布", width="550px"))
         pie.add(
