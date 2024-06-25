@@ -55,7 +55,9 @@ def exam_manage():
     for course in courses:
         temp = {}
         temp['courseName'] = course.courseName
+        print(course.courseID)
         exams = StudentHandinUtils.get_course_test(dbPool, course.courseID)
+        print(exams)
         temp['exams'] = json.loads(exams)
         courses_data.append(temp)
 

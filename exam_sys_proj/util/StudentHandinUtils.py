@@ -216,7 +216,10 @@ class StudentHandinUtils:
                     dic = dict()
                     dic['userID'] = item[0]
                     dic['studentHandInID'] = item[1]
-                    dic['score'] = float(item[2])
+                    if item[2]:
+                        dic['score'] = float(item[2])
+                    else:
+                        dic['score'] = None
                     if item[3] is not None:
                         dic['content'] = 1
                     else:

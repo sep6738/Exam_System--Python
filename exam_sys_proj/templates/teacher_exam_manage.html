@@ -31,18 +31,21 @@
                                             <td>{{ exam.score if exam.score is not none else '未评分' }}</td>
                                             <td>{{ '是' if exam.content == 1 else '否' }}</td>
                                             <td>
-                                                {% if exam.content == 1 %}
-                                                    {% if exam.score is none %}
-                                                        <button class="layui-btn layui-btn-normal"
-                                                                onclick="correctExam({{ exam.studentHandInID|safe }})">
-                                                            批改试卷
-                                                        </button>
-                                                    {% else %}
-                                                        <button class="layui-btn layui-btn-primary"
-                                                                onclick="viewExam({{ exam.studentHandInID|safe }})">查看试卷
-                                                        </button>
+                                                <div class="layui-btn-group">
+                                                    {% if exam.content == 1 %}
+                                                        {% if exam.score is none %}
+                                                            <button class="layui-btn layui-btn-normal"
+                                                                    data-id="{{ exam.studentHandInID }}"
+                                                                    onclick="correctExam(this)">批改试卷
+                                                            </button>
+                                                        {% else %}
+                                                            <button class="layui-btn layui-btn-primary"
+                                                                    data-id="{{ exam.studentHandInID }}"
+                                                                    onclick="viewExam(this)">查看试卷
+                                                            </button>
+                                                        {% endif %}
                                                     {% endif %}
-                                                {% endif %}
+                                                </div>
                                             </td>
                                         </tr>
                                     {% endfor %}
@@ -56,30 +59,59 @@
         </div>
     </div>
 
+
     <script>
-        layui.use(['element', 'table'], function () {
-            var element = layui.element;
-            var table = layui.table;
-
-            {% for course in data['courses'] %}
-                table.init('examTable{{ loop.index }}', {
-                    page: true,
-                    limit: 10
-                });
-            {% endfor %}
-        });
-
-        function correctExam(studentHandInID) {
-            // Implement the function to correct the exam
-            console.log("Correct Exam: " + studentHandInID);
-            // Add your logic to open the correction page or modal
+        function correctExam(button) {
+            console.log("Correct Exam: " + button.dataset.id);
         }
 
-        function viewExam(studentHandInID) {
-            // Implement the function to view the exam
-            console.log("View Exam: " + studentHandInID);
-            // Add your logic to open the exam details page or modal
+        function viewExam(button) {
+            console.log("View Exam: " + button.dataset.id);
         }
+
+        {#layui.use(['element', 'table'], function(){#}
+        {#    var element = layui.element;#}
+        {#    var table = layui.table;#}
+        {##}
+        {#    function renderButtons(index) {#}
+        {#        table.init('examTable' + index, {#}
+        {#            page: true,#}
+        {#            limit: 10,#}
+        {#            done: function(res, curr, count){#}
+        {#                // Custom render actions column with buttons#}
+        {#                res.data.forEach(function(item){#}
+        {#                    var tr = document.querySelector('tr[data-index="'+ item.LAY_TABLE_INDEX +'"]');#}
+        {#                    if (tr) {#}
+        {#                        var td = tr.querySelector('td[data-field="actions"] .layui-table-cell');#}
+        {#                        if (td) {#}
+        {#                            var buttonHtml = '';#}
+        {#                            if(item.isCompleted === '是'){#}
+        {#                                if(item.score === '未评分'){#}
+        {#                                    buttonHtml = '<div class="layui-btn-group"><button class="layui-btn layui-btn-normal" data-id="'+ item.studentHandInID +'" onclick="correctExam(this)">批改试卷</button></div>';#}
+        {#                                } else {#}
+        {#                                    buttonHtml = '<div class="layui-btn-group"><button class="layui-btn layui-btn-primary" data-id="'+ item.studentHandInID +'" onclick="viewExam(this)">查看试卷</button></div>';#}
+        {#                                }#}
+        {#                            }#}
+        {#                            td.innerHTML = buttonHtml;#}
+        {#                        }#}
+        {#                    }#}
+        {#                });#}
+        {#            }#}
+        {#        });#}
+        {#    }#}
+        {##}
+        {#    element.on('tab(courseTab)', function(data){#}
+        {#        var courseIndex = data.index + 1;#}
+        {#        renderButtons(courseIndex);#}
+        {#    });#}
+        {##}
+        {#    {% for course in data['courses'] %}#}
+        {#        renderButtons({{ loop.index }});#}
+        {#    {% endfor %}#}
+        {#})
+            ;
+        #}
+
 
     </script>
 {% endblock %}
