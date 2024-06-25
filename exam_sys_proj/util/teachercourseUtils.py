@@ -1,5 +1,6 @@
 import pandas as pd
 from matplotlib import pyplot as plt
+import os
 
 from exam_sys_proj.dao.StudentCourseDAO import StudentCourseDAO
 from exam_sys_proj.orm.StudentCourse import StudentCourse
@@ -77,7 +78,8 @@ class TeacherCourseUtils:
             plt.pie(counts, autopct='%1.1f%%')  # autopct后面的值1.1表示保留2位小数
             plt.legend(labels=['0-59', '60-69', '70-79', '80-89', '90-100'], loc="best")
             plt.title("学生成绩区间分布图")
-            file_name = "./static/img/{name}.png"
+            current_script_path = os.path.dirname(os.path.abspath(__file__))
+            file_name = current_script_path[:-5] + "\\static\\img\\{name}.png"
             path = file_name.format(name=courseID)
             plt.savefig(path)
             return courseID
