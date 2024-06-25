@@ -42,8 +42,8 @@ class HomeworkOrExamPoolDAO(BaseDAO):
                         question_type + f"  (一共{len(store_paper['questions'][question_type]) - 1}小题，每题{store_paper['questions'][question_type][0]}分，共{store_paper['questions'][question_type][0] * (len(store_paper['questions'][question_type]) - 1)}分)")
                     if len(store_paper["score"]) < len(store_paper["questions"].keys()):
                         s = [store_paper['questions'][question_type][0]]
-                        store_paper["score"].append(s * (
-                                    len(store_paper['questions'][question_type]) - 1))
+                        store_paper["score"].append([s * (
+                                    len(store_paper['questions'][question_type]) - 1)])
                     for q_json in result:
                         answer_list.append(json.loads(q_json[2]))
                         diff_list.append(q_json[1])
