@@ -16,15 +16,40 @@
         .question-content {
             margin-bottom: 10px;
         }
+        .header {
+            width: 100%;
+            height: 3vw;
+            font-size: 1.2vw;
+            font-weight: bold;
+            color: white;
+
+            position: fixed;
+            left: 0;
+            top: 0;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #1e9efd;
+            flex-direction: row;
+
+            z-index: 99;
+        }
     </style>
 </head>
 <body>
 <div class="layui-container">
     <div class="layui-row">
         <div class="layui-col-md12">
-            <h1 class="layui-text-center">{{ paper["main_content"] }}</h1>
+            <div class="header">
+                <div>剩余时间：</div>
+                <div id="timer">{{ paper["time"] }}</div>
+            </div>
+            <div style="height: 1px;width: 100%;margin-top: 3vw"></div>
+            <div class="layui-text-center" id="title" style="font-size: 5vw;display: flex;justify-content: center;align-content: center"></div>
             <div id="questions"></div>
-            <button class="layui-btn layui-btn-normal" onclick="submitAnswers()">提交答案</button>
+            <button class="layui-btn layui-btn-normal" onclick="submitAnswers()" style="transform: scale(1.5);margin-left: 1.5vw;margin-top: 1.2vw">提交答案</button>
+
         </div>
     </div>
 </div>
@@ -34,6 +59,9 @@
     var paper = {{ paper|safe }};
     var answers = [];
 
+
+    document.getElementById('timer').textContent = paper.time;
+    document.getElementById('title').textContent = paper.main_content;
     // 渲染试题
     function renderQuestions() {
         var questionsDiv = document.getElementById('questions');
@@ -41,13 +69,13 @@
             if (typeof question === 'string') {
                 let section = document.createElement('div');
                 section.className = 'question-section';
-                section.innerHTML = `<h2>${question}</h2>`;
+                section.innerHTML = `<div style="display:flex;font-size:3vw;margin-left: 1vw;font-weight: bold">${question}</div>`;
                 questionsDiv.appendChild(section);
             } else {
                 let questionDiv = document.createElement('div');
                 questionDiv.className = 'question-content';
                 questionDiv.innerHTML = `
-                    <p>${question.main_content}</p>
+                    <p style="display:flex;font-size:2vw;margin-left: 1vw;margin-top: 0.5vw;">${question.main_content}</p>
                     ${renderOptions(question, index)}
                 `;
                 questionsDiv.appendChild(questionDiv);
@@ -61,8 +89,11 @@
         if (question.type === '选择题' || question.type === '判断题') {
             question.questions.forEach((option, optionIndex) => {
                 optionsHtml += `
-                    <input type="radio" name="question_${index}" value="${option}">
-                    <label>${option}</label>
+                    <div style="display: flex;flex-direction: row"">
+                        <input type="radio" name="question_${index}" value="${option}" style="margin-top: 0.5vw;height: 1.25vw;width: 1.25vw">
+                        <label style="display:flex;font-size:1.25vw;margin-left: 0.88vw;margin-top: 0.5vw;color: black">${option}</label>
+                    </div>
+
                 `;
             });
         } else if (question.type === '填空题') {
@@ -115,6 +146,33 @@
 
     // 初始化渲染
     renderQuestions();
+</script>
+<script>
+    var paper = {{ paper|safe }};
+        const timerDiv = document.getElementById('timer');
+        let initialTime = parseInt(timerDiv.textContent, 10);
+        let duration = initialTime * 60;
+        function startTimer(duration, display) {
+            let timer = duration, minutes, seconds;
+            const interval = setInterval(function () {
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = minutes + ":" + seconds;
+
+                if (--timer < 0) {
+                    clearInterval(interval);
+                    submitAnswers();
+                }
+            }, 1000);
+        }
+        // Start the timer
+        window.onload = function () {
+            startTimer(duration, timerDiv);
+        };
 </script>
 </body>
 </html>
