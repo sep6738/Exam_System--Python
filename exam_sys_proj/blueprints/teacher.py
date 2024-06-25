@@ -70,6 +70,24 @@ def teacher_exam_correct(handInID):
     return render_template("teacher_exam_correct.html", handInID=handInID)
 
 
+@bp.route("/get_teacher_exam_correct/<handInID>")
+def get_teacher_exam_correct(handInID):
+    data = StudentHandinUtils.get_a_test(dbPool, int(handInID))
+    print(type(data))
+    print(data)
+    return data
+
+
+@bp.route("/score_analyse")
+def score_analyse():
+    teacher_operator = TeacherCourseDAO(dbPool)
+    courses = teacher_operator.query(session.get("user_id"), "userID", True)
+    charts = []
+    for course in courses:
+        chart = TeacherCourseUtils.getScoreanalysis(dbPool, course.courseID)
+        charts.append(chart)
+    return render_template("teacher_score_analyse.html", charts=charts)
+
 
 @bp.route("/student_manage")
 def student_manage():

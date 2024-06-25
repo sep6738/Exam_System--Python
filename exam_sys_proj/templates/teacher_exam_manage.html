@@ -63,10 +63,13 @@
     <script>
         function correctExam(button) {
             console.log("Correct Exam: " + button.dataset.id);
+            window.location.href = '/teacher/teacher_exam_correct/' + button.dataset.id;
         }
+
 
         function viewExam(button) {
             console.log("View Exam: " + button.dataset.id);
+            window.location.href = '/teacher/teacher_exam_correct/' + button.dataset.id;
         }
 
         {#layui.use(['element', 'table'], function(){#}

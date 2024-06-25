@@ -1,0 +1,11 @@
+{% extends "teacher_base.html" %}
+
+{% block body %}
+    <div class="layui-row">
+        {% for chart in charts %}
+            <div class="layui-col-md6">
+                <img src="{{ url_for('static', filename='img/' ~ chart ~ '.png') }}" alt="示例图片">
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

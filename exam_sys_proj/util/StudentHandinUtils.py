@@ -83,7 +83,8 @@ class StudentHandinUtils:
         :return:
         '''
         try:
-            test_paper = json.loads(test[0])
+            # test_paper = json.loads(test[0])
+            test_paper = test[0]
             answer_list = test[3]
             test_paper['answer'] = answer_list
             dao = StudentHandInDAO(db_util)
