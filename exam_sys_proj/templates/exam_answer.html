@@ -10,20 +10,20 @@
             margin-bottom: 10px;
         }
         .header {
-            width: 100%;
+            width: 10%;
             height: 3vw;
             font-size: 1.2vw;
             font-weight: bold;
-            color: white;
+            color: rgba(232, 74, 60, 0.62);
 
             position: fixed;
-            left: 0;
-            top: 0;
+            right: 3vw;
+            bottom: 2vw;
 
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #1e9efd;
+            {#background-color: #1e9efd;#}
             flex-direction: row;
 
             z-index: 99;
@@ -38,8 +38,8 @@
                 <div>剩余时间：</div>
                 <div id="timer">{{ paper["time"] }}</div>
             </div>
-            <div style="height: 1px;width: 100%;margin-top: 3vw"></div>
-            <div class="layui-text-center" id="title" style="font-size: 5vw;display: flex;justify-content: center;align-content: center"></div>
+            <div style="height: 1px;width: 100%;margin-top: 1vw"></div>
+            <div class="layui-text-center" id="title" style="font-size: 64px;display: flex;justify-content: center;align-content: center"></div>
             <div id="questions"></div>
             <button class="layui-btn layui-btn-normal" onclick="submitAnswers()" style="transform: scale(1.5);margin-left: 1.5vw;margin-top: 1.2vw">提交答案</button>
 
@@ -62,13 +62,13 @@
             if (typeof question === 'string') {
                 let section = document.createElement('div');
                 section.className = 'question-section';
-                section.innerHTML = `<div style="display:flex;font-size:3vw;margin-left: 1vw;font-weight: bold">${question}</div>`;
+                section.innerHTML = `<div style="display:flex;font-size:36px;margin-left: 10px;font-weight: bold;margin-top:28px">${question}</div>`;
                 questionsDiv.appendChild(section);
             } else {
                 let questionDiv = document.createElement('div');
                 questionDiv.className = 'question-content';
                 questionDiv.innerHTML = `
-                    <p style="display:flex;font-size:2vw;margin-left: 1vw;margin-top: 0.5vw;">${question.main_content}</p>
+                    <p style="display:flex;font-size:24px;margin-left: 10px;margin-top: 24px;">${question.main_content}</p>
                     ${renderOptions(question, index)}
                 `;
                 questionsDiv.appendChild(questionDiv);
@@ -83,16 +83,16 @@
             question.questions.forEach((option, optionIndex) => {
                 optionsHtml += `
                     <div style="display: flex;flex-direction: row"">
-                        <input type="radio" name="question_${index}" value="${option}" style="margin-top: 0.5vw;height: 1.25vw;width: 1.25vw">
-                        <label style="display:flex;font-size:1.25vw;margin-left: 0.88vw;margin-top: 0.5vw;color: black">${option}</label>
+                        <input type="radio" name="question_${index}" value="${option}" style="margin-top: 5px;height: 20px;width: 20px">
+                        <label style="display:flex;font-size:20px;margin-left: 8px;margin-top: 5px;color: black">${option}</label>
                     </div>
 
                 `;
             });
         } else if (question.type === '填空题') {
-            optionsHtml = `<input type="text" name="question_${index}" class="layui-input">`;
+            optionsHtml = `<input type="text" name="question_${index}" class="layui-input" style="border: solid 2px rgba(100, 236, 200, 0.62);margin-top: 24px">`;
         } else if (question.type === '主观题') {
-            optionsHtml = `<textarea name="question_${index}" class="layui-textarea"></textarea>`;
+            optionsHtml = `<textarea name="question_${index}" class="layui-textarea" style="border: solid 2px rgba(100, 236, 200, 0.62);margin-top: 24px"></textarea>`;
         }
         return optionsHtml;
     }
