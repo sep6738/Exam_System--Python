@@ -1,9 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>教师批改页面</title>
-    <link rel="stylesheet" href="https://www.layuicdn.com/layui/css/layui.css">
+{% extends "teacher_base.html" %}
+
+{% block body %}
     <style>
         .question-container {
             margin-bottom: 20px;
@@ -26,11 +23,10 @@
     <button class="layui-btn" id="submit_scores">提交评分</button>
 </div>
 
-<script src="https://www.layuicdn.com/layui/layui.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
     $(document).ready(function () {
-        $.getJSON('/get_test_data/1', function (data) {
+        $.getJSON('/teacher/get_teacher_exam_correct/' + {{ handInID }}, function (data) {
             $('#main_title').text(data.main_content);
 
             data.question.forEach(function (item, index) {
@@ -107,5 +103,4 @@
         }
     }
 </script>
-</body>
-</html>
+{% endblock %}

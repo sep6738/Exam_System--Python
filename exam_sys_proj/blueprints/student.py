@@ -83,7 +83,7 @@ def paper_create(subject):
         paper['overall_difficulty_easy'] = data['overall_difficulty_easy']
         paper['overall_difficulty_normal'] = data['overall_difficulty_normal']
         paper['overall_difficulty_hard'] = data['overall_difficulty_hard']
-        paper['get_answer'] = False
+        paper['get_answer'] = True
         if 'shuffle' in data:
             paper['shuffle'] = False
         else:
@@ -100,9 +100,15 @@ def paper_create(subject):
             for knowledge_point in knowledge_points:
                 paper[question_type]["amount_per_knowledge_point"][knowledge_point.kpName] = data[
                     question_type + "_" + knowledge_point.kpName]
-    # TODO:传入Content
+    result = TeacherUtils.random_paper(paper, dbPool)
     print(paper)
-    return 'Data received successfully'
+    if result['status_code'] == 404:
+        return result['message']
+    else:
+        TeacherUtils.insertOneQuestion(dbPool, result['content'][1])
+        inserter = StudentHandinUtils()
+        inserter.insert_self_exam(dbPool, result['content'], session.get("user_id"))
+        return result['content'][2]
 
 
 @bp.route('/select_subject', methods=['POST', 'GET'])
