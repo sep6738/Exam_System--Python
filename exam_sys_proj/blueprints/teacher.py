@@ -318,13 +318,7 @@ def paper_create():
 #         return render_template("teacher_paper_publish.html", papers=papers)
 
 
-@bp.route("/question_manage")
-def question_manage():
-    teacher_operator = TeacherCourseDAO(dbPool)
-    courses = teacher_operator.query(session.get("user_id"), "userID", True)
-    subject = courses[0].subject
-    chart_getter = HomeworkOrExamPoolDAO(dbPool)
-    chart = chart_getter.get_type_analysis()
+def cutBody(chart):
     #  截取图标html代码的body部分
     start_tag = "<body >"
     end_tag = "</body>"
@@ -333,9 +327,21 @@ def question_manage():
     chart = chart[start_index:end_index]
     chart = chart.strip('<body >')
     chart = chart.strip('</body >')
-    chart = Markup(chart)
-    print(chart)
-    return render_template("teacher_question_manage.html", subject=subject, chart=chart)
+    return Markup(chart)
+
+
+@bp.route("/question_manage")
+def question_manage():
+    teacher_operator = TeacherCourseDAO(dbPool)
+    courses = teacher_operator.query(session.get("user_id"), "userID", True)
+    subject = courses[0].subject
+    chart_getter2 = HepAndKpMediaterDAO(dbPool)
+    chart_getter = HomeworkOrExamPoolDAO(dbPool)
+    chart1 = chart_getter.get_type_analysis()
+    chart2 = chart_getter.get_diffi_analysis()
+    chart3 = chart_getter2.get_knowledgepoints_analysis()
+    return render_template("teacher_question_manage.html", subject=subject, chart1=cutBody(chart1),
+                           chart2=cutBody(chart2), chart3=cutBody(chart3))
 
 
 @bp.route("/api/get_question/<subject>")
