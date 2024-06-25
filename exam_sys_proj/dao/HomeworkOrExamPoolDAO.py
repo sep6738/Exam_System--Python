@@ -53,7 +53,7 @@ class HomeworkOrExamPoolDAO(BaseDAO):
                     s = []
                     for q_json in result:
                         q_dict = json.loads(q_json[0])
-                        q_dict["main_content"] += f"  ({sum(q_dict['score'])}分)"
+                        q_dict["main_content"] += f"         ({sum(q_dict['score'])}分)"
                         questions_list.append(q_dict)
                         answer_list.append(json.loads(q_json[2]))
                         diff_list.append(q_json[1])
