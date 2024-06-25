@@ -44,35 +44,9 @@
             <div class="header">
                 <div>剩余时间：</div>
                 <div id="timer">{{ paper["time"] }}</div>
-                <script>
-        const timerDiv = document.getElementById('timer');
-        let initialTime = parseInt(timerDiv.textContent, 10);
-        let duration = initialTime * 60;
-        function startTimer(duration, display) {
-            let timer = duration, minutes, seconds;
-            const interval = setInterval(function () {
-                minutes = parseInt(timer / 60, 10);
-                seconds = parseInt(timer % 60, 10);
-
-                minutes = minutes < 10 ? "0" + minutes : minutes;
-                seconds = seconds < 10 ? "0" + seconds : seconds;
-
-                display.textContent = minutes + ":" + seconds;
-
-                if (--timer < 0) {
-                    clearInterval(interval);
-                    submitAnswers();
-                }
-            }, 1000);
-        }
-        // Start the timer
-        window.onload = function () {
-            startTimer(duration, timerDiv);
-        };
-    </script>
             </div>
             <div style="height: 1px;width: 100%;margin-top: 3vw"></div>
-            <h1 class="layui-text-center">{{ paper["main_content"] }}</h1>
+            <div class="layui-text-center" id="title" style="font-size: 5vw;display: flex;justify-content: center;align-content: center"></div>
             <div id="questions"></div>
             <button class="layui-btn layui-btn-normal" onclick="submitAnswers()" style="transform: scale(1.5);margin-left: 1.5vw;margin-top: 1.2vw">提交答案</button>
 
@@ -85,6 +59,9 @@
     var paper = {{ paper|safe }};
     var answers = [];
 
+
+    document.getElementById('timer').textContent = paper.time;
+    document.getElementById('title').textContent = paper.main_content;
     // 渲染试题
     function renderQuestions() {
         var questionsDiv = document.getElementById('questions');
@@ -169,6 +146,33 @@
 
     // 初始化渲染
     renderQuestions();
+</script>
+<script>
+    var paper = {{ paper|safe }};
+        const timerDiv = document.getElementById('timer');
+        let initialTime = parseInt(timerDiv.textContent, 10);
+        let duration = initialTime * 60;
+        function startTimer(duration, display) {
+            let timer = duration, minutes, seconds;
+            const interval = setInterval(function () {
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = minutes + ":" + seconds;
+
+                if (--timer < 0) {
+                    clearInterval(interval);
+                    submitAnswers();
+                }
+            }, 1000);
+        }
+        // Start the timer
+        window.onload = function () {
+            startTimer(duration, timerDiv);
+        };
 </script>
 </body>
 </html>
