@@ -102,7 +102,7 @@ def get_email_captcha():
     # I/O：Input/Output
     registerOrm = RegistrationCode()
     message = Message(subject="好得不能再好了！测试系统验证码", recipients=[email],
-                      body=f"恭喜您受邀参与“好得不能再好了测试系统”的内测，您的验证码是:{registerOrm.verificationCode}，测试网址请向坎诺特先生支付1000至纯源石获得")
+                      body=f"恭喜您受邀参与“好得不能再好了测试系统”的内测，您的验证码是:{registerOrm.verificationCode}")
     mail.send(message)
     # memcached/redis
     # 用数据库表的方式存储

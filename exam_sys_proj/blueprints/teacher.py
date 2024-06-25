@@ -75,7 +75,10 @@ def get_teacher_exam_correct(handInID):
     data = StudentHandinUtils.get_a_test(dbPool, int(handInID))
     print(type(data))
     print(data)
-    return data
+    data = json.loads(data)
+    print(type(data))
+    print(data)
+    return jsonify(data)
 
 
 @bp.route("/score_analyse")

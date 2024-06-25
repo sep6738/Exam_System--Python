@@ -255,7 +255,7 @@ class StudentHandinUtils:
             answer = json.loads(ans[0][1])
             content = json.loads(ans[0][2])
             data['answer'] = answer
-            data['content'] = content
+            data['studentContent'] = content
             data['question'] = result['questions']
             data['subject'] = result['subject']
             data['main_content'] = result['main_content']
