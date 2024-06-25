@@ -230,3 +230,24 @@ class StudentHandinUtils:
         except Exception as e:
             print(e)
             return 'error'
+
+    @classmethod
+    def get_a_test(cls, db_util, studenthandinId: int):
+        try:
+            query = f"SELECT hep.question,hep.answer,shi.content FROM student_hand_in shi,homework_or_exam hp,homework_or_exam_pool hep WHERE shi.homeworkExamID=hp.heID and hp.homeworkExamPoolID=hep.hepID and shi.studenthandinID=%s"
+            conn = db_util.get_connection()
+            try:
+                with conn.cursor() as cursor:
+                    cursor.execute(query, (studenthandinId,))
+                    ans = cursor.fetchall()
+            finally:
+                conn.close()
+            data = dict()
+            for item in ans:
+                data['试卷内容'] = item[0]
+                data['答案'] = item[1]
+                data['学生内容'] = item[2]
+            return json.dumps(data, ensure_ascii=False)
+        except Exception as e:
+            print(e)
+            return 'error'

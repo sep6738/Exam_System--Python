@@ -2,9 +2,24 @@
 
 {% block body %}
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.1/dist/echarts.min.js"></script>
-    {#    <div style="transform: scale(0.5)">#}
-    {{ chart }}
-    {#</div>#}
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md4">
+            {#      <div class="layui-card">#}
+            {#        <div class="layui-card-header">卡片面板</div>#}
+            {#        <div class="layui-card-body">#}
+            {{ chart1 }}
+            {#        </div>#}
+            {#      </div>#}
+        </div>
+        <div class="layui-col-md8">
+            {#      <div class="layui-card">#}
+            {#        <div class="layui-card-header">卡片面板</div>#}
+            {#        <div class="layui-card-body">#}
+            {{ chart2 }}
+            {#        </div>#}
+            {#      </div>#}
+        </div>
+    </div>
     <div class="layui-card">
         <div class="layui-card-header">试题管理</div>
         <div class="layui-card-body">

@@ -101,18 +101,20 @@ class HomeworkOrExamPoolDAO(BaseDAO):
         for type in type_list:
             if type == "考试":
                 continue
-            type_counts[type] = type_counts.get(type,0)+1
+            if type == '自测':
+                continue
+            type_counts[type] = type_counts.get(type, 0)+1
         result_list = list(type_counts.items())
-        pie = Pie(init_opts=opts.InitOpts(theme=ThemeType.LIGHT))
+        pie = Pie(init_opts=opts.InitOpts(theme=ThemeType.LIGHT, page_title="题库中题目类型分布", width="550px"))
         pie.add(
             series_name='题目类型',
             data_pair=result_list,
             rosetype='radius',
             radius='70%',
         )
-        pie.set_global_opts(
-            title_opts=opts.TitleOpts(title="题库中题目类型分布")
-        )
+        # pie.set_global_opts(
+        #     title_opts=opts.TitleOpts(title="题库中题目类型分布")
+        # )
         pie.set_series_opts(
             tooltip_opts=opts.TooltipOpts(trigger='item', formatter='{a} <br/>{b}: {c}题 ({d}%)')
         )
