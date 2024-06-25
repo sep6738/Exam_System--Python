@@ -4,6 +4,7 @@ from exam_sys_proj.dao.HomeworkOrExamPoolDAO import HomeworkOrExamPoolDAO
 from exam_sys_proj.dao.StudentHandInDAO import StudentHandInDAO
 from exam_sys_proj.orm.HomeworkOrExamPool import HomeworkOrExamPool
 from exam_sys_proj.orm.StudentHandIn import StudentHandIn
+from exam_sys_proj.util.teacherUtils import TeacherUtils
 
 
 class StudentHandinUtils:
@@ -233,6 +234,12 @@ class StudentHandinUtils:
 
     @classmethod
     def get_a_test(cls, db_util, studenthandinId: int):
+        '''
+        返回试卷内容，答案，学生内容
+        :param db_util:
+        :param studenthandinId:
+        :return:
+        '''
         try:
             query = f"SELECT hep.question,hep.answer,shi.content FROM student_hand_in shi,homework_or_exam hp,homework_or_exam_pool hep WHERE shi.homeworkExamID=hp.heID and hp.homeworkExamPoolID=hep.hepID and shi.studenthandinID=%s"
             conn = db_util.get_connection()
@@ -243,10 +250,13 @@ class StudentHandinUtils:
             finally:
                 conn.close()
             data = dict()
+            result = TeacherUtils.getPaperForShowWithoutAnswer(studenthandinId, db_util)
             for item in ans:
-                data['试卷内容'] = item[0]
-                data['答案'] = item[1]
-                data['学生内容'] = item[2]
+                data['answer'] = item[1]
+                data['studentContent'] = item[2]
+            data['question'] = result['questions']
+            data['subject'] = result['subject']
+            data['main_content'] = result['main_content']
             return json.dumps(data, ensure_ascii=False)
         except Exception as e:
             print(e)
