@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>教师批改页面</title>
+    <link rel="stylesheet" href="https://www.layuicdn.com/layui/css/layui.css">
+    <style>
+        .question-container {
+            margin-bottom: 20px;
+        }
+
+        .folded-content {
+            display: none;
+        }
+
+        .score-input {
+            width: 20%; /* 将宽度设置为原来的五分之一 */
+            display: inline-block; /* 使输入框内联显示 */
+        }
+    </style>
+</head>
+<body>
+<div class="layui-container">
+    <h1 id="main_title">某某试卷</h1>
+    <div id="questions"></div>
+    <button class="layui-btn" id="submit_scores">提交评分</button>
+</div>
+
+<script src="https://www.layuicdn.com/layui/layui.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $.getJSON('/get_test_data/1', function (data) {
+            $('#main_title').text(data.main_content);
+
+            data.question.forEach(function (item, index) {
+                if (typeof item === 'string') {
+                    $('#questions').append('<h2>' + item + '</h2>');
+                } else {
+                    var maxScore = item.score[0];
+                    var questionHtml = `
+                            <div class="question-container">
+                                <div class="layui-card">
+                                    <div class="layui-card-header">
+                                        <a href="javascript:void(0);" onclick="toggleFold(${index})" class="layui-btn layui-btn-primary layui-btn-xs">折叠/展开题干</a>
+                                    </div>
+                                    <div id="folded-${index}" class="layui-card-body">
+                                        <p><strong>题干：</strong>${item.main_content}</p>
+                                    </div>
+                                    <div class="layui-card-body">
+                                        <p><strong>参考答案：</strong>${data.answer[index]}</p>
+                                        <p><strong>学生作答：</strong>${data.studentContent[index]}</p>
+                                        <div>
+                                            <label>得分：</label>
+                                            <input type="number" class="layui-input score-input"
+                                                   placeholder="请输入分数"
+                                                   data-index="${index}"
+                                                   step="0.5"
+                                                   max="${maxScore}"
+                                                   readonly>
+                                            <button class="layui-btn layui-btn-xs" onclick="adjustScore(${index}, -0.5)">-</button>
+                                            <button class="layui-btn layui-btn-xs" onclick="adjustScore(${index}, 0.5)">+</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`;
+                    $('#questions').append(questionHtml);
+                }
+            });
+
+            $('.score-input').each(function () {
+                var index = $(this).data('index');
+                $(this).val(0);  // 初始化为0分
+            });
+        });
+
+        $('#submit_scores').click(function () {
+            var scores = [];
+            $('.score-input').each(function () {
+                scores.push($(this).val());
+            });
+
+            $.ajax({
+                url: '/submit_scores',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({scores: scores}),
+                success: function (response) {
+                    alert('评分提交成功！');
+                }
+            });
+        });
+    });
+
+    function toggleFold(index) {
+        $('#folded-' + index).toggle();
+    }
+
+    function adjustScore(index, delta) {
+        var input = $('.score-input[data-index="' + index + '"]');
+        var currentValue = parseFloat(input.val());
+        var maxScore = parseFloat(input.attr('max'));
+        var newValue = currentValue + delta;
+
+        if (newValue >= 0 && newValue <= maxScore) {
+            input.val(newValue.toFixed(1));  // 确保显示一位小数
+        }
+    }
+</script>
+</body>
+</html>
