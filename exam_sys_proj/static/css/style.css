@@ -5,7 +5,7 @@ body {
     font-family: 'Arial', sans-serif; /* 使用Arial字体 */
     background-image: url('/static/img/mybackground.jpg');
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: auto;
 }
 
 .container {

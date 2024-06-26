@@ -13,13 +13,13 @@ from ..dao.HepAndKpMediaterDAO import HepAndKpMediaterDAO
 from ..dao.HomeworkOrExamPoolDAO import HomeworkOrExamPoolDAO
 from ..dao.StudentCourseDAO import StudentCourseDAO
 from ..dao.TeacherCourseDAO import TeacherCourseDAO
+from ..src.decorators import login_required
 from ..util.HomeworkOrExamUtils import HomeworkOrExamUtils
 from ..util.StudentHandinUtils import StudentHandinUtils
 from ..util.studentcourseUtils import StudentCourseUtils
 from ..util.teachercourseUtils import TeacherCourseUtils
 
 bp = Blueprint("teacher", __name__, url_prefix="/teacher")
-
 
 class MyEncoder(json.JSONEncoder):
 
@@ -47,6 +47,7 @@ def detail():
     return render_template("teacher_detail.html", broadcasts=broadcasts)
 
 
+@login_required
 @bp.route("/exam_manage")
 def exam_manage():
     teacher_operator = TeacherCourseDAO(dbPool)
@@ -65,6 +66,7 @@ def exam_manage():
     return render_template("teacher_exam_manage.html", data=data)
 
 
+@login_required
 @bp.route("/teacher_exam_correct/<handInID>")
 def teacher_exam_correct(handInID):
     return render_template("teacher_exam_correct.html", handInID=handInID)

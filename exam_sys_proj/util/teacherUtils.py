@@ -483,7 +483,7 @@ class TeacherUtils:
     def export_paper_as_docx(cls, db_util, hepID: int, path: str):
         homeworkOrExamPoolDAO = HomeworkOrExamPoolDAO(db_util)
         entity: HomeworkOrExamPool = homeworkOrExamPoolDAO.query(hepID)
-        whole_paper = homeworkOrExamPoolDAO.query_whole_paper(json.loads(entity.question))
+        whole_paper = homeworkOrExamPoolDAO.query_whole_paper_md(json.loads(entity.question))
         md: str = whole_paper[0]["main_content"]
         md.replace("<center>", "")
         md.replace("</center>", "")

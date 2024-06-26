@@ -11,4 +11,4 @@ exam_sys_proj/test_questions.json
 exam_sys_proj/test_diff.py
 flask_markdown_example
 exam_sys_proj/test_query_whole_paper.py
-/exam_sys_proj/static/
+#/exam_sys_proj/static/
