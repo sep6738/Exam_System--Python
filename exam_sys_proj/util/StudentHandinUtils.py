@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 
 from exam_sys_proj.dao.HomeworkOrExamPoolDAO import HomeworkOrExamPoolDAO
 from exam_sys_proj.dao.StudentHandInDAO import StudentHandInDAO
@@ -35,7 +36,8 @@ class StudentHandinUtils:
             questions = json.loads(ans[0][1])['questions']
             scores = json.loads(ans[0][1])['score']
             # setattr(result, 'testPaper', json.dumps(ans[0][1], ensure_ascii=False))
-
+            total =0
+            # return None
             pos = 0
             idea = 0
             details = {}
@@ -47,6 +49,7 @@ class StudentHandinUtils:
                     if content[i][0] == answer[i][0]:
                         score = score + scores[idea][i - pos]
                         correct += 1
+                    total += scores[idea][i-pos]
                 details['选择题得分'] = score
                 details['选择题回答正确个数'] = correct
                 details['选择题总个数'] = cnt
@@ -60,9 +63,12 @@ class StudentHandinUtils:
                     if content[i][0] == answer[i][0]:
                         score = score + scores[idea][i-pos]
                         correct += 1
+                    total += scores[idea][i-pos]
                 details['判断题得分'] = score
                 details['判断题回答正确个数'] = correct
                 details['判断题总个数'] = cnt
+            details['试卷满分'] = total
+            # print(details)
             setattr(result, 'resultDetails', json.dumps(details, ensure_ascii=False))
             dao.update(result, studenthandinId)
             return '选择题和判断题批改成功'
@@ -91,6 +97,8 @@ class StudentHandinUtils:
             entity = StudentHandIn()
             setattr(entity, 'userID', userid)
             setattr(entity, 'testPaper', json.dumps(test_paper))
+            setattr(entity, 'homeworkExamID', -1)
+            setattr(entity, 'createTime', datetime.now())
             pri = dao.insert(entity, 0)
             return pri
         except Exception as e:
@@ -102,7 +110,7 @@ class StudentHandinUtils:
         try:
             dao = StudentHandInDAO(db_util)
             result = dao.query(studenthandinId)
-
+            setattr(result, 'upTime', datetime.now())
             setattr(result, 'content', json.dumps(content, ensure_ascii=False))
             test_paper = getattr(result, 'testPaper')
             answer = json.loads(test_paper)['answer']
@@ -274,23 +282,38 @@ class StudentHandinUtils:
             total += details['判断题得分']
             total += details['选择题得分']
             cnt1 = 0
-            cnt21 = 0
-            cnt22 = 0
+            cnt2 = 0
             total1 = 0
             total2 = 0
-            for score_list in scores:
-                print(score_list)
-                for score in score_list:
-                    if isinstance(score, float):
-                        cnt1 += 1
-                        total1 += score
-                    else:
-                        cnt21 += 1
-                        for xiao in score:
-                            cnt22 += 1
-                            total2 += xiao
-            return [cnt1, total1, cnt21, cnt22, total2]
-            return total
+            scores1 = scores[0]
+            scores2 = scores[1]
+            for score in scores1:
+                total1 += score[0]
+                cnt1 += 1
+            for score in scores2:
+                total2 += score[0]
+                cnt2 += 1
+            total += total1 + total2
+            details['填空题得分'] = total1
+            details['填空题总个数'] = cnt1
+            details['主观题得分'] = total2
+            details['主观题总个数'] = cnt2
+            details['试卷总分数'] = total
+            setattr(resultset, 'resultDetails', details)
+            setattr(resultset, 'score', total)
+            dao.update(studenthandinId, resultset)
+            return '试卷总分已汇总'
+        except Exception as e:
+            print(e)
+            return 'error'
+
+    @classmethod
+    def get_dati_analysis(cls, db_util, studenthandinId: int):
+        try:
+            dao = StudentHandInDAO(db_util)
+            resultset = dao.query(studenthandinId)
+            details = json.loads(getattr(resultset, 'resultDetails'))
+            return json.dumps(details, ensure_ascii=False)
         except Exception as e:
             print(e)
             return 'error'
