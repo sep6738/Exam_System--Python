@@ -1,10 +1,3 @@
--- insert into homework_or_exam_pool (type, question, answer, courseName, difficultyLevel, isActive) VALUES ('选择题', '{
--- "main_content": "1+1=?",
--- "questions": ["等于1", "等于2", "等于3", "ABC都不对"],
--- "type": "选择题",
--- "shuffle": false,
--- "score": [5]
--- }', '{}', '数学', 1, true);
 SET
 @new_hoep_id = LAST_INSERT_ID();
 insert into knowledge_points (kpName, subject)
@@ -15,10 +8,9 @@ insert into knowledge_points (kpName, subject)
 VALUES ('线性代数', '数学');
 insert into knowledge_points (kpName, subject)
 VALUES ('微积分', '数学');
--- SET
--- @new_kp_id = LAST_INSERT_ID();
--- insert into hep_and_kp_mediater (hepID, kpID)
--- VALUES (@new_hoep_id, @new_kp_id);
+insert into knowledge_points (kpName, subject)
+VALUES ('其他', '数学');
+
 insert into users (userID, userName, passWord, name, roleID, email)
 VALUES (666, '晓美焰', '$2b$08$C2pRyZ4v8WHy1BYml6kw1enOkUMvjCbbdrULL6ZThC92ej4TttYzG', 'Homura Akemi
 ', 1, 'student@test.com');
@@ -62,7 +54,7 @@ values ('亚瑟王速成班', 778, '500', 6666, 0);
 insert into student_course (courseName, userID, semester, courseID, isDelete)
 values ('亚瑟王速成班', 779, '500', 6666, 0);
 
-INSERT INTO exam_sys.homework_or_exam_pool (hepID, type, question, answer, courseName, difficultyLevel, isActive)
-VALUES (2, '选择题',
-        '{"type": "选择题", "score": [4.0], "shuffle": false, "questions": ["选择题1选项1", "选择题1选项2", "选择题1选项3", "选择题1选项4"], "main_content": "测试选择题1题干"}',
-        '["1"]', '数学', 5, true);
+-- INSERT INTO exam_sys.homework_or_exam_pool (hepID, type, question, answer, courseName, difficultyLevel, isActive)
+-- VALUES (2, '选择题',
+--         '{"type": "选择题", "score": [4.0], "shuffle": false, "questions": ["选择题1选项1", "选择题1选项2", "选择题1选项3", "选择题1选项4"], "main_content": "测试选择题1题干"}',
+--         '["1"]', '数学', 5, true);
