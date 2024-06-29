@@ -314,6 +314,11 @@ class StudentHandinUtils:
             resultset = dao.query(studenthandinId)
             details = json.loads(getattr(resultset, 'resultDetails'))
             data = {}
+            data['选择题'] = {}
+            data['判断题'] = {}
+            data['填空题'] = {}
+            data['主观题'] = {}
+            data['总体'] = {}
             data['选择题']['总分'] = details['选择题总分']
             data['选择题']['得分'] = details['选择题得分']
             data['判断题']['总分'] = details['判断题总分']
@@ -325,12 +330,11 @@ class StudentHandinUtils:
             data['总体']['总分'] = details['试卷总分']
             data['总体']['得分'] = details['试卷得分']
             line = Line()
-
-            x_data = list(details.keys())
+            x_data = list(data.keys())
 
             line.add_xaxis(x_data)
-            line.add_yaxis("得分", [detail['得分'] for detail in details.values()])
-            line.add_yaxis("总分", [detail['总分'] for detail in details.values()])
+            line.add_yaxis("得分", [detail['得分'] for detail in data.values()])
+            line.add_yaxis("总分", [detail['总分'] for detail in data.values()])
 
             line.set_global_opts(
                 title_opts=TitleOpts(title="成绩报告"),
