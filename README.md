@@ -1,7 +1,7 @@
 # python大作业
 ### 环境说明
-此项目经过测试在python 3.10，3.12均能运行
-数据库请安装mysql 8.0以上版本，经过mysql最新版可以运行
+此项目经过测试在python 3.10，3.12均能运行；
+数据库请安装mysql 8.0以上版本，经过测试mysql最新版可以运行
 ### 安装依赖
 ```dos
 pip install -r requirements.txt
