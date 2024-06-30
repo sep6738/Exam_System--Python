@@ -69,6 +69,7 @@ class HomeworkOrExamPoolDAO(BaseDAO):
         result_dict["shuffle"] = store_paper["shuffle"]
         result_dict["questions"] = questions_list
         result_dict["main_content"] = f"{store_paper['main_content']}"
+        print(diff_list)
         return [result_dict, answer_list, diff_list, questions_list]
 
     def query_whole_paper_md(self, store_paper: dict):

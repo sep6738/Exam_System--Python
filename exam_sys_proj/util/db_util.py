@@ -25,7 +25,11 @@ class DBUtil:
             password=config['password'],
             database=config['database'],
             mincached=config['mincached'],
-            maxcached=config['maxcached']
+            maxcached=config['maxcached'],
+            blocking=True,  # 在达到最大连接数时阻塞等待
+            maxusage=None,  # 连接使用的最大次数
+            setsession=[],  # 会话初始化命令
+            ping=1
         )
 
     def get_connection(self):
