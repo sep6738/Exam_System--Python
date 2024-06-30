@@ -1,7 +1,28 @@
 # python大作业
+### 环境说明
+此项目经过测试在python 3.10，3.12均能运行；
+数据库请安装mysql 8.0以上版本，经过测试mysql最新版可以运行
 ### 安装依赖
 ```dos
 pip install -r requirements.txt
+```
+### 配置文件说明
+在运行项目之前需要在util/目录下建立一个config.yaml，并在yaml文件中填入配置信息，如下：
+```yaml
+database:
+  host: localhost
+  # 数据库ip地址
+  user: 
+  # mysql数据库的用户名
+  password: 
+  # 数据库密码
+  database: 
+  # 数据库名，如：exam_sys
+  mincached: 1
+  # 最小连接数
+  maxcached: 20
+  # 最大连接数
+
 ```
 ### 分工安排
 4人小组两人做前端，两人做后端
